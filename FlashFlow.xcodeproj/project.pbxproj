@@ -1,0 +1,670 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0AAF1F9485A92CEAD6534608 /* GlassCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD9561D18F70C07ABE6B413 /* GlassCardView.swift */; };
+		1B457F3BD3E1CB17E7005BAF /* DecksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AF6708A787A2A463794359 /* DecksViewModel.swift */; };
+		41AAAD446A553A5118E66AD9 /* FSRSParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D23D56C820A57FC3AF7010 /* FSRSParameters.swift */; };
+		451A4D70C3B355D92DAB724F /* SchedulerMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747743885A5483EFC6C1ADD6 /* SchedulerMode.swift */; };
+		46885145CB890031A57298E5 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2313526293C26BE01F195E44 /* HomeViewController.swift */; };
+		4FB810A13BB16B5B9FAEE58D /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F982FCE6397CEFF8AD9D615B /* HomeViewModel.swift */; };
+		515DB0549CC52175684AD3D5 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869715261FFE220B82F29861 /* Card.swift */; };
+		59994389711ADD58818586B3 /* AnkiScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46B23186BD548F02C9F2CF6 /* AnkiScheduler.swift */; };
+		64E02E057E0E291050E8FB4F /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0E6051F8B961EF644CE30C /* Deck.swift */; };
+		69C9CD51C9856AA2AFE35447 /* StudyCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A49BF5DF36439B440932CE /* StudyCard.swift */; };
+		72D0135DBB0E1FB8BE8B5661 /* CardEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A02C18ADF7EAC5E578A5C7 /* CardEditorViewController.swift */; };
+		7FA28FA24AC4A0BB123A8CCA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EC92FBEA323D27551A8F01 /* SceneDelegate.swift */; };
+		8143D6D31D9468BBA1F290C1 /* FSRSScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B6674FD3EB8760110A9D6E /* FSRSScheduler.swift */; };
+		8982BACE7041838F93017058 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F191840DC2677B0D22791074 /* SnapKit */; };
+		A26C4E9F2BB0710F42DFBC11 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638B39E4C7F5D8EBAA95161C /* OnboardingViewController.swift */; };
+		A7B3A896FA04287CB2069ABD /* DeckDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A446F21C9D4FCB1113E48DC /* DeckDetailViewModel.swift */; };
+		CA6FB4F40F3537BCE90E7776 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481DE27578858C7BA8CA5E65 /* AppDelegate.swift */; };
+		D5922687CFC5609B41822A02 /* RootTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906AF33EF963D3FABCE54EDB /* RootTabBarController.swift */; };
+		DC7680A36A0F7BCE10548937 /* FlashCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9BFDC169682A843298F3F4 /* FlashCard.swift */; };
+		E2787E7C3A737CD5F1DE2E8D /* FSRSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD3799234C07F474D18576E /* FSRSTests.swift */; };
+		E82D4C68C71EBADE5E6C960A /* DeckDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE498C63E98943BB7BEDC366 /* DeckDetailViewController.swift */; };
+		EA0008FAB74F24FCC7879AF6 /* AppNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233E5F6726A5F5E536BA8AA1 /* AppNotification.swift */; };
+		F0C136BC0366632117EE158F /* CardRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999F8CD582E2C405F765FF27 /* CardRepository.swift */; };
+		F354699531D3917483E63CCA /* ReviewHeatmapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6036FB0329444FFC6D0D2A45 /* ReviewHeatmapView.swift */; };
+		F6FCF36C565528B02AF2345D /* DecksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE75DD24A2DDD201004E73A8 /* DecksViewController.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		37EB67F141430CD08776160F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D18CCF87C81AFD236F62E65B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C37FB1228479DBDAD925A732;
+			remoteInfo = FlashFlow;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		08076E3887A4C0442BF23F4A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7061755B6A1818D971101E25 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		16A49BF5DF36439B440932CE /* StudyCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyCard.swift; sourceTree = "<group>"; };
+		2313526293C26BE01F195E44 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		233E5F6726A5F5E536BA8AA1 /* AppNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNotification.swift; sourceTree = "<group>"; };
+		23AF6708A787A2A463794359 /* DecksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecksViewModel.swift; sourceTree = "<group>"; };
+		23D23D56C820A57FC3AF7010 /* FSRSParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSRSParameters.swift; sourceTree = "<group>"; };
+		3A446F21C9D4FCB1113E48DC /* DeckDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDetailViewModel.swift; sourceTree = "<group>"; };
+		3BCBE663070C7F504EE60C27 /* FlashFlowTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "FlashFlowTests-Info.plist"; sourceTree = "<group>"; };
+		462F2B20BD213539113EE6EF /* FlashFlowTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlashFlowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		481DE27578858C7BA8CA5E65 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		52F55E8A12F23886FCC5B960 /* FlashFlow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlashFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A9BFDC169682A843298F3F4 /* FlashCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCard.swift; sourceTree = "<group>"; };
+		6036FB0329444FFC6D0D2A45 /* ReviewHeatmapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewHeatmapView.swift; sourceTree = "<group>"; };
+		638B39E4C7F5D8EBAA95161C /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		6BD9561D18F70C07ABE6B413 /* GlassCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassCardView.swift; sourceTree = "<group>"; };
+		703C6FAA9809CBFA300EED7C /* FlashFlow-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "FlashFlow-Info.plist"; sourceTree = "<group>"; };
+		747743885A5483EFC6C1ADD6 /* SchedulerMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerMode.swift; sourceTree = "<group>"; };
+		75A02C18ADF7EAC5E578A5C7 /* CardEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardEditorViewController.swift; sourceTree = "<group>"; };
+		869715261FFE220B82F29861 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		8E0E6051F8B961EF644CE30C /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
+		906AF33EF963D3FABCE54EDB /* RootTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabBarController.swift; sourceTree = "<group>"; };
+		999F8CD582E2C405F765FF27 /* CardRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardRepository.swift; sourceTree = "<group>"; };
+		A46B23186BD548F02C9F2CF6 /* AnkiScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnkiScheduler.swift; sourceTree = "<group>"; };
+		ACD3799234C07F474D18576E /* FSRSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSRSTests.swift; sourceTree = "<group>"; };
+		B2EC92FBEA323D27551A8F01 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		CE75DD24A2DDD201004E73A8 /* DecksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecksViewController.swift; sourceTree = "<group>"; };
+		EE498C63E98943BB7BEDC366 /* DeckDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDetailViewController.swift; sourceTree = "<group>"; };
+		F0B6674FD3EB8760110A9D6E /* FSRSScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSRSScheduler.swift; sourceTree = "<group>"; };
+		F982FCE6397CEFF8AD9D615B /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		48FDFC206A34BAD97929CA39 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8982BACE7041838F93017058 /* SnapKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EC9F1ADB8A3931CDBEB5E405 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		05BF299B0C368630EFF547FB /* Derived */ = {
+			isa = PBXGroup;
+			children = (
+				A59742F75CF0BE04C9ADBC75 /* InfoPlists */,
+			);
+			path = Derived;
+			sourceTree = "<group>";
+		};
+		0B12155B8FC079470DA68E69 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				75A02C18ADF7EAC5E578A5C7 /* CardEditorViewController.swift */,
+				EE498C63E98943BB7BEDC366 /* DeckDetailViewController.swift */,
+				CE75DD24A2DDD201004E73A8 /* DecksViewController.swift */,
+				2313526293C26BE01F195E44 /* HomeViewController.swift */,
+				638B39E4C7F5D8EBAA95161C /* OnboardingViewController.swift */,
+				906AF33EF963D3FABCE54EDB /* RootTabBarController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		1FD67E438E0FB0E1DE4F85C9 /* Project */ = {
+			isa = PBXGroup;
+			children = (
+				84FAAC731E5E6462AAF14EB3 /* App */,
+				05BF299B0C368630EFF547FB /* Derived */,
+				B706BD90AA7497227CBCCE7D /* Models */,
+				FB85D41FC7B32043D699584B /* Services */,
+				4127C1038A20F9CD9BEF1195 /* Tests */,
+				0B12155B8FC079470DA68E69 /* ViewControllers */,
+				61BEE6F45AD7AB9E235AC439 /* ViewModels */,
+				5AA8D96B1D31972ABCB647B4 /* Views */,
+			);
+			name = Project;
+			sourceTree = "<group>";
+		};
+		35B24DF3814EB1A979B6457E = {
+			isa = PBXGroup;
+			children = (
+				888588C8428C754D820534B6 /* Products */,
+				1FD67E438E0FB0E1DE4F85C9 /* Project */,
+			);
+			sourceTree = "<group>";
+		};
+		4127C1038A20F9CD9BEF1195 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				ACD3799234C07F474D18576E /* FSRSTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		5AA8D96B1D31972ABCB647B4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6BD9561D18F70C07ABE6B413 /* GlassCardView.swift */,
+				6036FB0329444FFC6D0D2A45 /* ReviewHeatmapView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		61BEE6F45AD7AB9E235AC439 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				3A446F21C9D4FCB1113E48DC /* DeckDetailViewModel.swift */,
+				23AF6708A787A2A463794359 /* DecksViewModel.swift */,
+				F982FCE6397CEFF8AD9D615B /* HomeViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		84FAAC731E5E6462AAF14EB3 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				481DE27578858C7BA8CA5E65 /* AppDelegate.swift */,
+				B2EC92FBEA323D27551A8F01 /* SceneDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		888588C8428C754D820534B6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				52F55E8A12F23886FCC5B960 /* FlashFlow.app */,
+				462F2B20BD213539113EE6EF /* FlashFlowTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A59742F75CF0BE04C9ADBC75 /* InfoPlists */ = {
+			isa = PBXGroup;
+			children = (
+				703C6FAA9809CBFA300EED7C /* FlashFlow-Info.plist */,
+				3BCBE663070C7F504EE60C27 /* FlashFlowTests-Info.plist */,
+			);
+			path = InfoPlists;
+			sourceTree = "<group>";
+		};
+		B706BD90AA7497227CBCCE7D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				233E5F6726A5F5E536BA8AA1 /* AppNotification.swift */,
+				869715261FFE220B82F29861 /* Card.swift */,
+				8E0E6051F8B961EF644CE30C /* Deck.swift */,
+				5A9BFDC169682A843298F3F4 /* FlashCard.swift */,
+				23D23D56C820A57FC3AF7010 /* FSRSParameters.swift */,
+				747743885A5483EFC6C1ADD6 /* SchedulerMode.swift */,
+				16A49BF5DF36439B440932CE /* StudyCard.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FB85D41FC7B32043D699584B /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A46B23186BD548F02C9F2CF6 /* AnkiScheduler.swift */,
+				999F8CD582E2C405F765FF27 /* CardRepository.swift */,
+				F0B6674FD3EB8760110A9D6E /* FSRSScheduler.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9D8C89F0BC53C837EC1C6CDD /* FlashFlowTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 077702DC71105CFA9E076F62 /* Build configuration list for PBXNativeTarget "FlashFlowTests" */;
+			buildPhases = (
+				4B99AC2B8F50C402D5CA43B2 /* Sources */,
+				5614FFB2A627CCFDF0F461E3 /* Resources */,
+				EC9F1ADB8A3931CDBEB5E405 /* Frameworks */,
+				7061755B6A1818D971101E25 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3EAA477440EC4B3EC2622F61 /* PBXTargetDependency */,
+			);
+			name = FlashFlowTests;
+			packageProductDependencies = (
+			);
+			productName = FlashFlowTests;
+			productReference = 462F2B20BD213539113EE6EF /* FlashFlowTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		C37FB1228479DBDAD925A732 /* FlashFlow */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FE12ADC1862E2FBA10E996E6 /* Build configuration list for PBXNativeTarget "FlashFlow" */;
+			buildPhases = (
+				57D3A40BA4F88CF2A17FC4BA /* Sources */,
+				6A4AC093A4A447EE3E4C0EBB /* Resources */,
+				48FDFC206A34BAD97929CA39 /* Frameworks */,
+				08076E3887A4C0442BF23F4A /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FlashFlow;
+			packageProductDependencies = (
+				F191840DC2677B0D22791074 /* SnapKit */,
+			);
+			productName = FlashFlow;
+			productReference = 52F55E8A12F23886FCC5B960 /* FlashFlow.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D18CCF87C81AFD236F62E65B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				ORGANIZATIONNAME = bbdyno;
+				TargetAttributes = {
+					9D8C89F0BC53C837EC1C6CDD = {
+						TestTargetID = C37FB1228479DBDAD925A732;
+					};
+				};
+			};
+			buildConfigurationList = 4A3970DBF297C809B43FF067 /* Build configuration list for PBXProject "FlashFlow" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 35B24DF3814EB1A979B6457E;
+			packageReferences = (
+				CC75AECD8B4EC89B780E7C32 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
+			productRefGroup = 888588C8428C754D820534B6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C37FB1228479DBDAD925A732 /* FlashFlow */,
+				9D8C89F0BC53C837EC1C6CDD /* FlashFlowTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5614FFB2A627CCFDF0F461E3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6A4AC093A4A447EE3E4C0EBB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4B99AC2B8F50C402D5CA43B2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E2787E7C3A737CD5F1DE2E8D /* FSRSTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		57D3A40BA4F88CF2A17FC4BA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CA6FB4F40F3537BCE90E7776 /* AppDelegate.swift in Sources */,
+				7FA28FA24AC4A0BB123A8CCA /* SceneDelegate.swift in Sources */,
+				EA0008FAB74F24FCC7879AF6 /* AppNotification.swift in Sources */,
+				515DB0549CC52175684AD3D5 /* Card.swift in Sources */,
+				64E02E057E0E291050E8FB4F /* Deck.swift in Sources */,
+				41AAAD446A553A5118E66AD9 /* FSRSParameters.swift in Sources */,
+				DC7680A36A0F7BCE10548937 /* FlashCard.swift in Sources */,
+				451A4D70C3B355D92DAB724F /* SchedulerMode.swift in Sources */,
+				69C9CD51C9856AA2AFE35447 /* StudyCard.swift in Sources */,
+				59994389711ADD58818586B3 /* AnkiScheduler.swift in Sources */,
+				F0C136BC0366632117EE158F /* CardRepository.swift in Sources */,
+				8143D6D31D9468BBA1F290C1 /* FSRSScheduler.swift in Sources */,
+				72D0135DBB0E1FB8BE8B5661 /* CardEditorViewController.swift in Sources */,
+				E82D4C68C71EBADE5E6C960A /* DeckDetailViewController.swift in Sources */,
+				F6FCF36C565528B02AF2345D /* DecksViewController.swift in Sources */,
+				46885145CB890031A57298E5 /* HomeViewController.swift in Sources */,
+				A26C4E9F2BB0710F42DFBC11 /* OnboardingViewController.swift in Sources */,
+				D5922687CFC5609B41822A02 /* RootTabBarController.swift in Sources */,
+				A7B3A896FA04287CB2069ABD /* DeckDetailViewModel.swift in Sources */,
+				1B457F3BD3E1CB17E7005BAF /* DecksViewModel.swift in Sources */,
+				4FB810A13BB16B5B9FAEE58D /* HomeViewModel.swift in Sources */,
+				0AAF1F9485A92CEAD6534608 /* GlassCardView.swift in Sources */,
+				F354699531D3917483E63CCA /* ReviewHeatmapView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3EAA477440EC4B3EC2622F61 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FlashFlow;
+			target = C37FB1228479DBDAD925A732 /* FlashFlow */;
+			targetProxy = 37EB67F141430CD08776160F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		890A8C1AC5A79427B556A58D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = M79H9K226Y;
+				INFOPLIST_FILE = "Derived/InfoPlists/FlashFlowTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bbdyno.FlashFlowTests;
+				PRODUCT_NAME = FlashFlowTests;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_COMPILATION_MODE = singlefile;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FlashFlow.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FlashFlow";
+				TEST_TARGET_NAME = FlashFlow;
+			};
+			name = Debug;
+		};
+		90745A5713D4CFC3A3FBAE28 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = M79H9K226Y;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "Derived/InfoPlists/FlashFlow-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bbdyno.FlashFlow;
+				PRODUCT_NAME = FlashFlow;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		955976DE79889FBAAC6CEAD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		AD74E6095BD22A10627FCEFA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = M79H9K226Y;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "Derived/InfoPlists/FlashFlow-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bbdyno.FlashFlow;
+				PRODUCT_NAME = FlashFlow;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_COMPILATION_MODE = singlefile;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F39543F943C962D6E1428BC3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = M79H9K226Y;
+				INFOPLIST_FILE = "Derived/InfoPlists/FlashFlowTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bbdyno.FlashFlowTests;
+				PRODUCT_NAME = FlashFlowTests;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FlashFlow.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FlashFlow";
+				TEST_TARGET_NAME = FlashFlow;
+			};
+			name = Release;
+		};
+		F97ECB2E778EBE5A9E69908A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.9;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		077702DC71105CFA9E076F62 /* Build configuration list for PBXNativeTarget "FlashFlowTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				890A8C1AC5A79427B556A58D /* Debug */,
+				F39543F943C962D6E1428BC3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4A3970DBF297C809B43FF067 /* Build configuration list for PBXProject "FlashFlow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				955976DE79889FBAAC6CEAD3 /* Debug */,
+				F97ECB2E778EBE5A9E69908A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FE12ADC1862E2FBA10E996E6 /* Build configuration list for PBXNativeTarget "FlashFlow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD74E6095BD22A10627FCEFA /* Debug */,
+				90745A5713D4CFC3A3FBAE28 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CC75AECD8B4EC89B780E7C32 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F191840DC2677B0D22791074 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = D18CCF87C81AFD236F62E65B /* Project object */;
+}

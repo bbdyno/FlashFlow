@@ -1,0 +1,199 @@
+//
+//  ReviewHeatmapView.swift
+//  FlashFlow
+//
+//  Created by bbdyno on 2/11/26.
+//
+
+import UIKit
+import SnapKit
+
+final class ReviewHeatmapView: UIView {
+    private let titleLabel = UILabel()
+    private let collectionView: UICollectionView
+    private var dayItems: [HeatmapDay] = []
+    private let calendar: Calendar
+
+    init(calendar: Calendar = .current) {
+        self.calendar = calendar
+        let layout = ReviewHeatmapFlowLayout()
+        self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        super.init(frame: .zero)
+        configureHierarchy()
+        configureStyle()
+        configureLayout()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func update(reviewCountByDate: [Date: Int], totalDays: Int = 140, today: Date = .now) {
+        let days = max(7, totalDays)
+        let startOfToday = calendar.startOfDay(for: today)
+
+        var generated: [HeatmapDay] = []
+        generated.reserveCapacity(days)
+
+        for offset in stride(from: days - 1, through: 0, by: -1) {
+            guard let date = calendar.date(byAdding: .day, value: -offset, to: startOfToday) else {
+                continue
+            }
+            let count = reviewCountByDate[calendar.startOfDay(for: date)] ?? 0
+            generated.append(HeatmapDay(date: date, count: count))
+        }
+
+        dayItems = generated
+        collectionView.reloadData()
+    }
+
+    private func configureHierarchy() {
+        addSubview(titleLabel)
+        addSubview(collectionView)
+    }
+
+    private func configureStyle() {
+        layer.cornerRadius = 20
+        layer.cornerCurve = .continuous
+        layer.borderWidth = 1
+        layer.borderColor = UIColor.white.withAlphaComponent(0.16).cgColor
+        backgroundColor = UIColor.white.withAlphaComponent(0.08)
+
+        titleLabel.text = "Review Heatmap"
+        titleLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 14) ?? .systemFont(ofSize: 14, weight: .semibold)
+        titleLabel.textColor = UIColor.white.withAlphaComponent(0.88)
+
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.dataSource = self
+        collectionView.register(ReviewHeatmapCell.self, forCellWithReuseIdentifier: ReviewHeatmapCell.reuseIdentifier)
+    }
+
+    private func configureLayout() {
+        titleLabel.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview().inset(14)
+        }
+
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(10)
+            make.leading.trailing.bottom.equalToSuperview().inset(12)
+            make.height.greaterThanOrEqualTo(110)
+        }
+    }
+}
+
+extension ReviewHeatmapView: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        dayItems.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: ReviewHeatmapCell.reuseIdentifier,
+            for: indexPath
+        ) as? ReviewHeatmapCell else {
+            return UICollectionViewCell()
+        }
+
+        let item = dayItems[indexPath.item]
+        cell.configure(count: item.count)
+        return cell
+    }
+}
+
+private struct HeatmapDay: Hashable, Sendable {
+    let date: Date
+    let count: Int
+}
+
+private final class ReviewHeatmapFlowLayout: UICollectionViewLayout {
+    private let rowCount = 7
+    private let itemSide: CGFloat = 12
+    private let spacing: CGFloat = 4
+
+    private var cachedAttributes: [UICollectionViewLayoutAttributes] = []
+    private var cachedContentSize: CGSize = .zero
+
+    override func prepare() {
+        super.prepare()
+
+        guard let collectionView else {
+            cachedAttributes.removeAll()
+            cachedContentSize = .zero
+            return
+        }
+
+        cachedAttributes.removeAll(keepingCapacity: true)
+
+        let itemCount = collectionView.numberOfItems(inSection: 0)
+        let itemWidth = itemSide + spacing
+        let itemHeight = itemSide + spacing
+
+        for index in 0..<itemCount {
+            let row = index % rowCount
+            let column = index / rowCount
+            let x = CGFloat(column) * itemWidth
+            let y = CGFloat(row) * itemHeight
+
+            let frame = CGRect(x: x, y: y, width: itemSide, height: itemSide)
+            let indexPath = IndexPath(item: index, section: 0)
+            let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+            attributes.frame = frame
+            cachedAttributes.append(attributes)
+        }
+
+        let columns = max(1, Int(ceil(Double(itemCount) / Double(rowCount))))
+        let width = CGFloat(columns) * itemSide + CGFloat(max(0, columns - 1)) * spacing
+        let height = CGFloat(rowCount) * itemSide + CGFloat(max(0, rowCount - 1)) * spacing
+        cachedContentSize = CGSize(width: width, height: height)
+    }
+
+    override var collectionViewContentSize: CGSize {
+        cachedContentSize
+    }
+
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        cachedAttributes.filter { $0.frame.intersects(rect) }
+    }
+
+    override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        guard indexPath.item >= 0, indexPath.item < cachedAttributes.count else {
+            return nil
+        }
+        return cachedAttributes[indexPath.item]
+    }
+
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        false
+    }
+}
+
+private final class ReviewHeatmapCell: UICollectionViewCell {
+    static let reuseIdentifier = "ReviewHeatmapCell"
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentView.layer.cornerRadius = 3
+        contentView.layer.cornerCurve = .continuous
+        contentView.layer.borderWidth = 0.5
+        contentView.layer.borderColor = UIColor.white.withAlphaComponent(0.08).cgColor
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func configure(count: Int) {
+        switch count {
+        case ...0:
+            contentView.backgroundColor = UIColor.white.withAlphaComponent(0.10)
+        case 1...10:
+            contentView.backgroundColor = UIColor(red: 0.58, green: 0.85, blue: 0.58, alpha: 0.92)
+        case 11...50:
+            contentView.backgroundColor = UIColor(red: 0.30, green: 0.72, blue: 0.38, alpha: 0.95)
+        default:
+            contentView.backgroundColor = UIColor(red: 0.12, green: 0.52, blue: 0.20, alpha: 1.0)
+        }
+    }
+}
