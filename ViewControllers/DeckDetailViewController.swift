@@ -12,6 +12,9 @@ final class DeckDetailViewController: UIViewController {
     private let repository: CardRepository
     private let deckID: UUID
 
+    private let backgroundGradientLayer = CAGradientLayer()
+    private let topGlowView = UIView()
+    private let bottomGlowView = UIView()
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private let emptyLabel = UILabel()
     private let loadingIndicator = UIActivityIndicatorView(style: .medium)
@@ -44,6 +47,13 @@ final class DeckDetailViewController: UIViewController {
         }
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        backgroundGradientLayer.frame = view.bounds
+        topGlowView.layer.cornerRadius = topGlowView.bounds.height / 2
+        bottomGlowView.layer.cornerRadius = bottomGlowView.bounds.height / 2
+    }
+
     private func makeOutput() -> DeckDetailViewModel.Output {
         DeckDetailViewModel.Output(
             didChangeLoading: { [weak self] isLoading in
@@ -68,7 +78,24 @@ final class DeckDetailViewController: UIViewController {
     }
 
     private func configureUI() {
-        view.backgroundColor = .systemBackground
+        view.layer.insertSublayer(backgroundGradientLayer, at: 0)
+        AppTheme.applyGradient(to: backgroundGradientLayer)
+        view.backgroundColor = .clear
+
+        topGlowView.backgroundColor = AppTheme.accent.withAlphaComponent(0.22)
+        topGlowView.layer.shadowColor = AppTheme.accent.cgColor
+        topGlowView.layer.shadowOpacity = 0.28
+        topGlowView.layer.shadowRadius = 52
+        topGlowView.layer.shadowOffset = .zero
+
+        bottomGlowView.backgroundColor = AppTheme.accentTeal.withAlphaComponent(0.16)
+        bottomGlowView.layer.shadowColor = AppTheme.accentTeal.cgColor
+        bottomGlowView.layer.shadowOpacity = 0.28
+        bottomGlowView.layer.shadowRadius = 52
+        bottomGlowView.layer.shadowOffset = .zero
+
+        view.addSubview(topGlowView)
+        view.addSubview(bottomGlowView)
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "plus"),
@@ -76,22 +103,41 @@ final class DeckDetailViewController: UIViewController {
             target: self,
             action: #selector(didTapAddCard)
         )
+        navigationItem.rightBarButtonItem?.tintColor = AppTheme.textPrimary
 
+        tableView.register(DeckCardCell.self, forCellReuseIdentifier: DeckCardCell.reuseIdentifier)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.rowHeight = 74
+        tableView.rowHeight = 104
+        tableView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 20, right: 0)
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
         view.addSubview(tableView)
 
-        emptyLabel.text = "카드가 없습니다.\n+ 버튼으로 카드를 추가하세요."
+        emptyLabel.text = "No cards yet.\nTap + to add a card."
         emptyLabel.textAlignment = .center
         emptyLabel.numberOfLines = 2
-        emptyLabel.textColor = .secondaryLabel
+        emptyLabel.textColor = AppTheme.textSecondary
         emptyLabel.font = UIFont.systemFont(ofSize: 15, weight: .medium)
         emptyLabel.isHidden = true
         view.addSubview(emptyLabel)
 
         loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.color = AppTheme.textPrimary
         view.addSubview(loadingIndicator)
+
+        topGlowView.snp.makeConstraints { make in
+            make.size.equalTo(280)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(-120)
+            make.trailing.equalToSuperview().offset(120)
+        }
+
+        bottomGlowView.snp.makeConstraints { make in
+            make.size.equalTo(240)
+            make.leading.equalToSuperview().offset(-120)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(90)
+        }
 
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -133,22 +179,38 @@ final class DeckDetailViewController: UIViewController {
         guard presentedViewController == nil else {
             return
         }
-        let alert = UIAlertController(title: "오류", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "닫기", style: .cancel))
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Close", style: .cancel))
         present(alert, animated: true)
     }
 
     private func stateText(for card: DeckCard) -> String {
         switch card.schedule.state {
         case .new:
-            return "NEW"
+            return "New Card"
         case .learning:
-            return "LEARNING"
+            return "In Learning"
         case .review:
-            return "REVIEW"
+            return "In Review"
         case .relearning:
-            return "RELEARNING"
+            return "Relearning"
         }
+    }
+
+    private func dueText(for date: Date) -> String {
+        let calendar = Calendar.current
+        if calendar.isDateInToday(date) {
+            return "Due today"
+        }
+        if calendar.isDateInTomorrow(date) {
+            return "Due tomorrow"
+        }
+        return "Due \(DateFormatter.deckDueDate.string(from: date))"
+    }
+
+    private func backPreview(for card: DeckCard) -> String {
+        let text = card.content.detail.trimmingCharacters(in: .whitespacesAndNewlines)
+        return text.isEmpty ? "No back content yet" : text
     }
 }
 
@@ -158,16 +220,19 @@ extension DeckDetailViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let identifier = "CardCell"
-        let cell = tableView.dequeueReusableCell(withIdentifier: identifier) ?? UITableViewCell(style: .subtitle, reuseIdentifier: identifier)
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: DeckCardCell.reuseIdentifier,
+            for: indexPath
+        ) as? DeckCardCell else {
+            return UITableViewCell()
+        }
         let card = cards[indexPath.row]
-
-        var content = cell.defaultContentConfiguration()
-        content.text = card.content.title
-        content.secondaryText = "\(stateText(for: card)) · Due \(DateFormatter.shortDate.string(from: card.schedule.dueDate))"
-        content.secondaryTextProperties.color = .secondaryLabel
-        cell.contentConfiguration = content
-        cell.accessoryType = .disclosureIndicator
+        cell.configure(
+            front: card.content.title,
+            back: backPreview(for: card),
+            state: stateText(for: card),
+            due: dueText(for: card.schedule.dueDate)
+        )
         return cell
     }
 }
@@ -199,10 +264,123 @@ extension DeckDetailViewController: UITableViewDelegate {
 }
 
 private extension DateFormatter {
-    static let shortDate: DateFormatter = {
+    static let deckDueDate: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .short
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateStyle = .medium
         formatter.timeStyle = .none
         return formatter
     }()
+}
+
+private final class DeckCardCell: UITableViewCell {
+    static let reuseIdentifier = "DeckCardCell"
+
+    private let cardView = UIView()
+    private let frontLabel = UILabel()
+    private let backLabel = UILabel()
+    private let statePillLabel = UILabel()
+    private let dueLabel = UILabel()
+    private let chevronImageView = UIImageView(image: UIImage(systemName: "chevron.right"))
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        configureUI()
+        configureLayout()
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func configure(front: String, back: String, state: String, due: String) {
+        frontLabel.text = front
+        backLabel.text = back
+        statePillLabel.text = state
+        dueLabel.text = due
+    }
+
+    private func configureUI() {
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
+        selectionStyle = .none
+
+        cardView.backgroundColor = AppTheme.cardBackground
+        cardView.layer.borderWidth = 1
+        cardView.layer.borderColor = AppTheme.cardBorder.cgColor
+        cardView.layer.cornerRadius = 14
+        cardView.layer.cornerCurve = .continuous
+
+        frontLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        frontLabel.textColor = AppTheme.textPrimary
+        frontLabel.numberOfLines = 1
+
+        backLabel.font = UIFont.systemFont(ofSize: 13, weight: .medium)
+        backLabel.textColor = AppTheme.textSecondary
+        backLabel.numberOfLines = 1
+
+        statePillLabel.font = UIFont.systemFont(ofSize: 11, weight: .bold)
+        statePillLabel.textColor = AppTheme.textPrimary
+        statePillLabel.backgroundColor = UIColor.white.withAlphaComponent(0.14)
+        statePillLabel.layer.cornerRadius = 10
+        statePillLabel.layer.cornerCurve = .continuous
+        statePillLabel.layer.borderWidth = 1
+        statePillLabel.layer.borderColor = AppTheme.cardBorder.cgColor
+        statePillLabel.clipsToBounds = true
+        statePillLabel.textAlignment = .center
+
+        dueLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        dueLabel.textColor = AppTheme.textSecondary
+
+        chevronImageView.tintColor = AppTheme.textSecondary
+        chevronImageView.contentMode = .scaleAspectFit
+
+        contentView.addSubview(cardView)
+        cardView.addSubview(frontLabel)
+        cardView.addSubview(backLabel)
+        cardView.addSubview(statePillLabel)
+        cardView.addSubview(dueLabel)
+        cardView.addSubview(chevronImageView)
+    }
+
+    private func configureLayout() {
+        cardView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview().inset(6)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+
+        chevronImageView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().inset(14)
+            make.width.equalTo(10)
+            make.height.equalTo(16)
+        }
+
+        frontLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(12)
+            make.leading.equalToSuperview().inset(14)
+            make.trailing.lessThanOrEqualTo(chevronImageView.snp.leading).offset(-10)
+        }
+
+        backLabel.snp.makeConstraints { make in
+            make.top.equalTo(frontLabel.snp.bottom).offset(4)
+            make.leading.equalTo(frontLabel)
+            make.trailing.lessThanOrEqualTo(chevronImageView.snp.leading).offset(-10)
+        }
+
+        statePillLabel.snp.makeConstraints { make in
+            make.top.equalTo(backLabel.snp.bottom).offset(10)
+            make.leading.equalTo(frontLabel)
+            make.height.equalTo(20)
+            make.width.greaterThanOrEqualTo(94)
+            make.bottom.equalToSuperview().inset(12)
+        }
+
+        dueLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(statePillLabel)
+            make.trailing.lessThanOrEqualTo(chevronImageView.snp.leading).offset(-10)
+            make.leading.greaterThanOrEqualTo(statePillLabel.snp.trailing).offset(8)
+        }
+    }
 }

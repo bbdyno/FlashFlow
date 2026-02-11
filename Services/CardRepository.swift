@@ -14,19 +14,22 @@ actor CardRepository {
         case deckNotFound
         case cardNotFound
         case persistenceFailed
+        case invalidBackupFile
 
         var errorDescription: String? {
             switch self {
             case .invalidTitle:
-                return "덱 이름을 입력해주세요."
+                return "Please enter a deck title."
             case .invalidCardContent:
-                return "카드 앞면과 뒷면을 모두 입력해주세요."
+                return "Please fill in both front and back."
             case .deckNotFound:
-                return "선택한 덱을 찾을 수 없습니다."
+                return "Deck not found."
             case .cardNotFound:
-                return "선택한 카드를 찾을 수 없습니다."
+                return "Card not found."
             case .persistenceFailed:
-                return "데이터 저장 중 오류가 발생했습니다."
+                return "Failed to save data."
+            case .invalidBackupFile:
+                return "Invalid backup file format."
             }
         }
     }
@@ -37,7 +40,7 @@ actor CardRepository {
 
         init(
             decks: [Deck] = [],
-            schedulerMode: SchedulerMode = .sm2
+            schedulerMode: SchedulerMode = .fsrs
         ) {
             self.decks = decks
             self.schedulerMode = schedulerMode
@@ -51,7 +54,7 @@ actor CardRepository {
         init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             decks = try container.decodeIfPresent([Deck].self, forKey: .decks) ?? []
-            schedulerMode = try container.decodeIfPresent(SchedulerMode.self, forKey: .schedulerMode) ?? .sm2
+            schedulerMode = try container.decodeIfPresent(SchedulerMode.self, forKey: .schedulerMode) ?? .fsrs
         }
     }
 
@@ -99,14 +102,122 @@ actor CardRepository {
         return store.schedulerMode
     }
 
-    func updateSchedulerMode(_ mode: SchedulerMode) throws {
+    func updateSchedulerMode(_: SchedulerMode) throws {
         try loadIfNeeded()
-        guard store.schedulerMode != mode else {
+        guard store.schedulerMode != .fsrs else {
             return
         }
 
-        store.schedulerMode = mode
+        store.schedulerMode = .fsrs
         try persist()
+    }
+
+    func resetAllData() throws {
+        try loadIfNeeded()
+        store = Store()
+        try persist()
+    }
+
+    func exportBackupData() throws -> Data {
+        try loadIfNeeded()
+        do {
+            return try encoder.encode(store)
+        } catch {
+            throw RepositoryError.persistenceFailed
+        }
+    }
+
+    func importBackupData(_ data: Data) throws {
+        try loadIfNeeded()
+        do {
+            let imported = try decoder.decode(Store.self, from: data)
+            store = imported
+            if store.schedulerMode != .fsrs {
+                store.schedulerMode = .fsrs
+            }
+            try persist()
+        } catch {
+            throw RepositoryError.invalidBackupFile
+        }
+    }
+
+    func previewBackupData(_ data: Data) throws -> BackupPreview {
+        try loadIfNeeded()
+        do {
+            let imported = try decoder.decode(Store.self, from: data)
+            let deckCount = imported.decks.count
+            let cardCount = imported.decks.reduce(0) { $0 + $1.cards.count }
+            let reviewCount = imported.decks.reduce(0) { sum, deck in
+                sum + deck.cards.reduce(0) { $0 + $1.schedule.reviewHistory.count }
+            }
+            return BackupPreview(deckCount: deckCount, cardCount: cardCount, reviewCount: reviewCount)
+        } catch {
+            throw RepositoryError.invalidBackupFile
+        }
+    }
+
+    @discardableResult
+    func createSampleDecksIfNeeded() throws -> Int {
+        try loadIfNeeded()
+
+        struct SampleCard {
+            let front: String
+            let back: String
+            let note: String
+        }
+        struct SampleDeck {
+            let title: String
+            let cards: [SampleCard]
+        }
+
+        let samples: [SampleDeck] = [
+            SampleDeck(
+                title: "English Vocabulary",
+                cards: [
+                    SampleCard(front: "ubiquitous", back: "present or found everywhere", note: "adjective"),
+                    SampleCard(front: "meticulous", back: "showing great attention to detail", note: "adjective"),
+                    SampleCard(front: "mitigate", back: "to make less severe", note: "verb")
+                ]
+            ),
+            SampleDeck(
+                title: "iOS Basics",
+                cards: [
+                    SampleCard(front: "What is MVC?", back: "Model-View-Controller architecture pattern.", note: ""),
+                    SampleCard(front: "What does Auto Layout do?", back: "It calculates view frames from constraints.", note: ""),
+                    SampleCard(front: "Difference between struct and class?", back: "Struct is value type, class is reference type.", note: "Swift")
+                ]
+            )
+        ]
+
+        var createdDecks = 0
+        for sampleDeck in samples {
+            if store.decks.contains(where: { $0.title.caseInsensitiveCompare(sampleDeck.title) == .orderedSame }) {
+                continue
+            }
+
+            let deck = Deck(title: sampleDeck.title)
+            store.decks.append(deck)
+            guard let deckIndex = store.decks.firstIndex(where: { $0.id == deck.id }) else {
+                continue
+            }
+
+            for sampleCard in sampleDeck.cards {
+                let content = FlashCard(
+                    title: sampleCard.front,
+                    subtitle: sampleCard.note,
+                    detail: sampleCard.back,
+                    imageName: suggestedImageName(from: sampleCard.front)
+                )
+                store.decks[deckIndex].cards.append(DeckCard(content: content))
+            }
+
+            createdDecks += 1
+        }
+
+        if createdDecks > 0 {
+            try persist()
+        }
+        return createdDecks
     }
 
     func deckSummaries(now: Date = .now) throws -> [DeckSummary] {
@@ -335,16 +446,15 @@ actor CardRepository {
 
         let data = try Data(contentsOf: url)
         store = try decoder.decode(Store.self, from: data)
+        if store.schedulerMode != .fsrs {
+            store.schedulerMode = .fsrs
+            try persist()
+        }
         hasLoaded = true
     }
 
     private func scheduleCard(_ card: Card, grade: UserGrade, now: Date) -> Card {
-        switch store.schedulerMode {
-        case .sm2:
-            return ankiScheduler.schedule(card: card, grade: grade, now: now)
-        case .fsrs:
-            return scheduleWithFSRSHybrid(card: card, grade: grade, now: now)
-        }
+        scheduleWithFSRSHybrid(card: card, grade: grade, now: now)
     }
 
     private func scheduleWithFSRSHybrid(card: Card, grade: UserGrade, now: Date) -> Card {
@@ -501,7 +611,7 @@ actor CardRepository {
         guard !trimmedFront.isEmpty, !trimmedBack.isEmpty else {
             throw RepositoryError.invalidCardContent
         }
-        return (trimmedFront, trimmedBack, trimmedNote.isEmpty ? "No Note" : trimmedNote)
+        return (trimmedFront, trimmedBack, trimmedNote)
     }
 
     private func suggestedImageName(from seed: String) -> String {

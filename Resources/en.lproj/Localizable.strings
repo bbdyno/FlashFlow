@@ -1,0 +1,57 @@
+"home.title" = "FlashFlow";
+"home.deck.select" = "Select Deck";
+"home.due.none" = "No cards due today";
+"home.reveal" = "Show Answer";
+"home.reload" = "Reload";
+"home.due.summary" = "Today %d cards · New %d / Review %d";
+"home.error.title" = "Error";
+"home.error.close" = "Close";
+"home.error.retry" = "Retry";
+"home.grade.prompt" = "How well did you remember it?";
+"home.grade.again.title" = "Again";
+"home.grade.again.subtitle" = "Forgot";
+"home.grade.hard.title" = "Hard";
+"home.grade.hard.subtitle" = "Barely";
+"home.grade.good.title" = "Good";
+"home.grade.good.subtitle" = "Remembered";
+"home.grade.easy.title" = "Easy";
+"home.grade.easy.subtitle" = "Very easy";
+
+"more.title" = "More";
+"more.reminder.title" = "Study Reminder";
+"more.reminder.description" = "Send a daily reminder at your chosen time.";
+"more.reminder.status.on" = "Reminder is set for %02d:%02d every day.";
+"more.reminder.status.off" = "Reminder is turned off.";
+"more.reminder.permission.title" = "Notification Permission Required";
+"more.reminder.permission.message" = "Please allow notifications to use reminders.";
+"more.common.cancel" = "Cancel";
+"more.common.open_settings" = "Open Settings";
+"more.footer" = "If reminders do not arrive, check iOS Settings > Notifications > FlashFlow.";
+
+"more.data.title" = "Data";
+"more.data.export" = "Export Backup";
+"more.data.import" = "Import Backup";
+"more.data.reset" = "Reset All Data";
+"more.data.description" = "Backup or reset decks, cards, and review history.";
+"more.data.export.done" = "Backup file created. Choose a location from Share.";
+"more.data.import.cancelled" = "Backup import was cancelled.";
+"more.data.import.invalid_selection" = "Unable to read selected file.";
+"more.data.import.done" = "Backup imported.";
+"more.data.import.preview" = "%d decks, %d cards, %d reviews";
+"more.data.import.confirm.title" = "Import Backup";
+"more.data.import.confirm.message" = "Importing a backup will overwrite current data.\n\nPreview:\n%@";
+"more.data.import.confirm.action" = "Import";
+"more.data.reset.confirm.title" = "Reset All Data";
+"more.data.reset.confirm.message" = "All decks, cards, and review history will be deleted. This cannot be undone.";
+"more.data.reset.confirm.action" = "Reset";
+"more.data.reset.done" = "All data has been reset.";
+
+"more.developer.title" = "Developer";
+"more.developer.generate_samples" = "Generate Sample Decks";
+"more.developer.description" = "Create preset decks and cards for quick testing.";
+"more.developer.created_result" = "Sample deck generation completed. %d deck(s) created.";
+
+"more.appinfo.title" = "App Info";
+"more.appinfo.body" = "Version: %@ (%@)\nNotifications: Local Push";
+
+"error.generic" = "An error occurred.";

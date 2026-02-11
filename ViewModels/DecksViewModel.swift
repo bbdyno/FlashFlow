@@ -15,24 +15,20 @@ final class DecksViewModel {
         case createDeck(String)
         case renameDeck(deckID: UUID, title: String)
         case deleteDeck(UUID)
-        case didSelectSchedulerMode(SchedulerMode)
     }
 
     struct Output {
         var didChangeLoading: @MainActor (Bool) -> Void
         var didUpdateDecks: @MainActor ([DeckSummary]) -> Void
-        var didUpdateSchedulerMode: @MainActor (SchedulerMode) -> Void
         var didReceiveError: @MainActor (String) -> Void
 
         init(
             didChangeLoading: @escaping @MainActor (Bool) -> Void = { _ in },
             didUpdateDecks: @escaping @MainActor ([DeckSummary]) -> Void = { _ in },
-            didUpdateSchedulerMode: @escaping @MainActor (SchedulerMode) -> Void = { _ in },
             didReceiveError: @escaping @MainActor (String) -> Void = { _ in }
         ) {
             self.didChangeLoading = didChangeLoading
             self.didUpdateDecks = didUpdateDecks
-            self.didUpdateSchedulerMode = didUpdateSchedulerMode
             self.didReceiveError = didReceiveError
         }
     }
@@ -59,8 +55,6 @@ final class DecksViewModel {
             await renameDeck(deckID: deckID, title: title)
         case let .deleteDeck(deckID):
             await deleteDeck(deckID)
-        case let .didSelectSchedulerMode(mode):
-            await updateSchedulerMode(mode)
         }
     }
 
@@ -71,9 +65,7 @@ final class DecksViewModel {
         do {
             try await repository.prepare()
             let summaries = try await repository.deckSummaries()
-            let mode = try await repository.schedulerMode()
             output.didUpdateDecks(summaries)
-            output.didUpdateSchedulerMode(mode)
         } catch {
             output.didReceiveError(Self.userFacingMessage(from: error))
         }
@@ -109,16 +101,6 @@ final class DecksViewModel {
         }
     }
 
-    private func updateSchedulerMode(_ mode: SchedulerMode) async {
-        do {
-            try await repository.updateSchedulerMode(mode)
-            notifyDeckDataChanged()
-            await refreshDecks()
-        } catch {
-            output.didReceiveError(Self.userFacingMessage(from: error))
-        }
-    }
-
     private func notifyDeckDataChanged() {
         NotificationCenter.default.post(name: .deckDataDidChange, object: nil)
     }
@@ -129,6 +111,6 @@ final class DecksViewModel {
            !description.isEmpty {
             return description
         }
-        return "덱 작업 중 오류가 발생했습니다."
+        return "An error occurred while processing decks."
     }
 }

@@ -12,20 +12,10 @@ enum SchedulerMode: String, CaseIterable, Codable, Sendable {
     case fsrs = "fsrs"
 
     var title: String {
-        switch self {
-        case .sm2:
-            return "SM-2 Hybrid"
-        case .fsrs:
-            return "FSRS Hybrid"
-        }
+        "Adaptive Hybrid (Anki + FSRS)"
     }
 
     var shortLabel: String {
-        switch self {
-        case .sm2:
-            return "SM-2"
-        case .fsrs:
-            return "FSRS"
-        }
+        "Hybrid"
     }
 }

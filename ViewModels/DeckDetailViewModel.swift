@@ -138,6 +138,6 @@ final class DeckDetailViewModel {
            !description.isEmpty {
             return description
         }
-        return "카드 작업 중 오류가 발생했습니다."
+        return "An error occurred while processing cards."
     }
 }

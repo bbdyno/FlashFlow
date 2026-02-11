@@ -11,12 +11,14 @@ import SnapKit
 final class DecksViewController: UIViewController {
     private let repository: CardRepository
 
+    private let backgroundGradientLayer = CAGradientLayer()
+    private let topGlowView = UIView()
+    private let bottomGlowView = UIView()
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private let emptyLabel = UILabel()
     private let loadingIndicator = UIActivityIndicatorView(style: .medium)
 
     private var deckSummaries: [DeckSummary] = []
-    private var schedulerMode: SchedulerMode = .sm2
 
     private lazy var viewModel: DecksViewModel = {
         let viewModel = DecksViewModel(repository: repository)
@@ -62,45 +64,83 @@ final class DecksViewController: UIViewController {
                 self?.tableView.reloadData()
                 self?.emptyLabel.isHidden = !decks.isEmpty
             },
-            didUpdateSchedulerMode: { [weak self] mode in
-                self?.schedulerMode = mode
-                self?.rebuildSchedulerMenu()
-            },
             didReceiveError: { [weak self] message in
                 self?.presentError(message)
             }
         )
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        backgroundGradientLayer.frame = view.bounds
+        topGlowView.layer.cornerRadius = topGlowView.bounds.height / 2
+        bottomGlowView.layer.cornerRadius = bottomGlowView.bounds.height / 2
+    }
+
     private func configureUI() {
         title = "Decks"
         navigationItem.largeTitleDisplayMode = .always
 
-        view.backgroundColor = .systemBackground
+        view.layer.insertSublayer(backgroundGradientLayer, at: 0)
+        AppTheme.applyGradient(to: backgroundGradientLayer)
+        view.backgroundColor = .clear
+
+        topGlowView.backgroundColor = AppTheme.accent.withAlphaComponent(0.22)
+        topGlowView.layer.shadowColor = AppTheme.accent.cgColor
+        topGlowView.layer.shadowOpacity = 0.28
+        topGlowView.layer.shadowRadius = 52
+        topGlowView.layer.shadowOffset = .zero
+
+        bottomGlowView.backgroundColor = AppTheme.accentTeal.withAlphaComponent(0.16)
+        bottomGlowView.layer.shadowColor = AppTheme.accentTeal.cgColor
+        bottomGlowView.layer.shadowOpacity = 0.28
+        bottomGlowView.layer.shadowRadius = 52
+        bottomGlowView.layer.shadowOffset = .zero
+
+        view.addSubview(topGlowView)
+        view.addSubview(bottomGlowView)
+
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "plus"),
             style: .plain,
             target: self,
             action: #selector(didTapAddDeck)
         )
-        rebuildSchedulerMenu()
+        navigationItem.rightBarButtonItem?.tintColor = AppTheme.textPrimary
 
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "DeckCell")
+        tableView.register(DeckSummaryCell.self, forCellReuseIdentifier: DeckSummaryCell.reuseIdentifier)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.rowHeight = 70
+        tableView.rowHeight = 86
+        tableView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 20, right: 0)
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
         view.addSubview(tableView)
 
-        emptyLabel.text = "아직 덱이 없습니다.\n우측 상단 + 버튼으로 새 덱을 만들어주세요."
+        emptyLabel.text = "No decks yet.\nTap + to create your first deck."
         emptyLabel.textAlignment = .center
         emptyLabel.numberOfLines = 2
-        emptyLabel.textColor = .secondaryLabel
+        emptyLabel.textColor = AppTheme.textSecondary
         emptyLabel.font = UIFont.systemFont(ofSize: 15, weight: .medium)
         emptyLabel.isHidden = true
         view.addSubview(emptyLabel)
 
         loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.color = AppTheme.textPrimary
         view.addSubview(loadingIndicator)
+
+        topGlowView.snp.makeConstraints { make in
+            make.size.equalTo(280)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(-120)
+            make.trailing.equalToSuperview().offset(120)
+        }
+
+        bottomGlowView.snp.makeConstraints { make in
+            make.size.equalTo(240)
+            make.leading.equalToSuperview().offset(-120)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(90)
+        }
 
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -121,22 +161,6 @@ final class DecksViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleDeckDataDidChange), name: .deckDataDidChange, object: nil)
     }
 
-    private func rebuildSchedulerMenu() {
-        let actions = SchedulerMode.allCases.map { mode in
-            UIAction(title: mode.title, state: mode == schedulerMode ? .on : .off) { [weak self] _ in
-                Task { @MainActor [weak self] in
-                    guard let self else { return }
-                    await self.viewModel.send(.didSelectSchedulerMode(mode))
-                }
-            }
-        }
-
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            title: schedulerMode.shortLabel,
-            menu: UIMenu(title: "Algorithm", options: .singleSelection, children: actions)
-        )
-    }
-
     @objc
     private func handleDeckDataDidChange() {
         Task { @MainActor [weak self] in
@@ -147,12 +171,12 @@ final class DecksViewController: UIViewController {
 
     @objc
     private func didTapAddDeck() {
-        let alert = UIAlertController(title: "새 덱", message: "덱 이름을 입력하세요.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "New Deck", message: "Enter a deck name.", preferredStyle: .alert)
         alert.addTextField { textField in
-            textField.placeholder = "예: iOS Interview"
+            textField.placeholder = "e.g. iOS Interview"
         }
-        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
-        alert.addAction(UIAlertAction(title: "생성", style: .default, handler: { [weak self, weak alert] _ in
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Create", style: .default, handler: { [weak self, weak alert] _ in
             guard let self else { return }
             let title = alert?.textFields?.first?.text ?? ""
             Task { @MainActor [weak self] in
@@ -164,12 +188,12 @@ final class DecksViewController: UIViewController {
     }
 
     private func presentRenamePrompt(for deck: DeckSummary) {
-        let alert = UIAlertController(title: "덱 이름 변경", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Rename Deck", message: nil, preferredStyle: .alert)
         alert.addTextField { textField in
             textField.text = deck.title
         }
-        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
-        alert.addAction(UIAlertAction(title: "저장", style: .default, handler: { [weak self, weak alert] _ in
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { [weak self, weak alert] _ in
             guard let self else { return }
             let newTitle = alert?.textFields?.first?.text ?? ""
             Task { @MainActor [weak self] in
@@ -184,8 +208,8 @@ final class DecksViewController: UIViewController {
         guard presentedViewController == nil else {
             return
         }
-        let alert = UIAlertController(title: "오류", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "닫기", style: .cancel))
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Close", style: .cancel))
         present(alert, animated: true)
     }
 }
@@ -196,15 +220,20 @@ extension DecksViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "DeckCell", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: DeckSummaryCell.reuseIdentifier,
+            for: indexPath
+        ) as? DeckSummaryCell else {
+            return UITableViewCell()
+        }
         let deck = deckSummaries[indexPath.row]
 
-        var content = cell.defaultContentConfiguration()
-        content.text = deck.title
-        content.secondaryText = "Cards \(deck.totalCardCount) · L \(deck.dueCounts.learning) / R \(deck.dueCounts.review)"
-        content.secondaryTextProperties.color = .secondaryLabel
-        cell.contentConfiguration = content
-        cell.accessoryType = .disclosureIndicator
+        let dueToday = deck.dueCounts.total
+        let remaining = max(0, deck.totalCardCount - dueToday)
+        cell.configure(
+            title: deck.title,
+            subtitle: "Today \(dueToday) · New \(deck.dueCounts.learning) / Review \(deck.dueCounts.review) · Remaining \(remaining)"
+        )
         return cell
     }
 }
@@ -244,5 +273,84 @@ extension DecksViewController: UITableViewDelegate {
         let config = UISwipeActionsConfiguration(actions: [delete, rename])
         config.performsFirstActionWithFullSwipe = false
         return config
+    }
+}
+
+private final class DeckSummaryCell: UITableViewCell {
+    static let reuseIdentifier = "DeckSummaryCell"
+
+    private let cardView = UIView()
+    private let titleLabel = UILabel()
+    private let subtitleLabel = UILabel()
+    private let chevronImageView = UIImageView(image: UIImage(systemName: "chevron.right"))
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        configureUI()
+        configureLayout()
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func configure(title: String, subtitle: String) {
+        titleLabel.text = title
+        subtitleLabel.text = subtitle
+    }
+
+    private func configureUI() {
+        backgroundColor = .clear
+        selectionStyle = .none
+        contentView.backgroundColor = .clear
+
+        cardView.backgroundColor = AppTheme.cardBackground
+        cardView.layer.borderWidth = 1
+        cardView.layer.borderColor = AppTheme.cardBorder.cgColor
+        cardView.layer.cornerRadius = 14
+        cardView.layer.cornerCurve = .continuous
+
+        titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        titleLabel.textColor = AppTheme.textPrimary
+
+        subtitleLabel.font = UIFont.systemFont(ofSize: 13, weight: .medium)
+        subtitleLabel.textColor = AppTheme.textSecondary
+        subtitleLabel.numberOfLines = 1
+
+        chevronImageView.tintColor = AppTheme.textSecondary
+        chevronImageView.contentMode = .scaleAspectFit
+
+        contentView.addSubview(cardView)
+        cardView.addSubview(titleLabel)
+        cardView.addSubview(subtitleLabel)
+        cardView.addSubview(chevronImageView)
+    }
+
+    private func configureLayout() {
+        cardView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview().inset(6)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+
+        chevronImageView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().inset(14)
+            make.width.equalTo(10)
+            make.height.equalTo(16)
+        }
+
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(12)
+            make.leading.equalToSuperview().inset(14)
+            make.trailing.lessThanOrEqualTo(chevronImageView.snp.leading).offset(-10)
+        }
+
+        subtitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(4)
+            make.leading.equalTo(titleLabel)
+            make.trailing.lessThanOrEqualTo(chevronImageView.snp.leading).offset(-10)
+            make.bottom.equalToSuperview().inset(12)
+        }
     }
 }

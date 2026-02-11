@@ -34,8 +34,3 @@ struct FlashCardText: Hashable, Codable, Sendable {
     let subtitle: String
     let detail: String
 }
-
-enum SwipeDirection: String, Sendable {
-    case left
-    case right
-}

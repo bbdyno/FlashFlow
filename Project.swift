@@ -49,6 +49,9 @@ let project = Project(
                 "Views/**",
                 "ViewControllers/**"
             ],
+            resources: [
+                "Resources/**"
+            ],
             dependencies: [
                 .package(product: "SnapKit")
             ],

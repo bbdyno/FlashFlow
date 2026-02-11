@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,18 +15,24 @@
 		4FB810A13BB16B5B9FAEE58D /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F982FCE6397CEFF8AD9D615B /* HomeViewModel.swift */; };
 		515DB0549CC52175684AD3D5 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869715261FFE220B82F29861 /* Card.swift */; };
 		59994389711ADD58818586B3 /* AnkiScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46B23186BD548F02C9F2CF6 /* AnkiScheduler.swift */; };
+		5C04C800C4C3125418AE52B8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FA4D8AE24A87F4C73D32DEA3 /* Localizable.strings */; };
 		64E02E057E0E291050E8FB4F /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0E6051F8B961EF644CE30C /* Deck.swift */; };
 		69C9CD51C9856AA2AFE35447 /* StudyCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A49BF5DF36439B440932CE /* StudyCard.swift */; };
 		72D0135DBB0E1FB8BE8B5661 /* CardEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A02C18ADF7EAC5E578A5C7 /* CardEditorViewController.swift */; };
 		7FA28FA24AC4A0BB123A8CCA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EC92FBEA323D27551A8F01 /* SceneDelegate.swift */; };
 		8143D6D31D9468BBA1F290C1 /* FSRSScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B6674FD3EB8760110A9D6E /* FSRSScheduler.swift */; };
 		8982BACE7041838F93017058 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F191840DC2677B0D22791074 /* SnapKit */; };
+		9310727C0535F428A5A8620A /* TuistBundle+FlashFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A2012063DCA9E1119E104B /* TuistBundle+FlashFlow.swift */; };
 		A26C4E9F2BB0710F42DFBC11 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638B39E4C7F5D8EBAA95161C /* OnboardingViewController.swift */; };
 		A7B3A896FA04287CB2069ABD /* DeckDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A446F21C9D4FCB1113E48DC /* DeckDetailViewModel.swift */; };
+		BA9E74C6B759BFF29B1759C5 /* TuistStrings+FlashFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F0207FD80F6BD01C70E1D9 /* TuistStrings+FlashFlow.swift */; };
+		C59561011BD7DA2FFFBADB56 /* StudyReminderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3D5AC77D3C853F7B8C7DD6 /* StudyReminderService.swift */; };
 		CA6FB4F40F3537BCE90E7776 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481DE27578858C7BA8CA5E65 /* AppDelegate.swift */; };
+		D53A16FEF74007F0460BE2B5 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC617E05753B019160C7CE /* L10n.swift */; };
 		D5922687CFC5609B41822A02 /* RootTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906AF33EF963D3FABCE54EDB /* RootTabBarController.swift */; };
 		DC7680A36A0F7BCE10548937 /* FlashCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9BFDC169682A843298F3F4 /* FlashCard.swift */; };
 		E2787E7C3A737CD5F1DE2E8D /* FSRSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD3799234C07F474D18576E /* FSRSTests.swift */; };
+		E37153E547544309D3048881 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E240884BB315947D1E832AE /* MoreViewController.swift */; };
 		E82D4C68C71EBADE5E6C960A /* DeckDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE498C63E98943BB7BEDC366 /* DeckDetailViewController.swift */; };
 		EA0008FAB74F24FCC7879AF6 /* AppNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233E5F6726A5F5E536BA8AA1 /* AppNotification.swift */; };
 		F0C136BC0366632117EE158F /* CardRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999F8CD582E2C405F765FF27 /* CardRepository.swift */; };
@@ -68,6 +74,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		10F0207FD80F6BD01C70E1D9 /* TuistStrings+FlashFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistStrings+FlashFlow.swift"; sourceTree = "<group>"; };
 		16A49BF5DF36439B440932CE /* StudyCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyCard.swift; sourceTree = "<group>"; };
 		2313526293C26BE01F195E44 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		233E5F6726A5F5E536BA8AA1 /* AppNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNotification.swift; sourceTree = "<group>"; };
@@ -79,20 +86,26 @@
 		481DE27578858C7BA8CA5E65 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52F55E8A12F23886FCC5B960 /* FlashFlow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlashFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A9BFDC169682A843298F3F4 /* FlashCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCard.swift; sourceTree = "<group>"; };
+		5E07FBFE59F1935C16033ACA /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6036FB0329444FFC6D0D2A45 /* ReviewHeatmapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewHeatmapView.swift; sourceTree = "<group>"; };
 		638B39E4C7F5D8EBAA95161C /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		6BD9561D18F70C07ABE6B413 /* GlassCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassCardView.swift; sourceTree = "<group>"; };
 		703C6FAA9809CBFA300EED7C /* FlashFlow-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "FlashFlow-Info.plist"; sourceTree = "<group>"; };
 		747743885A5483EFC6C1ADD6 /* SchedulerMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerMode.swift; sourceTree = "<group>"; };
 		75A02C18ADF7EAC5E578A5C7 /* CardEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardEditorViewController.swift; sourceTree = "<group>"; };
+		7E240884BB315947D1E832AE /* MoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
 		869715261FFE220B82F29861 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		8E0E6051F8B961EF644CE30C /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		906AF33EF963D3FABCE54EDB /* RootTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabBarController.swift; sourceTree = "<group>"; };
 		999F8CD582E2C405F765FF27 /* CardRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardRepository.swift; sourceTree = "<group>"; };
+		9E3D5AC77D3C853F7B8C7DD6 /* StudyReminderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyReminderService.swift; sourceTree = "<group>"; };
 		A46B23186BD548F02C9F2CF6 /* AnkiScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnkiScheduler.swift; sourceTree = "<group>"; };
+		A80BB1F51C193AED7D61B7B6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		ACD3799234C07F474D18576E /* FSRSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSRSTests.swift; sourceTree = "<group>"; };
+		ACFC617E05753B019160C7CE /* L10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
 		B2EC92FBEA323D27551A8F01 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		CE75DD24A2DDD201004E73A8 /* DecksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecksViewController.swift; sourceTree = "<group>"; };
+		D5A2012063DCA9E1119E104B /* TuistBundle+FlashFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistBundle+FlashFlow.swift"; sourceTree = "<group>"; };
 		EE498C63E98943BB7BEDC366 /* DeckDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDetailViewController.swift; sourceTree = "<group>"; };
 		F0B6674FD3EB8760110A9D6E /* FSRSScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSRSScheduler.swift; sourceTree = "<group>"; };
 		F982FCE6397CEFF8AD9D615B /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -121,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				A59742F75CF0BE04C9ADBC75 /* InfoPlists */,
+				0B1F5FA78D53F487A71D3F0C /* Sources */,
 			);
 			path = Derived;
 			sourceTree = "<group>";
@@ -132,10 +146,28 @@
 				EE498C63E98943BB7BEDC366 /* DeckDetailViewController.swift */,
 				CE75DD24A2DDD201004E73A8 /* DecksViewController.swift */,
 				2313526293C26BE01F195E44 /* HomeViewController.swift */,
+				7E240884BB315947D1E832AE /* MoreViewController.swift */,
 				638B39E4C7F5D8EBAA95161C /* OnboardingViewController.swift */,
 				906AF33EF963D3FABCE54EDB /* RootTabBarController.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		0B1F5FA78D53F487A71D3F0C /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				D5A2012063DCA9E1119E104B /* TuistBundle+FlashFlow.swift */,
+				10F0207FD80F6BD01C70E1D9 /* TuistStrings+FlashFlow.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		1F82A66CAF13F4F65E6F6715 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FA4D8AE24A87F4C73D32DEA3 /* Localizable.strings */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		1FD67E438E0FB0E1DE4F85C9 /* Project */ = {
@@ -144,6 +176,7 @@
 				84FAAC731E5E6462AAF14EB3 /* App */,
 				05BF299B0C368630EFF547FB /* Derived */,
 				B706BD90AA7497227CBCCE7D /* Models */,
+				1F82A66CAF13F4F65E6F6715 /* Resources */,
 				FB85D41FC7B32043D699584B /* Services */,
 				4127C1038A20F9CD9BEF1195 /* Tests */,
 				0B12155B8FC079470DA68E69 /* ViewControllers */,
@@ -192,6 +225,7 @@
 			isa = PBXGroup;
 			children = (
 				481DE27578858C7BA8CA5E65 /* AppDelegate.swift */,
+				ACFC617E05753B019160C7CE /* L10n.swift */,
 				B2EC92FBEA323D27551A8F01 /* SceneDelegate.swift */,
 			);
 			path = App;
@@ -235,6 +269,7 @@
 				A46B23186BD548F02C9F2CF6 /* AnkiScheduler.swift */,
 				999F8CD582E2C405F765FF27 /* CardRepository.swift */,
 				F0B6674FD3EB8760110A9D6E /* FSRSScheduler.swift */,
+				9E3D5AC77D3C853F7B8C7DD6 /* StudyReminderService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -305,6 +340,7 @@
 			knownRegions = (
 				Base,
 				en,
+				ko,
 			);
 			mainGroup = 35B24DF3814EB1A979B6457E;
 			packageReferences = (
@@ -332,6 +368,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C04C800C4C3125418AE52B8 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,7 +388,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA6FB4F40F3537BCE90E7776 /* AppDelegate.swift in Sources */,
+				D53A16FEF74007F0460BE2B5 /* L10n.swift in Sources */,
 				7FA28FA24AC4A0BB123A8CCA /* SceneDelegate.swift in Sources */,
+				9310727C0535F428A5A8620A /* TuistBundle+FlashFlow.swift in Sources */,
+				BA9E74C6B759BFF29B1759C5 /* TuistStrings+FlashFlow.swift in Sources */,
 				EA0008FAB74F24FCC7879AF6 /* AppNotification.swift in Sources */,
 				515DB0549CC52175684AD3D5 /* Card.swift in Sources */,
 				64E02E057E0E291050E8FB4F /* Deck.swift in Sources */,
@@ -362,10 +402,12 @@
 				59994389711ADD58818586B3 /* AnkiScheduler.swift in Sources */,
 				F0C136BC0366632117EE158F /* CardRepository.swift in Sources */,
 				8143D6D31D9468BBA1F290C1 /* FSRSScheduler.swift in Sources */,
+				C59561011BD7DA2FFFBADB56 /* StudyReminderService.swift in Sources */,
 				72D0135DBB0E1FB8BE8B5661 /* CardEditorViewController.swift in Sources */,
 				E82D4C68C71EBADE5E6C960A /* DeckDetailViewController.swift in Sources */,
 				F6FCF36C565528B02AF2345D /* DecksViewController.swift in Sources */,
 				46885145CB890031A57298E5 /* HomeViewController.swift in Sources */,
+				E37153E547544309D3048881 /* MoreViewController.swift in Sources */,
 				A26C4E9F2BB0710F42DFBC11 /* OnboardingViewController.swift in Sources */,
 				D5922687CFC5609B41822A02 /* RootTabBarController.swift in Sources */,
 				A7B3A896FA04287CB2069ABD /* DeckDetailViewModel.swift in Sources */,
@@ -387,13 +429,24 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		FA4D8AE24A87F4C73D32DEA3 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A80BB1F51C193AED7D61B7B6 /* en */,
+				5E07FBFE59F1935C16033ACA /* ko */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		890A8C1AC5A79427B556A58D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = M79H9K226Y;
 				INFOPLIST_FILE = "Derived/InfoPlists/FlashFlowTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -407,7 +460,10 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -423,7 +479,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = M79H9K226Y;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Derived/InfoPlists/FlashFlow-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -511,7 +566,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = M79H9K226Y;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Derived/InfoPlists/FlashFlow-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -525,7 +579,10 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -538,7 +595,6 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = M79H9K226Y;
 				INFOPLIST_FILE = "Derived/InfoPlists/FlashFlowTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (

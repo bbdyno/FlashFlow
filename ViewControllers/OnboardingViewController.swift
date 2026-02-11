@@ -45,50 +45,56 @@ final class OnboardingViewController: UIViewController {
 
     private func configureUI() {
         view.layer.insertSublayer(backgroundGradientLayer, at: 0)
-        view.backgroundColor = .black
+        view.backgroundColor = .clear
         navigationItem.hidesBackButton = true
 
-        backgroundGradientLayer.colors = [
-            UIColor(red: 0.04, green: 0.10, blue: 0.20, alpha: 1.0).cgColor,
-            UIColor(red: 0.07, green: 0.18, blue: 0.32, alpha: 1.0).cgColor,
-            UIColor(red: 0.02, green: 0.05, blue: 0.11, alpha: 1.0).cgColor
-        ]
-        backgroundGradientLayer.startPoint = CGPoint(x: 0, y: 0)
-        backgroundGradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        AppTheme.applyGradient(to: backgroundGradientLayer)
 
-        titleLabel.text = "FlashFlow에 오신 것을 환영합니다"
-        titleLabel.textColor = .white
+        titleLabel.text = "Welcome to FlashFlow"
+        titleLabel.textColor = AppTheme.textPrimary
         titleLabel.numberOfLines = 2
         titleLabel.font = UIFont(name: "AvenirNext-Bold", size: 30) ?? .systemFont(ofSize: 30, weight: .bold)
 
-        subtitleLabel.text = "첫 덱과 첫 카드를 만들면 바로 학습을 시작할 수 있습니다."
-        subtitleLabel.textColor = UIColor.white.withAlphaComponent(0.82)
+        subtitleLabel.text = "Create your first deck and card to start studying right away."
+        subtitleLabel.textColor = AppTheme.textSecondary
         subtitleLabel.numberOfLines = 2
         subtitleLabel.font = UIFont(name: "AvenirNext-Medium", size: 16) ?? .systemFont(ofSize: 16, weight: .medium)
 
         [deckField, frontField, backField, noteField].forEach { field in
-            field.borderStyle = .roundedRect
-            field.backgroundColor = UIColor.white.withAlphaComponent(0.9)
+            field.backgroundColor = AppTheme.cardBackground
+            field.textColor = AppTheme.textPrimary
             field.autocapitalizationType = .sentences
             field.clearButtonMode = .whileEditing
+            field.layer.borderWidth = 1
+            field.layer.borderColor = AppTheme.cardBorder.cgColor
             field.layer.cornerRadius = 12
+            field.layer.cornerCurve = .continuous
+            field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 1))
+            field.leftViewMode = .always
         }
 
-        deckField.placeholder = "덱 이름 (예: iOS)"
-        frontField.placeholder = "첫 카드 앞면"
-        backField.placeholder = "첫 카드 뒷면"
-        noteField.placeholder = "노트 (선택)"
+        deckField.placeholder = "Deck name (e.g. Vocabulary)"
+        frontField.placeholder = "First card front"
+        backField.placeholder = "First card back"
+        noteField.placeholder = "Note (optional)"
 
-        startButton.setTitle("첫 덱 생성하기", for: .normal)
-        startButton.setTitleColor(.white, for: .normal)
+        [deckField, frontField, backField, noteField].forEach { field in
+            field.attributedPlaceholder = NSAttributedString(
+                string: field.placeholder ?? "",
+                attributes: [.foregroundColor: AppTheme.textSecondary]
+            )
+        }
+
+        startButton.setTitle("Create First Deck", for: .normal)
+        startButton.setTitleColor(AppTheme.textPrimary, for: .normal)
         startButton.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 16) ?? .systemFont(ofSize: 16, weight: .bold)
-        startButton.backgroundColor = UIColor.systemCyan.withAlphaComponent(0.82)
+        startButton.backgroundColor = AppTheme.accent.withAlphaComponent(0.86)
         startButton.layer.cornerRadius = 14
         startButton.layer.cornerCurve = .continuous
         startButton.addTarget(self, action: #selector(didTapStart), for: .touchUpInside)
 
         loadingIndicator.hidesWhenStopped = true
-        loadingIndicator.color = .white
+        loadingIndicator.color = AppTheme.textPrimary
 
         view.addSubview(titleLabel)
         view.addSubview(subtitleLabel)
@@ -181,8 +187,8 @@ final class OnboardingViewController: UIViewController {
             return
         }
 
-        let alert = UIAlertController(title: "오류", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .cancel))
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
         present(alert, animated: true)
     }
 
@@ -192,6 +198,6 @@ final class OnboardingViewController: UIViewController {
            !description.isEmpty {
             return description
         }
-        return "온보딩 처리 중 오류가 발생했습니다."
+        return "An error occurred during onboarding."
     }
 }

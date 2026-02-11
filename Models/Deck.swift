@@ -71,3 +71,9 @@ struct DeckSummary: Identifiable, Hashable, Sendable {
     let totalCardCount: Int
     let dueCounts: QueueDueCounts
 }
+
+struct BackupPreview: Sendable {
+    let deckCount: Int
+    let cardCount: Int
+    let reviewCount: Int
+}

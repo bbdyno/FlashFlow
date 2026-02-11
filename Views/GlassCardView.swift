@@ -9,6 +9,11 @@ import UIKit
 import SnapKit
 
 final class GlassCardView: UIView {
+    enum Face {
+        case front
+        case back
+    }
+
     private let glassContainer = UIView()
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
     private let highlightView = UIView()
@@ -17,6 +22,7 @@ final class GlassCardView: UIView {
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
     private let detailLabel = UILabel()
+    private let helperLabel = UILabel()
 
     private let highlightGradient = CAGradientLayer()
 
@@ -41,7 +47,7 @@ final class GlassCardView: UIView {
         let card = studyCard.content
         titleLabel.text = card.title
         let note = card.subtitle.trimmingCharacters(in: .whitespacesAndNewlines)
-        if note.isEmpty || note == "No Note" {
+        if note.isEmpty || note == "No Note" || note == "No note" {
             subtitleLabel.text = studyCard.deckTitle
         } else {
             subtitleLabel.text = "\(studyCard.deckTitle) · \(note)"
@@ -51,6 +57,32 @@ final class GlassCardView: UIView {
 
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 24, weight: .semibold)
         iconImageView.image = UIImage(systemName: card.imageName, withConfiguration: symbolConfig)
+        setFace(.front, animated: false)
+    }
+
+    func setFace(_ face: Face, animated: Bool) {
+        let applyState = {
+            switch face {
+            case .front:
+                self.detailLabel.isHidden = true
+                self.helperLabel.isHidden = false
+            case .back:
+                self.detailLabel.isHidden = false
+                self.helperLabel.isHidden = true
+            }
+        }
+
+        if animated {
+            UIView.transition(
+                with: glassContainer,
+                duration: 0.24,
+                options: [.transitionCrossDissolve, .allowUserInteraction]
+            ) {
+                applyState()
+            }
+        } else {
+            applyState()
+        }
     }
 
     func applyDragTranslation(_ translation: CGPoint, in bounds: CGRect) {
@@ -93,6 +125,7 @@ final class GlassCardView: UIView {
         glassContainer.addSubview(titleLabel)
         glassContainer.addSubview(subtitleLabel)
         glassContainer.addSubview(detailLabel)
+        glassContainer.addSubview(helperLabel)
     }
 
     private func configureStyle() {
@@ -147,6 +180,11 @@ final class GlassCardView: UIView {
         detailLabel.font = UIFont(name: "AvenirNext-Medium", size: 17) ?? .systemFont(ofSize: 17, weight: .medium)
         detailLabel.textColor = UIColor.white.withAlphaComponent(0.88)
         detailLabel.numberOfLines = 0
+
+        helperLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 14) ?? .systemFont(ofSize: 14, weight: .semibold)
+        helperLabel.textColor = UIColor.white.withAlphaComponent(0.74)
+        helperLabel.textAlignment = .left
+        helperLabel.text = "Tap card to reveal answer"
     }
 
     private func configureLayout() {
@@ -185,6 +223,12 @@ final class GlassCardView: UIView {
         }
 
         detailLabel.snp.makeConstraints { make in
+            make.top.equalTo(subtitleLabel.snp.bottom).offset(16)
+            make.leading.trailing.equalTo(titleLabel)
+            make.bottom.lessThanOrEqualToSuperview().inset(28)
+        }
+
+        helperLabel.snp.makeConstraints { make in
             make.top.equalTo(subtitleLabel.snp.bottom).offset(16)
             make.leading.trailing.equalTo(titleLabel)
             make.bottom.lessThanOrEqualToSuperview().inset(28)

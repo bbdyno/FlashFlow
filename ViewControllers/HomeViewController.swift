@@ -17,27 +17,25 @@ final class HomeViewController: UIViewController {
 
     private let titleLabel = UILabel()
     private let deckButton = UIButton(type: .system)
-    private let algorithmBadgeLabel = UILabel()
     private let dueBadgeLabel = UILabel()
-    private let queueSegmentedControl = UISegmentedControl(items: StudyQueue.allCases.map(\.title))
-    private let heatmapView = ReviewHeatmapView()
     private let glassCardView = GlassCardView()
+    private let revealAnswerButton = UIButton(type: .system)
+    private let gradePromptLabel = UILabel()
     private let gradeStackView = UIStackView()
     private let emptyStateLabel = UILabel()
     private let reloadButton = UIButton(type: .system)
     private let loadingIndicator = UIActivityIndicatorView(style: .large)
 
-    private lazy var panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleCardPan(_:)))
     private lazy var viewModel: HomeViewModel = {
         let viewModel = HomeViewModel(repository: repository)
         viewModel.bind(output: makeOutput())
         return viewModel
     }()
 
-    private var isSwipeAnimating = false
-    private var selectedQueue: StudyQueue = .learning
+    private var isAnswerRevealed = false
     private var selectedDeckID: UUID?
     private var deckSummaries: [DeckSummary] = []
+    private var cardHeightConstraint: Constraint?
 
     init(repository: CardRepository) {
         self.repository = repository
@@ -62,10 +60,17 @@ final class HomeViewController: UIViewController {
         configureHierarchy()
         configureStyle()
         configureLayout()
-        configureGestures()
         configureGradeButtons()
         configureNotifications()
         requestInitialData()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            await self.viewModel.send(.didTapReload)
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -73,6 +78,7 @@ final class HomeViewController: UIViewController {
         backgroundGradientLayer.frame = view.bounds
         topGlowView.layer.cornerRadius = topGlowView.bounds.height / 2
         bottomGlowView.layer.cornerRadius = bottomGlowView.bounds.height / 2
+        updateCardHeightIfNeeded()
     }
 
     private func makeOutput() -> HomeViewModel.Output {
@@ -83,20 +89,11 @@ final class HomeViewController: UIViewController {
             didUpdateDeckSummaries: { [weak self] summaries, selectedDeckID in
                 self?.applyDeckSummaries(summaries, selectedDeckID: selectedDeckID)
             },
-            didUpdateQueueSelection: { [weak self] queue in
-                self?.applyQueueSelection(queue)
-            },
-            didUpdateSchedulerMode: { [weak self] mode in
-                self?.algorithmBadgeLabel.text = mode.shortLabel
-            },
             didUpdateQueueCounts: { [weak self] counts in
-                self?.dueBadgeLabel.text = "L \(counts.learning) · R \(counts.review)"
+                self?.applyDueSummary(counts)
             },
             didUpdateCard: { [weak self] card in
                 self?.render(card: card)
-            },
-            didUpdateHeatmap: { [weak self] heatmap in
-                self?.heatmapView.update(reviewCountByDate: heatmap, totalDays: 140)
             },
             didShowEmptyState: { [weak self] message in
                 self?.showEmptyState(message)
@@ -114,11 +111,10 @@ final class HomeViewController: UIViewController {
         view.addSubview(bottomGlowView)
         view.addSubview(titleLabel)
         view.addSubview(deckButton)
-        view.addSubview(algorithmBadgeLabel)
         view.addSubview(dueBadgeLabel)
-        view.addSubview(queueSegmentedControl)
-        view.addSubview(heatmapView)
         view.addSubview(glassCardView)
+        view.addSubview(revealAnswerButton)
+        view.addSubview(gradePromptLabel)
         view.addSubview(gradeStackView)
         view.addSubview(emptyStateLabel)
         view.addSubview(reloadButton)
@@ -126,96 +122,91 @@ final class HomeViewController: UIViewController {
     }
 
     private func configureStyle() {
-        backgroundGradientLayer.colors = [
-            UIColor(red: 0.04, green: 0.10, blue: 0.20, alpha: 1.0).cgColor,
-            UIColor(red: 0.10, green: 0.23, blue: 0.40, alpha: 1.0).cgColor,
-            UIColor(red: 0.02, green: 0.06, blue: 0.12, alpha: 1.0).cgColor
-        ]
-        backgroundGradientLayer.startPoint = CGPoint(x: 0, y: 0)
-        backgroundGradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        AppTheme.applyGradient(to: backgroundGradientLayer)
 
-        topGlowView.backgroundColor = UIColor.systemCyan.withAlphaComponent(0.2)
-        topGlowView.layer.shadowColor = UIColor.systemCyan.cgColor
+        topGlowView.backgroundColor = AppTheme.accent.withAlphaComponent(0.22)
+        topGlowView.layer.shadowColor = AppTheme.accent.cgColor
         topGlowView.layer.shadowOpacity = 0.28
         topGlowView.layer.shadowRadius = 52
         topGlowView.layer.shadowOffset = .zero
 
-        bottomGlowView.backgroundColor = UIColor.systemMint.withAlphaComponent(0.15)
-        bottomGlowView.layer.shadowColor = UIColor.systemMint.cgColor
+        bottomGlowView.backgroundColor = AppTheme.accentTeal.withAlphaComponent(0.16)
+        bottomGlowView.layer.shadowColor = AppTheme.accentTeal.cgColor
         bottomGlowView.layer.shadowOpacity = 0.28
         bottomGlowView.layer.shadowRadius = 52
         bottomGlowView.layer.shadowOffset = .zero
 
-        titleLabel.text = "FlashFlow"
+        titleLabel.text = L10n.tr("home.title")
         titleLabel.font = UIFont(name: "AvenirNext-Bold", size: 34) ?? .systemFont(ofSize: 34, weight: .bold)
-        titleLabel.textColor = UIColor.white.withAlphaComponent(0.96)
+        titleLabel.textColor = AppTheme.textPrimary
 
         deckButton.configuration = .plain()
         deckButton.configuration?.image = UIImage(systemName: "chevron.down")
         deckButton.configuration?.imagePlacement = .trailing
         deckButton.configuration?.imagePadding = 6
-        deckButton.configuration?.baseForegroundColor = .white
+        deckButton.configuration?.baseForegroundColor = AppTheme.textPrimary
         deckButton.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 14) ?? .systemFont(ofSize: 14, weight: .semibold)
         deckButton.layer.cornerRadius = 12
         deckButton.layer.cornerCurve = .continuous
         deckButton.layer.borderWidth = 1
-        deckButton.layer.borderColor = UIColor.white.withAlphaComponent(0.20).cgColor
-        deckButton.backgroundColor = UIColor.white.withAlphaComponent(0.12)
+        deckButton.layer.borderColor = AppTheme.cardBorder.cgColor
+        deckButton.backgroundColor = AppTheme.cardBackground
         deckButton.showsMenuAsPrimaryAction = true
-        setDeckButtonTitle("덱 선택")
-
-        algorithmBadgeLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 12) ?? .systemFont(ofSize: 12, weight: .semibold)
-        algorithmBadgeLabel.textColor = UIColor.white.withAlphaComponent(0.92)
-        algorithmBadgeLabel.textAlignment = .center
-        algorithmBadgeLabel.backgroundColor = UIColor.systemTeal.withAlphaComponent(0.28)
-        algorithmBadgeLabel.layer.cornerRadius = 14
-        algorithmBadgeLabel.layer.cornerCurve = .continuous
-        algorithmBadgeLabel.layer.borderWidth = 1
-        algorithmBadgeLabel.layer.borderColor = UIColor.white.withAlphaComponent(0.20).cgColor
-        algorithmBadgeLabel.clipsToBounds = true
-        algorithmBadgeLabel.text = "SM-2"
+        setDeckButtonTitle(L10n.tr("home.deck.select"))
 
         dueBadgeLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 13) ?? .systemFont(ofSize: 13, weight: .semibold)
-        dueBadgeLabel.textColor = UIColor.white.withAlphaComponent(0.92)
+        dueBadgeLabel.textColor = AppTheme.textPrimary
         dueBadgeLabel.textAlignment = .center
-        dueBadgeLabel.backgroundColor = UIColor.white.withAlphaComponent(0.12)
+        dueBadgeLabel.backgroundColor = AppTheme.cardBackground
         dueBadgeLabel.layer.cornerRadius = 14
         dueBadgeLabel.layer.cornerCurve = .continuous
         dueBadgeLabel.layer.borderWidth = 1
-        dueBadgeLabel.layer.borderColor = UIColor.white.withAlphaComponent(0.20).cgColor
+        dueBadgeLabel.layer.borderColor = AppTheme.cardBorder.cgColor
         dueBadgeLabel.clipsToBounds = true
-        dueBadgeLabel.text = "L 0 · R 0"
+        dueBadgeLabel.text = L10n.tr("home.due.none")
 
-        queueSegmentedControl.selectedSegmentIndex = selectedQueue.rawValue
-        queueSegmentedControl.selectedSegmentTintColor = UIColor.white.withAlphaComponent(0.24)
-        queueSegmentedControl.backgroundColor = UIColor.white.withAlphaComponent(0.10)
-        queueSegmentedControl.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
-        queueSegmentedControl.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
-        queueSegmentedControl.addTarget(self, action: #selector(didChangeQueueSegment(_:)), for: .valueChanged)
+        revealAnswerButton.setTitle(L10n.tr("home.reveal"), for: .normal)
+        revealAnswerButton.setTitleColor(AppTheme.textPrimary, for: .normal)
+        revealAnswerButton.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 15) ?? .systemFont(ofSize: 15, weight: .bold)
+        revealAnswerButton.backgroundColor = AppTheme.accent.withAlphaComponent(0.55)
+        revealAnswerButton.layer.cornerRadius = 12
+        revealAnswerButton.layer.cornerCurve = .continuous
+        revealAnswerButton.layer.borderWidth = 1
+        revealAnswerButton.layer.borderColor = AppTheme.cardBorder.cgColor
+        revealAnswerButton.addTarget(self, action: #selector(didTapRevealAnswer), for: .touchUpInside)
+        revealAnswerButton.isHidden = true
+
+        gradePromptLabel.text = L10n.tr("home.grade.prompt")
+        gradePromptLabel.textColor = AppTheme.textSecondary
+        gradePromptLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 13) ?? .systemFont(ofSize: 13, weight: .semibold)
+        gradePromptLabel.textAlignment = .center
+        gradePromptLabel.numberOfLines = 2
+        gradePromptLabel.isHidden = true
 
         gradeStackView.axis = .horizontal
         gradeStackView.alignment = .fill
         gradeStackView.distribution = .fillEqually
         gradeStackView.spacing = 10
+        gradeStackView.isHidden = true
 
         emptyStateLabel.textAlignment = .center
         emptyStateLabel.numberOfLines = 3
         emptyStateLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 18) ?? .systemFont(ofSize: 18, weight: .semibold)
-        emptyStateLabel.textColor = UIColor.white.withAlphaComponent(0.90)
+        emptyStateLabel.textColor = AppTheme.textPrimary
         emptyStateLabel.isHidden = true
 
-        reloadButton.setTitle("새로고침", for: .normal)
+        reloadButton.setTitle(L10n.tr("home.reload"), for: .normal)
         reloadButton.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 15) ?? .systemFont(ofSize: 15, weight: .bold)
-        reloadButton.setTitleColor(.white, for: .normal)
-        reloadButton.backgroundColor = UIColor.white.withAlphaComponent(0.16)
+        reloadButton.setTitleColor(AppTheme.textPrimary, for: .normal)
+        reloadButton.backgroundColor = AppTheme.cardBackground
         reloadButton.layer.cornerRadius = 14
         reloadButton.layer.cornerCurve = .continuous
         reloadButton.layer.borderWidth = 1
-        reloadButton.layer.borderColor = UIColor.white.withAlphaComponent(0.20).cgColor
+        reloadButton.layer.borderColor = AppTheme.cardBorder.cgColor
         reloadButton.isHidden = true
         reloadButton.addTarget(self, action: #selector(didTapReloadButton), for: .touchUpInside)
 
-        loadingIndicator.color = UIColor.white.withAlphaComponent(0.90)
+        loadingIndicator.color = AppTheme.textPrimary
         loadingIndicator.hidesWhenStopped = true
     }
 
@@ -235,20 +226,14 @@ final class HomeViewController: UIViewController {
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             make.leading.equalToSuperview().inset(24)
+            make.trailing.lessThanOrEqualTo(dueBadgeLabel.snp.leading).offset(-12)
         }
 
         dueBadgeLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(titleLabel)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(14)
             make.trailing.equalToSuperview().inset(24)
             make.height.equalTo(30)
             make.width.greaterThanOrEqualTo(104)
-        }
-
-        algorithmBadgeLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(dueBadgeLabel)
-            make.trailing.equalTo(dueBadgeLabel.snp.leading).offset(-8)
-            make.height.equalTo(30)
-            make.width.greaterThanOrEqualTo(72)
         }
 
         deckButton.snp.makeConstraints { make in
@@ -256,33 +241,31 @@ final class HomeViewController: UIViewController {
             make.leading.equalToSuperview().inset(24)
             make.height.equalTo(32)
             make.width.greaterThanOrEqualTo(120)
-        }
-
-        queueSegmentedControl.snp.makeConstraints { make in
-            make.centerY.equalTo(deckButton)
-            make.trailing.equalToSuperview().inset(24)
-            make.leading.greaterThanOrEqualTo(deckButton.snp.trailing).offset(12)
-            make.width.equalTo(210)
-            make.height.equalTo(32)
-        }
-
-        heatmapView.snp.makeConstraints { make in
-            make.top.equalTo(deckButton.snp.bottom).offset(14)
-            make.leading.trailing.equalToSuperview().inset(24)
-            make.height.equalTo(162)
+            make.trailing.lessThanOrEqualToSuperview().inset(24)
         }
 
         glassCardView.snp.makeConstraints { make in
-            make.top.equalTo(heatmapView.snp.bottom).offset(16)
+            make.top.equalTo(deckButton.snp.bottom).offset(18)
             make.leading.trailing.equalToSuperview().inset(24)
-            make.height.equalTo(glassCardView.snp.width).multipliedBy(1.1)
+            cardHeightConstraint = make.height.equalTo(280).constraint
         }
 
-        gradeStackView.snp.makeConstraints { make in
+        revealAnswerButton.snp.makeConstraints { make in
             make.top.equalTo(glassCardView.snp.bottom).offset(14)
             make.leading.trailing.equalToSuperview().inset(24)
             make.height.equalTo(44)
+        }
+
+        gradeStackView.snp.makeConstraints { make in
+            make.top.equalTo(gradePromptLabel.snp.bottom).offset(8)
+            make.leading.trailing.equalToSuperview().inset(24)
+            make.height.equalTo(96)
             make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide).inset(12)
+        }
+
+        gradePromptLabel.snp.makeConstraints { make in
+            make.top.equalTo(revealAnswerButton.snp.bottom).offset(12)
+            make.leading.trailing.equalToSuperview().inset(24)
         }
 
         emptyStateLabel.snp.makeConstraints { make in
@@ -302,32 +285,59 @@ final class HomeViewController: UIViewController {
         }
     }
 
-    private func configureGestures() {
-        glassCardView.addGestureRecognizer(panGestureRecognizer)
-    }
-
     private func configureGradeButtons() {
-        let configs: [(title: String, grade: UserGrade, tint: UIColor)] = [
-            ("Again", .again, UIColor(red: 0.96, green: 0.39, blue: 0.40, alpha: 0.95)),
-            ("Hard", .hard, UIColor(red: 0.97, green: 0.66, blue: 0.31, alpha: 0.95)),
-            ("Good", .good, UIColor(red: 0.35, green: 0.80, blue: 0.46, alpha: 0.95)),
-            ("Easy", .easy, UIColor(red: 0.20, green: 0.72, blue: 0.78, alpha: 0.95))
+        let configs: [(title: String, subtitle: String, grade: UserGrade, tint: UIColor)] = [
+            (L10n.tr("home.grade.again.title"), L10n.tr("home.grade.again.subtitle"), .again, AppTheme.gradeAgain),
+            (L10n.tr("home.grade.hard.title"), L10n.tr("home.grade.hard.subtitle"), .hard, AppTheme.gradeHard),
+            (L10n.tr("home.grade.good.title"), L10n.tr("home.grade.good.subtitle"), .good, AppTheme.gradeGood),
+            (L10n.tr("home.grade.easy.title"), L10n.tr("home.grade.easy.subtitle"), .easy, AppTheme.gradeEasy)
         ]
+
+        let topRow = UIStackView()
+        topRow.axis = .horizontal
+        topRow.alignment = .fill
+        topRow.distribution = .fillEqually
+        topRow.spacing = 10
+
+        let bottomRow = UIStackView()
+        bottomRow.axis = .horizontal
+        bottomRow.alignment = .fill
+        bottomRow.distribution = .fillEqually
+        bottomRow.spacing = 10
+
+        gradeStackView.axis = .vertical
+        gradeStackView.alignment = .fill
+        gradeStackView.distribution = .fillEqually
+        gradeStackView.spacing = 10
+        gradeStackView.addArrangedSubview(topRow)
+        gradeStackView.addArrangedSubview(bottomRow)
 
         configs.forEach { config in
             let button = UIButton(type: .system)
-            button.setTitle(config.title, for: .normal)
+            var buttonConfig = UIButton.Configuration.filled()
+            buttonConfig.title = config.title
+            buttonConfig.subtitle = config.subtitle
+            buttonConfig.titleAlignment = .center
+            buttonConfig.baseForegroundColor = .white
+            buttonConfig.baseBackgroundColor = config.tint.withAlphaComponent(0.90)
+            buttonConfig.cornerStyle = .large
+            buttonConfig.background.strokeWidth = 1
+            buttonConfig.background.strokeColor = UIColor.white.withAlphaComponent(0.16)
+            button.configuration = buttonConfig
             button.setTitleColor(.white, for: .normal)
             button.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 14) ?? .systemFont(ofSize: 14, weight: .bold)
-            button.backgroundColor = config.tint.withAlphaComponent(0.78)
-            button.layer.cornerRadius = 12
-            button.layer.cornerCurve = .continuous
-            button.layer.borderWidth = 1
-            button.layer.borderColor = UIColor.white.withAlphaComponent(0.16).cgColor
             button.tag = config.grade.rawValue
             button.addTarget(self, action: #selector(didTapGradeButton(_:)), for: .touchUpInside)
-            gradeStackView.addArrangedSubview(button)
+            if config.grade == .again || config.grade == .hard {
+                topRow.addArrangedSubview(button)
+            } else {
+                bottomRow.addArrangedSubview(button)
+            }
         }
+
+        glassCardView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapRevealAnswer))
+        glassCardView.addGestureRecognizer(tap)
     }
 
     private func configureNotifications() {
@@ -335,11 +345,17 @@ final class HomeViewController: UIViewController {
     }
 
     private func requestInitialData() {
-        // ViewModel은 @MainActor로 격리되어 있어 Task 경계에서도 UI 상태 갱신이 안전합니다.
         Task { @MainActor [weak self] in
             guard let self else { return }
             await self.viewModel.send(.viewDidLoad)
         }
+    }
+
+    private func updateCardHeightIfNeeded() {
+        let availableHeight = view.safeAreaLayoutGuide.layoutFrame.height
+        let widthBased = max(220, (view.bounds.width - 48) * 0.76)
+        let heightCap = max(220, availableHeight * 0.40)
+        cardHeightConstraint?.update(offset: min(widthBased, heightCap))
     }
 
     @objc
@@ -358,7 +374,7 @@ final class HomeViewController: UIViewController {
            let summary = summaries.first(where: { $0.id == selectedDeckID }) {
             setDeckButtonTitle(summary.title)
         } else {
-            setDeckButtonTitle("덱 선택")
+            setDeckButtonTitle(L10n.tr("home.deck.select"))
         }
 
         rebuildDeckMenu()
@@ -378,23 +394,21 @@ final class HomeViewController: UIViewController {
                 }
             }
         }
-        deckButton.menu = UIMenu(title: "덱 선택", children: actions)
-    }
-
-    private func applyQueueSelection(_ queue: StudyQueue) {
-        selectedQueue = queue
-        queueSegmentedControl.selectedSegmentIndex = queue.rawValue
+        deckButton.menu = UIMenu(title: L10n.tr("home.deck.select"), children: actions)
     }
 
     private func render(card: StudyCard) {
         glassCardView.configure(with: card)
+        glassCardView.setFace(.front, animated: false)
         setDeckButtonTitle(card.deckTitle)
+        isAnswerRevealed = false
 
         glassCardView.isHidden = false
-        gradeStackView.isHidden = false
+        revealAnswerButton.isHidden = false
+        gradePromptLabel.isHidden = true
+        gradeStackView.isHidden = true
         emptyStateLabel.isHidden = true
         reloadButton.isHidden = true
-        panGestureRecognizer.isEnabled = true
 
         glassCardView.alpha = 0
         glassCardView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
@@ -414,28 +428,25 @@ final class HomeViewController: UIViewController {
 
     private func showEmptyState(_ message: String) {
         glassCardView.isHidden = true
+        revealAnswerButton.isHidden = true
         gradeStackView.isHidden = true
+        gradePromptLabel.isHidden = true
         emptyStateLabel.isHidden = false
         reloadButton.isHidden = false
-        panGestureRecognizer.isEnabled = false
         emptyStateLabel.text = message
     }
 
     private func updateLoadingState(_ isLoading: Bool) {
         if isLoading {
             loadingIndicator.startAnimating()
-            panGestureRecognizer.isEnabled = false
             gradeStackView.isUserInteractionEnabled = false
-            queueSegmentedControl.isEnabled = false
+            revealAnswerButton.isEnabled = false
             deckButton.isEnabled = false
         } else {
             loadingIndicator.stopAnimating()
             gradeStackView.isUserInteractionEnabled = true
-            queueSegmentedControl.isEnabled = true
+            revealAnswerButton.isEnabled = true
             deckButton.isEnabled = true
-            if !glassCardView.isHidden {
-                panGestureRecognizer.isEnabled = true
-            }
         }
     }
 
@@ -445,14 +456,27 @@ final class HomeViewController: UIViewController {
         deckButton.configuration = configuration
     }
 
+    private func applyDueSummary(_ counts: QueueDueCounts) {
+        if counts.total == 0 {
+            dueBadgeLabel.text = L10n.tr("home.due.none")
+            return
+        }
+        dueBadgeLabel.text = String(
+            format: L10n.tr("home.due.summary"),
+            counts.total,
+            counts.learning,
+            counts.review
+        )
+    }
+
     private func presentErrorAlert(message: String) {
         guard presentedViewController == nil else {
             return
         }
 
-        let alert = UIAlertController(title: "오류", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "닫기", style: .cancel))
-        alert.addAction(UIAlertAction(title: "재시도", style: .default, handler: { [weak self] _ in
+        let alert = UIAlertController(title: L10n.tr("home.error.title"), message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: L10n.tr("home.error.close"), style: .cancel))
+        alert.addAction(UIAlertAction(title: L10n.tr("home.error.retry"), style: .default, handler: { [weak self] _ in
             Task { @MainActor [weak self] in
                 guard let self else { return }
                 await self.viewModel.send(.didTapReload)
@@ -471,7 +495,7 @@ final class HomeViewController: UIViewController {
 
     @objc
     private func didTapGradeButton(_ sender: UIButton) {
-        guard let grade = UserGrade(rawValue: sender.tag), !isSwipeAnimating else {
+        guard isAnswerRevealed, let grade = UserGrade(rawValue: sender.tag) else {
             return
         }
 
@@ -482,68 +506,15 @@ final class HomeViewController: UIViewController {
     }
 
     @objc
-    private func didChangeQueueSegment(_ sender: UISegmentedControl) {
-        guard let queue = StudyQueue(rawValue: sender.selectedSegmentIndex) else {
+    private func didTapRevealAnswer() {
+        guard !glassCardView.isHidden, !isAnswerRevealed else {
             return
         }
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            await self.viewModel.send(.didSelectQueue(queue))
-        }
+        isAnswerRevealed = true
+        glassCardView.setFace(.back, animated: true)
+        revealAnswerButton.isHidden = true
+        gradePromptLabel.isHidden = false
+        gradeStackView.isHidden = false
     }
 
-    @objc
-    private func handleCardPan(_ recognizer: UIPanGestureRecognizer) {
-        guard !glassCardView.isHidden, !isSwipeAnimating else {
-            return
-        }
-
-        let translation = recognizer.translation(in: view)
-        let velocity = recognizer.velocity(in: view)
-
-        switch recognizer.state {
-        case .changed:
-            glassCardView.applyDragTranslation(translation, in: view.bounds)
-        case .ended, .cancelled, .failed:
-            let threshold = view.bounds.width * 0.23
-            guard abs(translation.x) >= threshold else {
-                glassCardView.resetTransformWithSpring(velocity: velocity)
-                return
-            }
-
-            let direction: SwipeDirection = translation.x > 0 ? .right : .left
-            animateSwipeDismiss(direction: direction, velocity: velocity)
-        default:
-            break
-        }
-    }
-
-    private func animateSwipeDismiss(direction: SwipeDirection, velocity: CGPoint) {
-        isSwipeAnimating = true
-
-        let horizontalOffset = direction == .right ? view.bounds.width * 1.35 : -view.bounds.width * 1.35
-        let rotation: CGFloat = direction == .right ? 0.2 : -0.2
-
-        UIView.animate(
-            withDuration: 0.28,
-            delay: 0,
-            options: [.allowUserInteraction, .curveEaseIn]
-        ) { [weak self] in
-            guard let self else { return }
-            self.glassCardView.transform = CGAffineTransform(translationX: horizontalOffset, y: velocity.y * 0.05).rotated(by: rotation)
-            self.glassCardView.layer.transform = CATransform3DIdentity
-            self.glassCardView.alpha = 0
-        } completion: { [weak self] _ in
-            guard let self else { return }
-            self.glassCardView.transform = .identity
-            self.glassCardView.layer.transform = CATransform3DIdentity
-            self.glassCardView.alpha = 1
-            self.isSwipeAnimating = false
-
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                await self.viewModel.send(.didSwipeCard(direction))
-            }
-        }
-    }
 }
