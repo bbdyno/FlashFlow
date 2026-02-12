@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftData
 
 actor CardRepository {
     enum RepositoryError: LocalizedError, Sendable {
@@ -34,7 +35,7 @@ actor CardRepository {
         }
     }
 
-    private struct Store: Codable, Sendable {
+    private struct PersistedStore: Codable, Sendable {
         var decks: [Deck]
         var schedulerMode: SchedulerMode
 
@@ -58,113 +59,127 @@ actor CardRepository {
         }
     }
 
-    // Actor로 스토리지 상태를 직렬화해 CRUD/스케줄 갱신이 thread-safe 하게 동작합니다.
-    private var store = Store()
-    private var hasLoaded = false
+    private static let settingsKey = "main"
+
+    private var hasPrepared = false
+    private var container: ModelContainer?
 
     private let ankiScheduler: AnkiScheduler
     private let fsrsScheduler: FSRSScheduler
     private let calendar: Calendar
     private let fileManager: FileManager
-    private let decoder: JSONDecoder
-    private let encoder: JSONEncoder
+    private let appSupportDirectoryOverride: URL?
+    private let backupDecoder: JSONDecoder
+    private let backupEncoder: JSONEncoder
+    private let payloadDecoder: JSONDecoder
+    private let payloadEncoder: JSONEncoder
 
     init(
         ankiScheduler: AnkiScheduler = AnkiScheduler(),
         fsrsScheduler: FSRSScheduler = FSRSScheduler(parameters: .default),
         calendar: Calendar = .current,
-        fileManager: FileManager = .default
+        fileManager: FileManager = .default,
+        appSupportDirectoryOverride: URL? = nil
     ) {
         self.ankiScheduler = ankiScheduler
         self.fsrsScheduler = fsrsScheduler
         self.calendar = calendar
         self.fileManager = fileManager
+        self.appSupportDirectoryOverride = appSupportDirectoryOverride
 
-        self.decoder = JSONDecoder()
-        self.decoder.dateDecodingStrategy = .iso8601
+        self.backupDecoder = JSONDecoder()
+        self.backupDecoder.dateDecodingStrategy = .iso8601
 
-        self.encoder = JSONEncoder()
-        self.encoder.dateEncodingStrategy = .iso8601
-        self.encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        self.backupEncoder = JSONEncoder()
+        self.backupEncoder.dateEncodingStrategy = .iso8601
+        self.backupEncoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+
+        self.payloadDecoder = JSONDecoder()
+        self.payloadDecoder.dateDecodingStrategy = .iso8601
+
+        self.payloadEncoder = JSONEncoder()
+        self.payloadEncoder.dateEncodingStrategy = .iso8601
     }
 
     func prepare() throws {
-        try loadIfNeeded()
+        try ensurePrepared()
     }
 
     func hasAnyDecks() throws -> Bool {
-        try loadIfNeeded()
-        return !store.decks.isEmpty
+        try ensurePrepared()
+        let context = try makeContext()
+        return try !fetchDecks(context: context).isEmpty
     }
 
     func schedulerMode() throws -> SchedulerMode {
-        try loadIfNeeded()
-        return store.schedulerMode
+        try ensurePrepared()
+        let context = try makeContext()
+        let settings = try fetchSettings(context: context)
+        guard let settings else {
+            return .fsrs
+        }
+        return SchedulerMode(rawValue: settings.schedulerModeRaw) ?? .fsrs
     }
 
     func updateSchedulerMode(_: SchedulerMode) throws {
-        try loadIfNeeded()
-        guard store.schedulerMode != .fsrs else {
+        try ensurePrepared()
+        let context = try makeContext()
+        let settings = try fetchOrCreateSettings(context: context)
+        guard settings.schedulerModeRaw != SchedulerMode.fsrs.rawValue else {
             return
         }
 
-        store.schedulerMode = .fsrs
-        try persist()
+        settings.schedulerModeRaw = SchedulerMode.fsrs.rawValue
+        try save(context: context)
     }
 
     func resetAllData() throws {
-        try loadIfNeeded()
-        store = Store()
-        try persist()
+        try ensurePrepared()
+        let context = try makeContext()
+        try deleteAllData(context: context)
+        context.insert(AppSettingsEntity(key: Self.settingsKey, schedulerModeRaw: SchedulerMode.fsrs.rawValue))
+        try save(context: context)
     }
 
     func exportBackupData() throws -> Data {
-        try loadIfNeeded()
+        try ensurePrepared()
+        let context = try makeContext()
+        let store = try snapshotStore(context: context)
         do {
-            return try encoder.encode(store)
+            return try backupEncoder.encode(store)
         } catch {
             throw RepositoryError.persistenceFailed
         }
     }
 
     func importBackupData(_ data: Data) throws {
-        try loadIfNeeded()
-        do {
-            let imported = try decoder.decode(Store.self, from: data)
-            store = imported
-            if store.schedulerMode != .fsrs {
-                store.schedulerMode = .fsrs
-            }
-            try persist()
-        } catch {
-            throw RepositoryError.invalidBackupFile
-        }
+        try ensurePrepared()
+        let imported = try decodeBackupStore(data)
+        let context = try makeContext()
+        try replaceStore(with: imported, context: context)
     }
 
     func previewBackupData(_ data: Data) throws -> BackupPreview {
-        try loadIfNeeded()
-        do {
-            let imported = try decoder.decode(Store.self, from: data)
-            let deckCount = imported.decks.count
-            let cardCount = imported.decks.reduce(0) { $0 + $1.cards.count }
-            let reviewCount = imported.decks.reduce(0) { sum, deck in
-                sum + deck.cards.reduce(0) { $0 + $1.schedule.reviewHistory.count }
-            }
-            return BackupPreview(deckCount: deckCount, cardCount: cardCount, reviewCount: reviewCount)
-        } catch {
-            throw RepositoryError.invalidBackupFile
+        let imported = try decodeBackupStore(data)
+        let deckCount = imported.decks.count
+        let cardCount = imported.decks.reduce(0) { $0 + $1.cards.count }
+        let reviewCount = imported.decks.reduce(0) { sum, deck in
+            sum + deck.cards.reduce(0) { $0 + $1.schedule.reviewHistory.count }
         }
+        return BackupPreview(deckCount: deckCount, cardCount: cardCount, reviewCount: reviewCount)
     }
 
     @discardableResult
     func createSampleDecksIfNeeded() throws -> Int {
-        try loadIfNeeded()
+        try ensurePrepared()
+        let context = try makeContext()
 
         struct SampleCard {
             let front: String
             let back: String
             let note: String
         }
+
         struct SampleDeck {
             let title: String
             let cards: [SampleCard]
@@ -190,16 +205,15 @@ actor CardRepository {
         ]
 
         var createdDecks = 0
+        var existingDecks = try fetchDecks(context: context)
+
         for sampleDeck in samples {
-            if store.decks.contains(where: { $0.title.caseInsensitiveCompare(sampleDeck.title) == .orderedSame }) {
+            if existingDecks.contains(where: { $0.title.caseInsensitiveCompare(sampleDeck.title) == .orderedSame }) {
                 continue
             }
 
-            let deck = Deck(title: sampleDeck.title)
-            store.decks.append(deck)
-            guard let deckIndex = store.decks.firstIndex(where: { $0.id == deck.id }) else {
-                continue
-            }
+            let deckEntity = DeckEntity(title: sampleDeck.title)
+            context.insert(deckEntity)
 
             for sampleCard in sampleDeck.cards {
                 let content = FlashCard(
@@ -208,22 +222,31 @@ actor CardRepository {
                     detail: sampleCard.back,
                     imageName: suggestedImageName(from: sampleCard.front)
                 )
-                store.decks[deckIndex].cards.append(DeckCard(content: content))
+                let deckCard = DeckCard(content: content)
+                let cardEntity = makeCardEntity(from: deckCard)
+                cardEntity.deck = deckEntity
+                deckEntity.cards.append(cardEntity)
             }
 
+            existingDecks.append(deckEntity)
             createdDecks += 1
         }
 
         if createdDecks > 0 {
-            try persist()
+            try save(context: context)
         }
+
         return createdDecks
     }
 
     func deckSummaries(now: Date = .now) throws -> [DeckSummary] {
-        try loadIfNeeded()
-        return store.decks.map { deck in
-            DeckSummary(
+        try ensurePrepared()
+        let context = try makeContext()
+        let decks = try fetchDecks(context: context)
+
+        return decks.map { deckEntity in
+            let deck = domainDeck(from: deckEntity)
+            return DeckSummary(
                 id: deck.id,
                 title: deck.title,
                 totalCardCount: deck.cards.count,
@@ -236,54 +259,63 @@ actor CardRepository {
     }
 
     func createDeck(title: String) throws -> Deck {
-        try loadIfNeeded()
+        try ensurePrepared()
 
         let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
             throw RepositoryError.invalidTitle
         }
 
-        let deck = Deck(title: trimmed)
-        store.decks.append(deck)
-        try persist()
-        return deck
+        let context = try makeContext()
+        let deckEntity = DeckEntity(title: trimmed)
+        context.insert(deckEntity)
+        try save(context: context)
+        return domainDeck(from: deckEntity)
     }
 
     func renameDeck(deckID: UUID, title: String) throws {
-        try loadIfNeeded()
+        try ensurePrepared()
 
         let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
             throw RepositoryError.invalidTitle
         }
 
-        guard let deckIndex = store.decks.firstIndex(where: { $0.id == deckID }) else {
+        let context = try makeContext()
+        guard let deckEntity = try fetchDeckEntity(deckID: deckID, context: context) else {
             throw RepositoryError.deckNotFound
         }
 
-        store.decks[deckIndex].title = trimmed
-        try persist()
+        deckEntity.title = trimmed
+        try save(context: context)
     }
 
     func deleteDeck(deckID: UUID) throws {
-        try loadIfNeeded()
-        guard let deckIndex = store.decks.firstIndex(where: { $0.id == deckID }) else {
+        try ensurePrepared()
+        let context = try makeContext()
+        guard let deckEntity = try fetchDeckEntity(deckID: deckID, context: context) else {
             throw RepositoryError.deckNotFound
         }
 
-        store.decks.remove(at: deckIndex)
-        try persist()
+        for card in deckEntity.cards {
+            context.delete(card)
+        }
+        context.delete(deckEntity)
+        try save(context: context)
     }
 
     func cards(in deckID: UUID) throws -> [DeckCard] {
-        try loadIfNeeded()
-        guard let deck = store.decks.first(where: { $0.id == deckID }) else {
+        try ensurePrepared()
+        let context = try makeContext()
+        guard let deckEntity = try fetchDeckEntity(deckID: deckID, context: context) else {
             throw RepositoryError.deckNotFound
         }
 
-        return deck.cards.sorted { lhs, rhs in
-            lhs.content.title.localizedCaseInsensitiveCompare(rhs.content.title) == .orderedAscending
-        }
+        return deckEntity.cards
+            .map(domainCard(from:))
+            .sorted { lhs, rhs in
+                lhs.content.title.localizedCaseInsensitiveCompare(rhs.content.title) == .orderedAscending
+            }
     }
 
     func addCard(
@@ -292,10 +324,12 @@ actor CardRepository {
         back: String,
         note: String
     ) throws -> DeckCard {
-        try loadIfNeeded()
+        try ensurePrepared()
 
         let normalized = try normalizedCardContent(front: front, back: back, note: note)
-        guard let deckIndex = store.decks.firstIndex(where: { $0.id == deckID }) else {
+        let context = try makeContext()
+
+        guard let deckEntity = try fetchDeckEntity(deckID: deckID, context: context) else {
             throw RepositoryError.deckNotFound
         }
 
@@ -305,11 +339,13 @@ actor CardRepository {
             detail: normalized.back,
             imageName: suggestedImageName(from: normalized.front)
         )
-        let card = DeckCard(content: content)
+        let deckCard = DeckCard(content: content)
+        let cardEntity = makeCardEntity(from: deckCard)
+        cardEntity.deck = deckEntity
+        deckEntity.cards.append(cardEntity)
 
-        store.decks[deckIndex].cards.append(card)
-        try persist()
-        return card
+        try save(context: context)
+        return deckCard
     }
 
     func updateCard(
@@ -319,57 +355,60 @@ actor CardRepository {
         back: String,
         note: String
     ) throws {
-        try loadIfNeeded()
+        try ensurePrepared()
 
         let normalized = try normalizedCardContent(front: front, back: back, note: note)
-        guard let deckIndex = store.decks.firstIndex(where: { $0.id == deckID }) else {
+        let context = try makeContext()
+
+        guard let deckEntity = try fetchDeckEntity(deckID: deckID, context: context) else {
             throw RepositoryError.deckNotFound
         }
-        guard let cardIndex = store.decks[deckIndex].cards.firstIndex(where: { $0.id == cardID }) else {
+        guard let cardEntity = deckEntity.cards.first(where: { $0.id == cardID }) else {
             throw RepositoryError.cardNotFound
         }
 
-        var target = store.decks[deckIndex].cards[cardIndex]
-        target.content = FlashCard(
-            id: target.content.id,
-            title: normalized.front,
-            subtitle: normalized.note,
-            detail: normalized.back,
-            imageName: target.content.imageName
-        )
-        store.decks[deckIndex].cards[cardIndex] = target
-        try persist()
+        cardEntity.contentTitle = normalized.front
+        cardEntity.contentSubtitle = normalized.note
+        cardEntity.contentDetail = normalized.back
+        try save(context: context)
     }
 
     func deleteCard(deckID: UUID, cardID: UUID) throws {
-        try loadIfNeeded()
+        try ensurePrepared()
+        let context = try makeContext()
 
-        guard let deckIndex = store.decks.firstIndex(where: { $0.id == deckID }) else {
+        guard let deckEntity = try fetchDeckEntity(deckID: deckID, context: context) else {
             throw RepositoryError.deckNotFound
         }
-        guard let cardIndex = store.decks[deckIndex].cards.firstIndex(where: { $0.id == cardID }) else {
+        guard let cardEntity = deckEntity.cards.first(where: { $0.id == cardID }) else {
             throw RepositoryError.cardNotFound
         }
 
-        store.decks[deckIndex].cards.remove(at: cardIndex)
-        try persist()
+        if let index = deckEntity.cards.firstIndex(where: { $0.id == cardID }) {
+            deckEntity.cards.remove(at: index)
+        }
+        context.delete(cardEntity)
+        try save(context: context)
     }
 
     func queueDueCounts(deckID: UUID, now: Date = .now) throws -> QueueDueCounts {
-        try loadIfNeeded()
-        guard let deck = store.decks.first(where: { $0.id == deckID }) else {
+        try ensurePrepared()
+        let context = try makeContext()
+        guard let deckEntity = try fetchDeckEntity(deckID: deckID, context: context) else {
             throw RepositoryError.deckNotFound
         }
-        return dueCounts(for: deck, now: now)
+        return dueCounts(for: domainDeck(from: deckEntity), now: now)
     }
 
     func nextDueCard(deckID: UUID, queue: StudyQueue, now: Date = .now) throws -> StudyCard? {
-        try loadIfNeeded()
+        try ensurePrepared()
+        let context = try makeContext()
 
-        guard let deck = store.decks.first(where: { $0.id == deckID }) else {
+        guard let deckEntity = try fetchDeckEntity(deckID: deckID, context: context) else {
             throw RepositoryError.deckNotFound
         }
 
+        let deck = domainDeck(from: deckEntity)
         let candidates = deck.cards.filter { entry in
             entry.schedule.dueDate <= now && matches(queue: queue, state: entry.schedule.state)
         }
@@ -388,33 +427,35 @@ actor CardRepository {
 
     @discardableResult
     func review(deckID: UUID, cardID: UUID, grade: UserGrade, now: Date = .now) throws -> Card {
-        try loadIfNeeded()
+        try ensurePrepared()
+        let context = try makeContext()
 
-        guard let deckIndex = store.decks.firstIndex(where: { $0.id == deckID }) else {
+        guard let deckEntity = try fetchDeckEntity(deckID: deckID, context: context) else {
             throw RepositoryError.deckNotFound
         }
-        guard let cardIndex = store.decks[deckIndex].cards.firstIndex(where: { $0.id == cardID }) else {
+        guard let cardEntity = deckEntity.cards.first(where: { $0.id == cardID }) else {
             throw RepositoryError.cardNotFound
         }
 
-        var card = store.decks[deckIndex].cards[cardIndex]
+        var card = domainCard(from: cardEntity)
         card.schedule.reviewHistory.append(now)
         card.schedule = scheduleCard(card.schedule, grade: grade, now: now)
-        store.decks[deckIndex].cards[cardIndex] = card
+        applySchedule(card.schedule, to: cardEntity)
 
-        try persist()
+        try save(context: context)
         return card.schedule
     }
 
     func reviewHeatmap(deckID: UUID, days: Int = 140, now: Date = .now) throws -> [Date: Int] {
-        try loadIfNeeded()
+        try ensurePrepared()
+        let context = try makeContext()
 
-        guard let deck = store.decks.first(where: { $0.id == deckID }) else {
+        guard let deckEntity = try fetchDeckEntity(deckID: deckID, context: context) else {
             throw RepositoryError.deckNotFound
         }
 
         var summary: [Date: Int] = [:]
-        for card in deck.cards {
+        for card in deckEntity.cards.map(domainCard(from:)) {
             for timestamp in card.schedule.reviewHistory {
                 let date = calendar.startOfDay(for: timestamp)
                 summary[date, default: 0] += 1
@@ -431,26 +472,241 @@ actor CardRepository {
         return summary
     }
 
-    private func loadIfNeeded() throws {
-        guard !hasLoaded else {
+    private func ensurePrepared() throws {
+        guard !hasPrepared else {
             return
         }
 
-        let url = try storageFileURL()
-        guard fileManager.fileExists(atPath: url.path) else {
-            store = Store()
-            try persist()
-            hasLoaded = true
+        let context = try makeContext()
+        try migrateLegacyStoreIfNeeded(context: context)
+        _ = try fetchOrCreateSettings(context: context)
+        try save(context: context)
+        hasPrepared = true
+    }
+
+    private func modelContainer() throws -> ModelContainer {
+        if let container {
+            return container
+        }
+
+        do {
+            let configuration = ModelConfiguration(url: try swiftDataFileURL())
+            let container = try ModelContainer(
+                for: DeckEntity.self,
+                CardEntryEntity.self,
+                AppSettingsEntity.self,
+                configurations: configuration
+            )
+            self.container = container
+            return container
+        } catch {
+            throw RepositoryError.persistenceFailed
+        }
+    }
+
+    private func makeContext() throws -> ModelContext {
+        let container = try modelContainer()
+        return ModelContext(container)
+    }
+
+    private func save(context: ModelContext) throws {
+        do {
+            try context.save()
+        } catch {
+            throw RepositoryError.persistenceFailed
+        }
+    }
+
+    private func migrateLegacyStoreIfNeeded(context: ModelContext) throws {
+        let hasDecks = try !fetchDecks(context: context).isEmpty
+        guard !hasDecks else {
             return
         }
 
-        let data = try Data(contentsOf: url)
-        store = try decoder.decode(Store.self, from: data)
-        if store.schedulerMode != .fsrs {
-            store.schedulerMode = .fsrs
-            try persist()
+        let legacyURL = try legacyStorageFileURL()
+        guard fileManager.fileExists(atPath: legacyURL.path) else {
+            return
         }
-        hasLoaded = true
+
+        do {
+            let data = try Data(contentsOf: legacyURL)
+            let store = try decodeLegacyStore(data)
+            try replaceStore(with: store, context: context)
+            try? fileManager.removeItem(at: legacyURL)
+        } catch let error as RepositoryError {
+            throw error
+        } catch {
+            throw RepositoryError.persistenceFailed
+        }
+    }
+
+    private func snapshotStore(context: ModelContext) throws -> PersistedStore {
+        let decks = try fetchDecks(context: context).map(domainDeck(from:))
+        let mode = try schedulerModeRawValue(context: context)
+        return PersistedStore(
+            decks: decks,
+            schedulerMode: SchedulerMode(rawValue: mode) ?? .fsrs
+        )
+    }
+
+    private func replaceStore(with store: PersistedStore, context: ModelContext) throws {
+        try deleteAllData(context: context)
+
+        for deck in store.decks {
+            let deckEntity = DeckEntity(
+                id: deck.id,
+                title: deck.title,
+                createdAt: deck.createdAt
+            )
+            context.insert(deckEntity)
+
+            for card in deck.cards {
+                let cardEntity = makeCardEntity(from: card)
+                cardEntity.deck = deckEntity
+                deckEntity.cards.append(cardEntity)
+            }
+        }
+
+        let mode = SchedulerMode.fsrs.rawValue
+        context.insert(AppSettingsEntity(key: Self.settingsKey, schedulerModeRaw: mode))
+        try save(context: context)
+    }
+
+    private func deleteAllData(context: ModelContext) throws {
+        try context.fetch(FetchDescriptor<CardEntryEntity>()).forEach { context.delete($0) }
+        try context.fetch(FetchDescriptor<DeckEntity>()).forEach { context.delete($0) }
+        try context.fetch(FetchDescriptor<AppSettingsEntity>()).forEach { context.delete($0) }
+    }
+
+    private func decodeLegacyStore(_ data: Data) throws -> PersistedStore {
+        do {
+            var store = try backupDecoder.decode(PersistedStore.self, from: data)
+            if store.schedulerMode != .fsrs {
+                store.schedulerMode = .fsrs
+            }
+            return store
+        } catch {
+            throw RepositoryError.persistenceFailed
+        }
+    }
+
+    private func decodeBackupStore(_ data: Data) throws -> PersistedStore {
+        do {
+            var store = try backupDecoder.decode(PersistedStore.self, from: data)
+            if store.schedulerMode != .fsrs {
+                store.schedulerMode = .fsrs
+            }
+            return store
+        } catch {
+            throw RepositoryError.invalidBackupFile
+        }
+    }
+
+    private func fetchDecks(context: ModelContext) throws -> [DeckEntity] {
+        try context.fetch(FetchDescriptor<DeckEntity>())
+    }
+
+    private func fetchDeckEntity(deckID: UUID, context: ModelContext) throws -> DeckEntity? {
+        try fetchDecks(context: context).first(where: { $0.id == deckID })
+    }
+
+    private func fetchSettings(context: ModelContext) throws -> AppSettingsEntity? {
+        try context.fetch(FetchDescriptor<AppSettingsEntity>())
+            .first(where: { $0.key == Self.settingsKey })
+    }
+
+    private func fetchOrCreateSettings(context: ModelContext) throws -> AppSettingsEntity {
+        if let settings = try fetchSettings(context: context) {
+            return settings
+        }
+        let settings = AppSettingsEntity(key: Self.settingsKey, schedulerModeRaw: SchedulerMode.fsrs.rawValue)
+        context.insert(settings)
+        return settings
+    }
+
+    private func schedulerModeRawValue(context: ModelContext) throws -> String {
+        let settings = try fetchOrCreateSettings(context: context)
+        return settings.schedulerModeRaw
+    }
+
+    private func domainDeck(from entity: DeckEntity) -> Deck {
+        Deck(
+            id: entity.id,
+            title: entity.title,
+            createdAt: entity.createdAt,
+            cards: entity.cards.map(domainCard(from:))
+        )
+    }
+
+    private func domainCard(from entity: CardEntryEntity) -> DeckCard {
+        let content = FlashCard(
+            id: entity.contentID,
+            title: entity.contentTitle,
+            subtitle: entity.contentSubtitle,
+            detail: entity.contentDetail,
+            imageName: entity.contentImageName
+        )
+        let schedule = Card(
+            id: entity.id,
+            state: CardState(rawValue: entity.scheduleStateRaw) ?? .new,
+            stepIndex: entity.scheduleStepIndex,
+            easeFactor: entity.scheduleEaseFactor,
+            interval: entity.scheduleInterval,
+            dueDate: entity.scheduleDueDate,
+            reviewHistory: decodeReviewHistory(from: entity.scheduleReviewHistoryData),
+            fsrsState: decodeFSRSState(from: entity.scheduleFSRSStateData)
+        )
+        return DeckCard(id: entity.id, content: content, schedule: schedule)
+    }
+
+    private func makeCardEntity(from card: DeckCard) -> CardEntryEntity {
+        CardEntryEntity(
+            id: card.id,
+            contentID: card.content.id,
+            contentTitle: card.content.title,
+            contentSubtitle: card.content.subtitle,
+            contentDetail: card.content.detail,
+            contentImageName: card.content.imageName,
+            scheduleStateRaw: card.schedule.state.rawValue,
+            scheduleStepIndex: card.schedule.stepIndex,
+            scheduleEaseFactor: card.schedule.easeFactor,
+            scheduleInterval: card.schedule.interval,
+            scheduleDueDate: card.schedule.dueDate,
+            scheduleReviewHistoryData: encodeReviewHistory(card.schedule.reviewHistory),
+            scheduleFSRSStateData: encodeFSRSState(card.schedule.fsrsState)
+        )
+    }
+
+    private func applySchedule(_ schedule: Card, to entity: CardEntryEntity) {
+        entity.scheduleStateRaw = schedule.state.rawValue
+        entity.scheduleStepIndex = schedule.stepIndex
+        entity.scheduleEaseFactor = schedule.easeFactor
+        entity.scheduleInterval = schedule.interval
+        entity.scheduleDueDate = schedule.dueDate
+        entity.scheduleReviewHistoryData = encodeReviewHistory(schedule.reviewHistory)
+        entity.scheduleFSRSStateData = encodeFSRSState(schedule.fsrsState)
+    }
+
+    private func decodeReviewHistory(from data: Data) -> [Date] {
+        (try? payloadDecoder.decode([Date].self, from: data)) ?? []
+    }
+
+    private func encodeReviewHistory(_ history: [Date]) -> Data {
+        (try? payloadEncoder.encode(history)) ?? Data("[]".utf8)
+    }
+
+    private func decodeFSRSState(from data: Data?) -> FSRSReviewState? {
+        guard let data else {
+            return nil
+        }
+        return try? payloadDecoder.decode(FSRSReviewState.self, from: data)
+    }
+
+    private func encodeFSRSState(_ state: FSRSReviewState?) -> Data? {
+        guard let state else {
+            return nil
+        }
+        return try? payloadEncoder.encode(state)
     }
 
     private func scheduleCard(_ card: Card, grade: UserGrade, now: Date) -> Card {
@@ -460,14 +716,12 @@ actor CardRepository {
     private func scheduleWithFSRSHybrid(card: Card, grade: UserGrade, now: Date) -> Card {
         switch card.state {
         case .new, .learning, .relearning:
-            // FSRS 모드에서도 learning/relearning 단계는 Anki step 로직(분 단위)을 유지합니다.
             var next = ankiScheduler.schedule(card: card, grade: grade, now: now)
             if next.state == .review {
                 next.fsrsState = seededFSRSState(from: next, now: now)
             }
             return next
         case .review:
-            // Review 단계만 FSRS 수식을 적용해 안정성/난이도/다음 interval을 계산합니다.
             return scheduleReviewWithFSRS(card: card, grade: grade, now: now)
         }
     }
@@ -477,7 +731,6 @@ actor CardRepository {
         let fsrsOutput = fsrsScheduler.schedule(card: fsrsInput, grade: grade)
 
         if grade == .again {
-            // FSRS의 실패 난이도/안정성 갱신값은 유지하면서, due는 relearning step(분 단위)로 설정합니다.
             var relearning = ankiScheduler.schedule(card: card, grade: grade, now: now)
             relearning.fsrsState = FSRSReviewState(
                 id: card.id,
@@ -536,29 +789,6 @@ actor CardRepository {
         let from = calendar.startOfDay(for: start)
         let to = calendar.startOfDay(for: end)
         return max(0, calendar.dateComponents([.day], from: from, to: to).day ?? 0)
-    }
-
-    private func persist() throws {
-        do {
-            let data = try encoder.encode(store)
-            try data.write(to: storageFileURL(), options: .atomic)
-        } catch {
-            throw RepositoryError.persistenceFailed
-        }
-    }
-
-    private func storageFileURL() throws -> URL {
-        let rootURL = try fileManager.url(
-            for: .applicationSupportDirectory,
-            in: .userDomainMask,
-            appropriateFor: nil,
-            create: true
-        )
-        let directory = rootURL.appendingPathComponent("FlashFlow", isDirectory: true)
-        if !fileManager.fileExists(atPath: directory.path) {
-            try fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
-        }
-        return directory.appendingPathComponent("storage.json")
     }
 
     private func dueCounts(for deck: Deck, now: Date) -> QueueDueCounts {
@@ -626,5 +856,34 @@ actor CardRepository {
         ]
         let sum = seed.unicodeScalars.reduce(0) { $0 + Int($1.value) }
         return candidates[sum % candidates.count]
+    }
+
+    private func appSupportDirectoryURL() throws -> URL {
+        if let appSupportDirectoryOverride {
+            if !fileManager.fileExists(atPath: appSupportDirectoryOverride.path) {
+                try fileManager.createDirectory(at: appSupportDirectoryOverride, withIntermediateDirectories: true)
+            }
+            return appSupportDirectoryOverride
+        }
+
+        let rootURL = try fileManager.url(
+            for: .applicationSupportDirectory,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: true
+        )
+        let directory = rootURL.appendingPathComponent("FlashFlow", isDirectory: true)
+        if !fileManager.fileExists(atPath: directory.path) {
+            try fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
+        }
+        return directory
+    }
+
+    private func legacyStorageFileURL() throws -> URL {
+        try appSupportDirectoryURL().appendingPathComponent("storage.json")
+    }
+
+    private func swiftDataFileURL() throws -> URL {
+        try appSupportDirectoryURL().appendingPathComponent("storage.store")
     }
 }

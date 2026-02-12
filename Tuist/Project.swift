@@ -1,8 +1,8 @@
 import ProjectDescription
 
 let appName = "FlashFlow"
-let bundleId = "com.bbdyno.FlashFlow"
-let testBundleId = "com.bbdyno.FlashFlowTests"
+let bundleId = "com.bbdyno.app.flashFlow"
+let testBundleId = "com.bbdyno.app.flashFlowTests"
 
 let project = Project(
     name: appName,
@@ -26,7 +26,7 @@ let project = Project(
             destinations: .iOS,
             product: .app,
             bundleId: bundleId,
-            deploymentTargets: .iOS("16.0"),
+            deploymentTargets: .iOS("17.0"),
             infoPlist: .extendingDefault(with: [
                 "UILaunchScreen": .dictionary([:]),
                 "UIApplicationSceneManifest": .dictionary([
@@ -63,7 +63,7 @@ let project = Project(
             destinations: .iOS,
             product: .unitTests,
             bundleId: testBundleId,
-            deploymentTargets: .iOS("16.0"),
+            deploymentTargets: .iOS("17.0"),
             infoPlist: .default,
             sources: [
                 "../Tests/**"

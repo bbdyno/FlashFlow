@@ -29,7 +29,7 @@ let project = Project(
             destinations: .iOS,
             product: .app,
             bundleId: bundleId,
-            deploymentTargets: .iOS("16.0"),
+            deploymentTargets: .iOS("17.0"),
             infoPlist: .extendingDefault(with: [
                 "UILaunchScreen": .dictionary([:]),
                 "UIApplicationSceneManifest": .dictionary([
@@ -94,7 +94,7 @@ let project = Project(
             destinations: .iOS,
             product: .unitTests,
             bundleId: testBundleId,
-            deploymentTargets: .iOS("16.0"),
+            deploymentTargets: .iOS("17.0"),
             infoPlist: .default,
             sources: [
                 "Tests/**"

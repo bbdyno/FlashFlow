@@ -17,7 +17,9 @@ final class HomeViewController: UIViewController {
 
     private let titleLabel = UILabel()
     private let deckButton = UIButton(type: .system)
-    private let dueBadgeLabel = UILabel()
+    private let dueSummaryContainer = UIView()
+    private let dueSummaryIconView = UIImageView()
+    private let dueSummaryTextLabel = UILabel()
     private let glassCardView = GlassCardView()
     private let revealAnswerButton = UIButton(type: .system)
     private let gradePromptLabel = UILabel()
@@ -35,6 +37,7 @@ final class HomeViewController: UIViewController {
     private var isAnswerRevealed = false
     private var selectedDeckID: UUID?
     private var deckSummaries: [DeckSummary] = []
+    private var latestQueueCounts = QueueDueCounts(learning: 0, review: 0)
     private var cardHeightConstraint: Constraint?
 
     init(repository: CardRepository) {
@@ -79,6 +82,7 @@ final class HomeViewController: UIViewController {
         topGlowView.layer.cornerRadius = topGlowView.bounds.height / 2
         bottomGlowView.layer.cornerRadius = bottomGlowView.bounds.height / 2
         updateCardHeightIfNeeded()
+        updateDueSummaryDisplay(with: latestQueueCounts)
     }
 
     private func makeOutput() -> HomeViewModel.Output {
@@ -111,7 +115,9 @@ final class HomeViewController: UIViewController {
         view.addSubview(bottomGlowView)
         view.addSubview(titleLabel)
         view.addSubview(deckButton)
-        view.addSubview(dueBadgeLabel)
+        view.addSubview(dueSummaryContainer)
+        dueSummaryContainer.addSubview(dueSummaryIconView)
+        dueSummaryContainer.addSubview(dueSummaryTextLabel)
         view.addSubview(glassCardView)
         view.addSubview(revealAnswerButton)
         view.addSubview(gradePromptLabel)
@@ -154,16 +160,25 @@ final class HomeViewController: UIViewController {
         deckButton.showsMenuAsPrimaryAction = true
         setDeckButtonTitle(L10n.tr("home.deck.select"))
 
-        dueBadgeLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 13) ?? .systemFont(ofSize: 13, weight: .semibold)
-        dueBadgeLabel.textColor = AppTheme.textPrimary
-        dueBadgeLabel.textAlignment = .center
-        dueBadgeLabel.backgroundColor = AppTheme.cardBackground
-        dueBadgeLabel.layer.cornerRadius = 14
-        dueBadgeLabel.layer.cornerCurve = .continuous
-        dueBadgeLabel.layer.borderWidth = 1
-        dueBadgeLabel.layer.borderColor = AppTheme.cardBorder.cgColor
-        dueBadgeLabel.clipsToBounds = true
-        dueBadgeLabel.text = L10n.tr("home.due.none")
+        dueSummaryContainer.backgroundColor = .clear
+        dueSummaryContainer.layer.cornerRadius = 0
+        dueSummaryContainer.layer.borderWidth = 0
+        dueSummaryContainer.layer.borderColor = UIColor.clear.cgColor
+        dueSummaryContainer.isUserInteractionEnabled = false
+
+        dueSummaryIconView.image = UIImage(systemName: "clock.fill")
+        dueSummaryIconView.tintColor = AppTheme.textSecondary
+        dueSummaryIconView.contentMode = .scaleAspectFit
+
+        dueSummaryTextLabel.font = UIFont(name: "AvenirNext-Medium", size: 12) ?? .systemFont(ofSize: 12, weight: .medium)
+        dueSummaryTextLabel.textColor = AppTheme.textSecondary
+        dueSummaryTextLabel.textAlignment = .left
+        dueSummaryTextLabel.numberOfLines = 1
+        dueSummaryTextLabel.lineBreakMode = .byTruncatingTail
+        dueSummaryTextLabel.adjustsFontSizeToFitWidth = true
+        dueSummaryTextLabel.minimumScaleFactor = 0.85
+        dueSummaryTextLabel.text = L10n.tr("home.due.none")
+        dueSummaryTextLabel.isUserInteractionEnabled = false
 
         revealAnswerButton.setTitle(L10n.tr("home.reveal"), for: .normal)
         revealAnswerButton.setTitleColor(AppTheme.textPrimary, for: .normal)
@@ -226,14 +241,7 @@ final class HomeViewController: UIViewController {
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             make.leading.equalToSuperview().inset(24)
-            make.trailing.lessThanOrEqualTo(dueBadgeLabel.snp.leading).offset(-12)
-        }
-
-        dueBadgeLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(14)
-            make.trailing.equalToSuperview().inset(24)
-            make.height.equalTo(30)
-            make.width.greaterThanOrEqualTo(104)
+            make.trailing.lessThanOrEqualToSuperview().inset(24)
         }
 
         deckButton.snp.makeConstraints { make in
@@ -244,8 +252,26 @@ final class HomeViewController: UIViewController {
             make.trailing.lessThanOrEqualToSuperview().inset(24)
         }
 
+        dueSummaryContainer.snp.makeConstraints { make in
+            make.top.equalTo(deckButton.snp.bottom).offset(1)
+            make.leading.trailing.equalToSuperview().inset(24)
+            make.height.equalTo(14)
+        }
+
+        dueSummaryIconView.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.width.height.equalTo(11)
+        }
+
+        dueSummaryTextLabel.snp.makeConstraints { make in
+            make.leading.equalTo(dueSummaryIconView.snp.trailing).offset(6)
+            make.trailing.equalToSuperview()
+            make.centerY.equalTo(dueSummaryIconView.snp.centerY)
+        }
+
         glassCardView.snp.makeConstraints { make in
-            make.top.equalTo(deckButton.snp.bottom).offset(18)
+            make.top.equalTo(dueSummaryContainer.snp.bottom).offset(4)
             make.leading.trailing.equalToSuperview().inset(24)
             cardHeightConstraint = make.height.equalTo(280).constraint
         }
@@ -351,11 +377,24 @@ final class HomeViewController: UIViewController {
         }
     }
 
-    private func updateCardHeightIfNeeded() {
+    private func updateCardHeightIfNeeded(animated: Bool = false) {
         let availableHeight = view.safeAreaLayoutGuide.layoutFrame.height
-        let widthBased = max(220, (view.bounds.width - 48) * 0.76)
-        let heightCap = max(220, availableHeight * 0.40)
-        cardHeightConstraint?.update(offset: min(widthBased, heightCap))
+        let cardWidth = max(220, view.bounds.width - 48)
+        let widthBased = cardWidth * (isAnswerRevealed ? 0.98 : 0.82)
+        let heightCap = max(isAnswerRevealed ? 280 : 240, availableHeight * (isAnswerRevealed ? 0.54 : 0.42))
+        let targetHeight = min(widthBased, heightCap)
+        cardHeightConstraint?.update(offset: targetHeight)
+
+        guard animated else {
+            return
+        }
+        UIView.animate(
+            withDuration: 0.22,
+            delay: 0,
+            options: [.allowUserInteraction, .curveEaseInOut]
+        ) { [weak self] in
+            self?.view.layoutIfNeeded()
+        }
     }
 
     @objc
@@ -390,6 +429,9 @@ final class HomeViewController: UIViewController {
             UIAction(title: summary.title, state: summary.id == selectedDeckID ? .on : .off) { [weak self] _ in
                 Task { @MainActor [weak self] in
                     guard let self else { return }
+                    self.selectedDeckID = summary.id
+                    self.setDeckButtonTitle(summary.title)
+                    self.rebuildDeckMenu()
                     await self.viewModel.send(.didSelectDeck(summary.id))
                 }
             }
@@ -402,6 +444,7 @@ final class HomeViewController: UIViewController {
         glassCardView.setFace(.front, animated: false)
         setDeckButtonTitle(card.deckTitle)
         isAnswerRevealed = false
+        updateCardHeightIfNeeded()
 
         glassCardView.isHidden = false
         revealAnswerButton.isHidden = false
@@ -457,12 +500,22 @@ final class HomeViewController: UIViewController {
     }
 
     private func applyDueSummary(_ counts: QueueDueCounts) {
+        latestQueueCounts = counts
+        updateDueSummaryDisplay(with: counts)
+    }
+
+    private func updateDueSummaryDisplay(with counts: QueueDueCounts) {
+        dueSummaryIconView.image = UIImage(systemName: counts.total == 0 ? "checkmark.circle.fill" : "clock.fill")
+        dueSummaryIconView.tintColor = counts.total == 0 ? AppTheme.accentTeal.withAlphaComponent(0.9) : AppTheme.textSecondary
+
         if counts.total == 0 {
-            dueBadgeLabel.text = L10n.tr("home.due.none")
+            dueSummaryTextLabel.text = L10n.tr("home.due.none")
             return
         }
-        dueBadgeLabel.text = String(
-            format: L10n.tr("home.due.summary"),
+
+        let key = view.bounds.width <= 360 ? "home.due.inline.compact" : "home.due.inline"
+        dueSummaryTextLabel.text = String(
+            format: L10n.tr(key),
             counts.total,
             counts.learning,
             counts.review
@@ -515,6 +568,7 @@ final class HomeViewController: UIViewController {
         revealAnswerButton.isHidden = true
         gradePromptLabel.isHidden = false
         gradeStackView.isHidden = false
+        updateCardHeightIfNeeded(animated: true)
     }
 
 }

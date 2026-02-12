@@ -184,21 +184,28 @@ final class GlassCardView: UIView {
         titleLabel.textColor = UIColor.white.withAlphaComponent(0.95)
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
+        titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
+        titleLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
 
         subtitleLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 15) ?? .systemFont(ofSize: 15, weight: .semibold)
         subtitleLabel.textColor = UIColor.white.withAlphaComponent(0.74)
-        subtitleLabel.numberOfLines = 2
-        subtitleLabel.lineBreakMode = .byWordWrapping
+        subtitleLabel.numberOfLines = 1
+        subtitleLabel.lineBreakMode = .byTruncatingTail
+        subtitleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
 
         detailLabel.font = UIFont(name: "AvenirNext-Medium", size: 17) ?? .systemFont(ofSize: 17, weight: .medium)
         detailLabel.textColor = UIColor.white.withAlphaComponent(0.88)
         detailLabel.numberOfLines = 0
         detailLabel.lineBreakMode = .byWordWrapping
+        detailLabel.setContentCompressionResistancePriority(.required, for: .vertical)
+        detailLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
 
         helperLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 14) ?? .systemFont(ofSize: 14, weight: .semibold)
         helperLabel.textColor = UIColor.white.withAlphaComponent(0.74)
         helperLabel.textAlignment = .left
-        helperLabel.numberOfLines = 0
+        helperLabel.numberOfLines = 1
+        helperLabel.lineBreakMode = .byTruncatingTail
+        helperLabel.setContentCompressionResistancePriority(.required, for: .vertical)
         helperLabel.text = "Tap card to reveal answer"
     }
 
@@ -276,12 +283,16 @@ final class GlassCardView: UIView {
         let lines = lineCount(in: text)
         let size: CGFloat
 
-        if lines >= 4 || length >= 120 {
+        if lines >= 6 || length >= 180 {
+            size = 21
+        } else if lines >= 5 || length >= 140 {
+            size = 22
+        } else if lines >= 4 || length >= 110 {
             size = 24
         } else if lines >= 3 || length >= 80 {
-            size = 26
+            size = 25
         } else if lines >= 2 || length >= 50 {
-            size = 28
+            size = 27
         } else {
             size = 30
         }
@@ -300,11 +311,15 @@ final class GlassCardView: UIView {
         let lines = lineCount(in: text)
         let size: CGFloat
 
-        if lines >= 7 || length >= 260 {
-            size = 14.5
-        } else if lines >= 5 || length >= 180 {
-            size = 15.5
-        } else if lines >= 3 || length >= 120 {
+        if lines >= 12 || length >= 420 {
+            size = 12
+        } else if lines >= 9 || length >= 320 {
+            size = 13
+        } else if lines >= 7 || length >= 240 {
+            size = 14
+        } else if lines >= 5 || length >= 170 {
+            size = 15
+        } else if lines >= 3 || length >= 110 {
             size = 16
         } else {
             size = 17

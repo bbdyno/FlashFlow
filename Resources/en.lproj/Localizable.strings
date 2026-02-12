@@ -4,6 +4,8 @@
 "home.reveal" = "Show Answer";
 "home.reload" = "Reload";
 "home.due.summary" = "Today %d cards · New %d / Review %d";
+"home.due.inline" = "Due %d · Learning %d · Review %d";
+"home.due.inline.compact" = "Due %d · L %d · R %d";
 "home.error.title" = "Error";
 "home.error.close" = "Close";
 "home.error.retry" = "Retry";

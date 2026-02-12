@@ -7,8 +7,11 @@
 
 import UIKit
 import SnapKit
+import UniformTypeIdentifiers
 
 final class OnboardingViewController: UIViewController {
+    private static let backupFileExtension = "ffbackup"
+
     private struct OnboardingDraft {
         let deckTitle: String
         let front: String
@@ -28,6 +31,7 @@ final class OnboardingViewController: UIViewController {
     private let backField = UITextField()
     private let noteField = UITextField()
     private let startButton = UIButton(type: .system)
+    private let importButton = UIButton(type: .system)
     private let loadingIndicator = UIActivityIndicatorView(style: .medium)
 
     init(repository: CardRepository) {
@@ -100,6 +104,16 @@ final class OnboardingViewController: UIViewController {
         startButton.layer.cornerCurve = .continuous
         startButton.addTarget(self, action: #selector(didTapStart), for: .touchUpInside)
 
+        importButton.setTitle("Import Backup Instead", for: .normal)
+        importButton.setTitleColor(AppTheme.textPrimary, for: .normal)
+        importButton.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 15) ?? .systemFont(ofSize: 15, weight: .semibold)
+        importButton.backgroundColor = AppTheme.infoBlue.withAlphaComponent(0.42)
+        importButton.layer.cornerRadius = 12
+        importButton.layer.cornerCurve = .continuous
+        importButton.layer.borderWidth = 1
+        importButton.layer.borderColor = AppTheme.cardBorder.cgColor
+        importButton.addTarget(self, action: #selector(didTapImportBackup), for: .touchUpInside)
+
         loadingIndicator.hidesWhenStopped = true
         loadingIndicator.color = AppTheme.textPrimary
 
@@ -110,6 +124,7 @@ final class OnboardingViewController: UIViewController {
         view.addSubview(backField)
         view.addSubview(noteField)
         view.addSubview(startButton)
+        view.addSubview(importButton)
         startButton.addSubview(loadingIndicator)
 
         titleLabel.snp.makeConstraints { make in
@@ -149,6 +164,12 @@ final class OnboardingViewController: UIViewController {
             make.height.equalTo(50)
         }
 
+        importButton.snp.makeConstraints { make in
+            make.top.equalTo(startButton.snp.bottom).offset(10)
+            make.leading.trailing.equalTo(deckField)
+            make.height.equalTo(44)
+        }
+
         loadingIndicator.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().inset(16)
@@ -181,6 +202,15 @@ final class OnboardingViewController: UIViewController {
                 self.presentError(message: Self.userFacingMessage(from: error))
             }
         }
+    }
+
+    @objc
+    private func didTapImportBackup() {
+        let backupType = UTType(filenameExtension: Self.backupFileExtension) ?? .data
+        let picker = UIDocumentPickerViewController(forOpeningContentTypes: [backupType])
+        picker.delegate = self
+        picker.allowsMultipleSelection = false
+        present(picker, animated: true)
     }
 
     private func normalizedDraft() -> OnboardingDraft? {
@@ -225,7 +255,7 @@ final class OnboardingViewController: UIViewController {
             loadingIndicator.stopAnimating()
         }
 
-        [deckField, frontField, backField, noteField, startButton].forEach { $0.isUserInteractionEnabled = !isLoading }
+        [deckField, frontField, backField, noteField, startButton, importButton].forEach { $0.isUserInteractionEnabled = !isLoading }
     }
 
     private func presentError(message: String) {
@@ -248,6 +278,41 @@ final class OnboardingViewController: UIViewController {
         present(alert, animated: true)
     }
 
+    private func presentImportConfirmation(data: Data, preview: BackupPreview) {
+        guard presentedViewController == nil else {
+            return
+        }
+
+        let message = "Decks: \(preview.deckCount)\nCards: \(preview.cardCount)\nReviews: \(preview.reviewCount)\n\nImport this backup now?"
+        let alert = UIAlertController(
+            title: "Import Backup",
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Import", style: .default, handler: { [weak self] _ in
+            self?.importBackupData(data)
+        }))
+        present(alert, animated: true)
+    }
+
+    private func importBackupData(_ data: Data) {
+        setLoading(true)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            defer { self.setLoading(false) }
+
+            do {
+                try await self.repository.importBackupData(data)
+                NotificationCenter.default.post(name: .deckDataDidChange, object: nil)
+                self.onCompleted?()
+                self.dismiss(animated: true)
+            } catch {
+                self.presentError(message: Self.userFacingMessage(from: error))
+            }
+        }
+    }
+
     private static func userFacingMessage(from error: Error) -> String {
         if let localized = error as? LocalizedError,
            let description = localized.errorDescription,
@@ -255,5 +320,48 @@ final class OnboardingViewController: UIViewController {
             return description
         }
         return "An error occurred during onboarding."
+    }
+}
+
+extension OnboardingViewController: UIDocumentPickerDelegate {
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {}
+
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        guard let fileURL = urls.first else {
+            presentValidationError(
+                title: "Invalid Backup",
+                message: "Please select a valid backup file."
+            )
+            return
+        }
+
+        setLoading(true)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            defer { self.setLoading(false) }
+
+            let didStartAccessing = fileURL.startAccessingSecurityScopedResource()
+            defer {
+                if didStartAccessing {
+                    fileURL.stopAccessingSecurityScopedResource()
+                }
+            }
+
+            do {
+                guard fileURL.pathExtension.lowercased() == Self.backupFileExtension else {
+                    self.presentValidationError(
+                        title: "Invalid Backup",
+                        message: "File extension must be .\(Self.backupFileExtension)."
+                    )
+                    return
+                }
+
+                let data = try Data(contentsOf: fileURL)
+                let preview = try await self.repository.previewBackupData(data)
+                self.presentImportConfirmation(data: data, preview: preview)
+            } catch {
+                self.presentError(message: Self.userFacingMessage(from: error))
+            }
+        }
     }
 }

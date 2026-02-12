@@ -32,6 +32,7 @@
 		CA6FB4F40F3537BCE90E7776 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481DE27578858C7BA8CA5E65 /* AppDelegate.swift */; };
 		D53A16FEF74007F0460BE2B5 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC617E05753B019160C7CE /* L10n.swift */; };
 		D5922687CFC5609B41822A02 /* RootTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906AF33EF963D3FABCE54EDB /* RootTabBarController.swift */; };
+		DAA823A2B28248842AE94FA7 /* PersistenceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8083C6F7E823B1783F804D9B /* PersistenceModels.swift */; };
 		DC7680A36A0F7BCE10548937 /* FlashCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9BFDC169682A843298F3F4 /* FlashCard.swift */; };
 		E2787E7C3A737CD5F1DE2E8D /* FSRSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD3799234C07F474D18576E /* FSRSTests.swift */; };
 		E37153E547544309D3048881 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E240884BB315947D1E832AE /* MoreViewController.swift */; };
@@ -40,6 +41,7 @@
 		F0C136BC0366632117EE158F /* CardRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999F8CD582E2C405F765FF27 /* CardRepository.swift */; };
 		F354699531D3917483E63CCA /* ReviewHeatmapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6036FB0329444FFC6D0D2A45 /* ReviewHeatmapView.swift */; };
 		F6FCF36C565528B02AF2345D /* DecksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE75DD24A2DDD201004E73A8 /* DecksViewController.swift */; };
+		FB91EB9DCF1A081E1E4C96C3 /* CardRepositoryPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2E132ABD12129EA8B73CB0 /* CardRepositoryPersistenceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,6 +99,7 @@
 		747743885A5483EFC6C1ADD6 /* SchedulerMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerMode.swift; sourceTree = "<group>"; };
 		75A02C18ADF7EAC5E578A5C7 /* CardEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardEditorViewController.swift; sourceTree = "<group>"; };
 		7E240884BB315947D1E832AE /* MoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
+		8083C6F7E823B1783F804D9B /* PersistenceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceModels.swift; sourceTree = "<group>"; };
 		869715261FFE220B82F29861 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		8E0E6051F8B961EF644CE30C /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		906AF33EF963D3FABCE54EDB /* RootTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabBarController.swift; sourceTree = "<group>"; };
@@ -108,6 +111,7 @@
 		ACD3799234C07F474D18576E /* FSRSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSRSTests.swift; sourceTree = "<group>"; };
 		ACFC617E05753B019160C7CE /* L10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
 		B2EC92FBEA323D27551A8F01 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		CD2E132ABD12129EA8B73CB0 /* CardRepositoryPersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardRepositoryPersistenceTests.swift; sourceTree = "<group>"; };
 		CE75DD24A2DDD201004E73A8 /* DecksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecksViewController.swift; sourceTree = "<group>"; };
 		D5A2012063DCA9E1119E104B /* TuistBundle+FlashFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistBundle+FlashFlow.swift"; sourceTree = "<group>"; };
 		EE498C63E98943BB7BEDC366 /* DeckDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDetailViewController.swift; sourceTree = "<group>"; };
@@ -201,6 +205,7 @@
 		4127C1038A20F9CD9BEF1195 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				CD2E132ABD12129EA8B73CB0 /* CardRepositoryPersistenceTests.swift */,
 				339538077D7314A0D21B6B83 /* CardTextSanitizerTests.swift */,
 				ACD3799234C07F474D18576E /* FSRSTests.swift */,
 			);
@@ -263,6 +268,7 @@
 				8E0E6051F8B961EF644CE30C /* Deck.swift */,
 				5A9BFDC169682A843298F3F4 /* FlashCard.swift */,
 				23D23D56C820A57FC3AF7010 /* FSRSParameters.swift */,
+				8083C6F7E823B1783F804D9B /* PersistenceModels.swift */,
 				747743885A5483EFC6C1ADD6 /* SchedulerMode.swift */,
 				16A49BF5DF36439B440932CE /* StudyCard.swift */,
 			);
@@ -407,6 +413,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB91EB9DCF1A081E1E4C96C3 /* CardRepositoryPersistenceTests.swift in Sources */,
 				19FD986284A8E07D0CB08CD2 /* CardTextSanitizerTests.swift in Sources */,
 				E2787E7C3A737CD5F1DE2E8D /* FSRSTests.swift in Sources */,
 			);
@@ -427,6 +434,7 @@
 				64E02E057E0E291050E8FB4F /* Deck.swift in Sources */,
 				41AAAD446A553A5118E66AD9 /* FSRSParameters.swift in Sources */,
 				DC7680A36A0F7BCE10548937 /* FlashCard.swift in Sources */,
+				DAA823A2B28248842AE94FA7 /* PersistenceModels.swift in Sources */,
 				451A4D70C3B355D92DAB724F /* SchedulerMode.swift in Sources */,
 				69C9CD51C9856AA2AFE35447 /* StudyCard.swift in Sources */,
 				59994389711ADD58818586B3 /* AnkiScheduler.swift in Sources */,
@@ -478,7 +486,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Derived/InfoPlists/FlashFlowTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -514,7 +522,7 @@
 				DEVELOPMENT_TEAM = M79H9K226Y;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Derived/InfoPlists/FlashFlow-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -606,7 +614,7 @@
 				DEVELOPMENT_TEAM = M79H9K226Y;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Derived/InfoPlists/FlashFlow-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -636,7 +644,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Derived/InfoPlists/FlashFlowTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
