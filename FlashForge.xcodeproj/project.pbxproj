@@ -1,0 +1,782 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		02D22339A3244C853A6828EF /* StudyReminderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1E198DE7F4EAE36BF2902B /* StudyReminderService.swift */; };
+		080B94E7283BC9E25E1762DF /* GlassCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 700AFB3B4CDA3F2F8FD9176C /* GlassCardView.swift */; };
+		0BA521677B2D6A433E04FAAE /* ReviewHeatmapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACBC97F9E67929393B532B2 /* ReviewHeatmapView.swift */; };
+		1C3EB5D4819DBDDB02534C2B /* DeckDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC6A1679DDC1AB1BE4D56A45 /* DeckDetailViewController.swift */; };
+		1CC9655C2C282ACBEF8D4F28 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = D55A5C72908252429091416B /* SnapKit */; };
+		323ABBD9C7F69CAE3D0B57CC /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34E594E97AF0B69E7790D09 /* HomeViewModel.swift */; };
+		34B1A5A4B783E17891789A85 /* DecksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A99F301ADDA6EC2EBF192A3 /* DecksViewModel.swift */; };
+		384023342BDA62019C3E064D /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94841623693077402111778D /* MoreViewController.swift */; };
+		3B5E45CCDC0D77F1E9445FAE /* PersistenceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF11FE5547DC426B932AFE /* PersistenceModels.swift */; };
+		3FE4103C0B2CCE3DDD6857BE /* CardRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9AD08B6C3F0A200AEE26108 /* CardRepository.swift */; };
+		51E93FB1205B0D8F6AFFE1BF /* RootTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461C4D4DA11970FCB8ACF50 /* RootTabBarController.swift */; };
+		606266CFD934DE3628B3D8AB /* SchedulerMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56638997A259354801A20F6A /* SchedulerMode.swift */; };
+		647916DADDF4BF1DD9F1CBBF /* AnkiScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DD93CCC11EDF1E2CA57CC0 /* AnkiScheduler.swift */; };
+		678FC23F12E83EC2647B80F0 /* TuistBundle+FlashForge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D472DD1C95FE3A90AF4B0E /* TuistBundle+FlashForge.swift */; };
+		67E01180A67B9AA704B1BD88 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFA33D699D6866CF70033EE /* SceneDelegate.swift */; };
+		751611C6D032D21CB655B467 /* StudyCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD0BD0EAECA19D54900CC25 /* StudyCard.swift */; };
+		78E39DE8C508097318652D3F /* CardTextSanitizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFE84B93A991370BC52944 /* CardTextSanitizerTests.swift */; };
+		799053F61A2BE2684417ADD6 /* CardRepositoryPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC48DFDD7AD6F63201B93A3 /* CardRepositoryPersistenceTests.swift */; };
+		79D6478AB8480D7DDCDAF0A5 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43063C25FD351D73CFC1A701 /* Card.swift */; };
+		7C0BCB0E4C2A38DB369BF9AE /* CardTextSanitizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77538CCCA5E1FEC22D41C3D /* CardTextSanitizer.swift */; };
+		8BA6F5C1CD15803CCB7C9B2B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28642A0E5702194F0DF7B3AD /* HomeViewController.swift */; };
+		8E690888A8F60B1813671647 /* TuistAssets+FlashForge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12AD161F2369835545014CA /* TuistAssets+FlashForge.swift */; };
+		8F62D2671F75C0B70092317C /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBB59EE0B5DFD2C7459A881 /* OnboardingViewController.swift */; };
+		8FFEFA9C00BFB71C8EE0DBDC /* FSRSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29096BBEA211227493FBF7C2 /* FSRSTests.swift */; };
+		911FA94FBE364CB0D0A730A3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 317D0E3C03BFEE59297F78D4 /* Assets.xcassets */; };
+		91E119AC9DDBA9AFF344F7C6 /* CardEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95BA1C7163594BF5A62BC85 /* CardEditorViewController.swift */; };
+		968D162A5D90A953F5D5A59D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3DF4AA76C4B4B652F282612D /* Localizable.strings */; };
+		AD0262810281751BE87930FA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A34BEB8690A7E0022ADD56 /* AppDelegate.swift */; };
+		BB9B1C01638FD190CBC90506 /* FlashCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F2218C1D27BFD8C0FA63EE /* FlashCard.swift */; };
+		CC9637242E4F66EAE551ABA3 /* AppNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA66B93FA8114B912CE7A7AC /* AppNotification.swift */; };
+		DDA55246A23CD41412EBBBA2 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37760F3BF153FDC5EF8BEFDC /* Deck.swift */; };
+		E019ABFBA476703C376B36B2 /* DecksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BA7B4C4BA63469CF1D48A8 /* DecksViewController.swift */; };
+		E42AA0A1947A2DA8A862AE4E /* FSRSScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FE9F3EE624612B657115E5 /* FSRSScheduler.swift */; };
+		E63DA69BBEA1639520763895 /* FSRSParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADB34A41A0F1A04AB626218 /* FSRSParameters.swift */; };
+		E799C4C3CB158890A026C53B /* TuistStrings+FlashForge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2645A56C4A455169870C4A2E /* TuistStrings+FlashForge.swift */; };
+		F56A7CC7966EEA138A7A63E7 /* DeckDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2D145E0784B9C06BF5572D /* DeckDetailViewModel.swift */; };
+		FCAD0A0EE491D89F4137BA0A /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B8F05D884CA05818AE1F3C /* L10n.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0157C1A348EBACED923788DE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 795A4894F3B40A8B45F6184F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7FDF7208A821E9D1D0C1D1CD;
+			remoteInfo = FlashForge;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		73E5DF4C83BC8929513AE10E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C89148B6D26F9636194B6006 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		11D472DD1C95FE3A90AF4B0E /* TuistBundle+FlashForge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistBundle+FlashForge.swift"; sourceTree = "<group>"; };
+		1A1E198DE7F4EAE36BF2902B /* StudyReminderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyReminderService.swift; sourceTree = "<group>"; };
+		2645A56C4A455169870C4A2E /* TuistStrings+FlashForge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistStrings+FlashForge.swift"; sourceTree = "<group>"; };
+		28642A0E5702194F0DF7B3AD /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		28DD93CCC11EDF1E2CA57CC0 /* AnkiScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnkiScheduler.swift; sourceTree = "<group>"; };
+		29096BBEA211227493FBF7C2 /* FSRSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSRSTests.swift; sourceTree = "<group>"; };
+		2EC48DFDD7AD6F63201B93A3 /* CardRepositoryPersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardRepositoryPersistenceTests.swift; sourceTree = "<group>"; };
+		317D0E3C03BFEE59297F78D4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		37760F3BF153FDC5EF8BEFDC /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
+		3ADB34A41A0F1A04AB626218 /* FSRSParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSRSParameters.swift; sourceTree = "<group>"; };
+		3E0AD8E8F65454CDB75CBF66 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		43063C25FD351D73CFC1A701 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		4A99F301ADDA6EC2EBF192A3 /* DecksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecksViewModel.swift; sourceTree = "<group>"; };
+		4CBFE84B93A991370BC52944 /* CardTextSanitizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTextSanitizerTests.swift; sourceTree = "<group>"; };
+		4FDF11FE5547DC426B932AFE /* PersistenceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceModels.swift; sourceTree = "<group>"; };
+		52B8F05D884CA05818AE1F3C /* L10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
+		56638997A259354801A20F6A /* SchedulerMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerMode.swift; sourceTree = "<group>"; };
+		67A3B3161796298FDD85D8F8 /* FlashForge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlashForge.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		700AFB3B4CDA3F2F8FD9176C /* GlassCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassCardView.swift; sourceTree = "<group>"; };
+		71BA7B4C4BA63469CF1D48A8 /* DecksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecksViewController.swift; sourceTree = "<group>"; };
+		75FE9F3EE624612B657115E5 /* FSRSScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSRSScheduler.swift; sourceTree = "<group>"; };
+		8FBB59EE0B5DFD2C7459A881 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		94841623693077402111778D /* MoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
+		AAD0BD0EAECA19D54900CC25 /* StudyCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyCard.swift; sourceTree = "<group>"; };
+		AAFA33D699D6866CF70033EE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		B95BA1C7163594BF5A62BC85 /* CardEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardEditorViewController.swift; sourceTree = "<group>"; };
+		BF22BD610B18E1204D750A34 /* FlashForgeTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "FlashForgeTests-Info.plist"; sourceTree = "<group>"; };
+		BF2D145E0784B9C06BF5572D /* DeckDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDetailViewModel.swift; sourceTree = "<group>"; };
+		CC6A1679DDC1AB1BE4D56A45 /* DeckDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDetailViewController.swift; sourceTree = "<group>"; };
+		D34EF64EDE96A0D476D7A915 /* FlashForgeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlashForgeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D461C4D4DA11970FCB8ACF50 /* RootTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabBarController.swift; sourceTree = "<group>"; };
+		D9AD08B6C3F0A200AEE26108 /* CardRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardRepository.swift; sourceTree = "<group>"; };
+		DACBC97F9E67929393B532B2 /* ReviewHeatmapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewHeatmapView.swift; sourceTree = "<group>"; };
+		DBE82C9F0B7059D892DC38A1 /* FlashForge-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "FlashForge-Info.plist"; sourceTree = "<group>"; };
+		E12AD161F2369835545014CA /* TuistAssets+FlashForge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistAssets+FlashForge.swift"; sourceTree = "<group>"; };
+		E2A34BEB8690A7E0022ADD56 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F34E594E97AF0B69E7790D09 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		F6F2218C1D27BFD8C0FA63EE /* FlashCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCard.swift; sourceTree = "<group>"; };
+		F77538CCCA5E1FEC22D41C3D /* CardTextSanitizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTextSanitizer.swift; sourceTree = "<group>"; };
+		FA66B93FA8114B912CE7A7AC /* AppNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNotification.swift; sourceTree = "<group>"; };
+		FFC9FB5D205FA9B7F501AB63 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1A367A11B0BD568BB34ABD1E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66F44C7097F93A03334A35D7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1CC9655C2C282ACBEF8D4F28 /* SnapKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		03778FB2D0627058D5641B56 /* Derived */ = {
+			isa = PBXGroup;
+			children = (
+				6D457D2A9033258185BB68F7 /* InfoPlists */,
+				1E359D9074526D4DFA2E5D5C /* Sources */,
+			);
+			path = Derived;
+			sourceTree = "<group>";
+		};
+		0685E4CBCF218C4D6FBE1DDE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				700AFB3B4CDA3F2F8FD9176C /* GlassCardView.swift */,
+				DACBC97F9E67929393B532B2 /* ReviewHeatmapView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		1E359D9074526D4DFA2E5D5C /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				E12AD161F2369835545014CA /* TuistAssets+FlashForge.swift */,
+				11D472DD1C95FE3A90AF4B0E /* TuistBundle+FlashForge.swift */,
+				2645A56C4A455169870C4A2E /* TuistStrings+FlashForge.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		20B51723166122151970EC1C /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				28DD93CCC11EDF1E2CA57CC0 /* AnkiScheduler.swift */,
+				D9AD08B6C3F0A200AEE26108 /* CardRepository.swift */,
+				75FE9F3EE624612B657115E5 /* FSRSScheduler.swift */,
+				1A1E198DE7F4EAE36BF2902B /* StudyReminderService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		224E887DDF0F320EA851D6FD /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				B95BA1C7163594BF5A62BC85 /* CardEditorViewController.swift */,
+				CC6A1679DDC1AB1BE4D56A45 /* DeckDetailViewController.swift */,
+				71BA7B4C4BA63469CF1D48A8 /* DecksViewController.swift */,
+				28642A0E5702194F0DF7B3AD /* HomeViewController.swift */,
+				94841623693077402111778D /* MoreViewController.swift */,
+				8FBB59EE0B5DFD2C7459A881 /* OnboardingViewController.swift */,
+				D461C4D4DA11970FCB8ACF50 /* RootTabBarController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2A00FE47D87D5E4636137DD7 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FA66B93FA8114B912CE7A7AC /* AppNotification.swift */,
+				43063C25FD351D73CFC1A701 /* Card.swift */,
+				F77538CCCA5E1FEC22D41C3D /* CardTextSanitizer.swift */,
+				37760F3BF153FDC5EF8BEFDC /* Deck.swift */,
+				F6F2218C1D27BFD8C0FA63EE /* FlashCard.swift */,
+				3ADB34A41A0F1A04AB626218 /* FSRSParameters.swift */,
+				4FDF11FE5547DC426B932AFE /* PersistenceModels.swift */,
+				56638997A259354801A20F6A /* SchedulerMode.swift */,
+				AAD0BD0EAECA19D54900CC25 /* StudyCard.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		3155B3FF019698EE5191A77E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				3DF4AA76C4B4B652F282612D /* Localizable.strings */,
+				317D0E3C03BFEE59297F78D4 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		442A19A737FB31EFFC1655CE /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				2EC48DFDD7AD6F63201B93A3 /* CardRepositoryPersistenceTests.swift */,
+				4CBFE84B93A991370BC52944 /* CardTextSanitizerTests.swift */,
+				29096BBEA211227493FBF7C2 /* FSRSTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		6D457D2A9033258185BB68F7 /* InfoPlists */ = {
+			isa = PBXGroup;
+			children = (
+				DBE82C9F0B7059D892DC38A1 /* FlashForge-Info.plist */,
+				BF22BD610B18E1204D750A34 /* FlashForgeTests-Info.plist */,
+			);
+			path = InfoPlists;
+			sourceTree = "<group>";
+		};
+		83F941F79D3E2ABA0B112BC6 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				E2A34BEB8690A7E0022ADD56 /* AppDelegate.swift */,
+				52B8F05D884CA05818AE1F3C /* L10n.swift */,
+				AAFA33D699D6866CF70033EE /* SceneDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		8661AAA9ADF3C2BDDBBC9FD5 = {
+			isa = PBXGroup;
+			children = (
+				FEF823C3C6F7E97C8AD62107 /* Products */,
+				EF17BA3CDDDEF9DCBF3905E4 /* Project */,
+			);
+			sourceTree = "<group>";
+		};
+		92C0AA41AFECC4F234F91590 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				BF2D145E0784B9C06BF5572D /* DeckDetailViewModel.swift */,
+				4A99F301ADDA6EC2EBF192A3 /* DecksViewModel.swift */,
+				F34E594E97AF0B69E7790D09 /* HomeViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		EF17BA3CDDDEF9DCBF3905E4 /* Project */ = {
+			isa = PBXGroup;
+			children = (
+				83F941F79D3E2ABA0B112BC6 /* App */,
+				03778FB2D0627058D5641B56 /* Derived */,
+				2A00FE47D87D5E4636137DD7 /* Models */,
+				3155B3FF019698EE5191A77E /* Resources */,
+				20B51723166122151970EC1C /* Services */,
+				442A19A737FB31EFFC1655CE /* Tests */,
+				224E887DDF0F320EA851D6FD /* ViewControllers */,
+				92C0AA41AFECC4F234F91590 /* ViewModels */,
+				0685E4CBCF218C4D6FBE1DDE /* Views */,
+			);
+			name = Project;
+			sourceTree = "<group>";
+		};
+		FEF823C3C6F7E97C8AD62107 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				67A3B3161796298FDD85D8F8 /* FlashForge.app */,
+				D34EF64EDE96A0D476D7A915 /* FlashForgeTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5ABB972DCB8C677A9216AC6D /* FlashForgeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F31C8408979FEF8A23388729 /* Build configuration list for PBXNativeTarget "FlashForgeTests" */;
+			buildPhases = (
+				7A301EBA8F77DBBE23B7FE53 /* Sources */,
+				8A93B2DCE95E7F1A5E61BDC3 /* Resources */,
+				1A367A11B0BD568BB34ABD1E /* Frameworks */,
+				C89148B6D26F9636194B6006 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7EA00BF46033AE0DE88AEDC3 /* PBXTargetDependency */,
+			);
+			name = FlashForgeTests;
+			packageProductDependencies = (
+			);
+			productName = FlashForgeTests;
+			productReference = D34EF64EDE96A0D476D7A915 /* FlashForgeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		7FDF7208A821E9D1D0C1D1CD /* FlashForge */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8843B1F43D3BEEA8D3FF8A40 /* Build configuration list for PBXNativeTarget "FlashForge" */;
+			buildPhases = (
+				28BD8B44C8A620310D6C4AB4 /* SwiftLint */,
+				BD9CCF1F66184B9E335488F0 /* Sources */,
+				CA86773BAF624A13EFBCB758 /* Resources */,
+				66F44C7097F93A03334A35D7 /* Frameworks */,
+				73E5DF4C83BC8929513AE10E /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FlashForge;
+			packageProductDependencies = (
+				D55A5C72908252429091416B /* SnapKit */,
+			);
+			productName = FlashForge;
+			productReference = 67A3B3161796298FDD85D8F8 /* FlashForge.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		795A4894F3B40A8B45F6184F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				ORGANIZATIONNAME = bbdyno;
+				TargetAttributes = {
+					5ABB972DCB8C677A9216AC6D = {
+						TestTargetID = 7FDF7208A821E9D1D0C1D1CD;
+					};
+				};
+			};
+			buildConfigurationList = 9C1F31B9C455E432962272D8 /* Build configuration list for PBXProject "FlashForge" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+				ko,
+			);
+			mainGroup = 8661AAA9ADF3C2BDDBBC9FD5;
+			packageReferences = (
+				9DAD1267F36BE1A46B2F7CFE /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
+			productRefGroup = FEF823C3C6F7E97C8AD62107 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7FDF7208A821E9D1D0C1D1CD /* FlashForge */,
+				5ABB972DCB8C677A9216AC6D /* FlashForgeTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8A93B2DCE95E7F1A5E61BDC3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA86773BAF624A13EFBCB758 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				911FA94FBE364CB0D0A730A3 /* Assets.xcassets in Resources */,
+				968D162A5D90A953F5D5A59D /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		28BD8B44C8A620310D6C4AB4 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if test -d \"/opt/homebrew/bin\"; then\n  export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif test -d \"/usr/local/bin\"; then\n  export PATH=\"/usr/local/bin:$PATH\"\nfi\n\nif which swiftlint >/dev/null; then\n  swiftlint lint --config \"${SRCROOT}/.swiftlint.yml\" --no-cache\nelse\n  echo \"warning: SwiftLint not installed. Install with: brew install swiftlint\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7A301EBA8F77DBBE23B7FE53 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				799053F61A2BE2684417ADD6 /* CardRepositoryPersistenceTests.swift in Sources */,
+				78E39DE8C508097318652D3F /* CardTextSanitizerTests.swift in Sources */,
+				8FFEFA9C00BFB71C8EE0DBDC /* FSRSTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BD9CCF1F66184B9E335488F0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD0262810281751BE87930FA /* AppDelegate.swift in Sources */,
+				FCAD0A0EE491D89F4137BA0A /* L10n.swift in Sources */,
+				67E01180A67B9AA704B1BD88 /* SceneDelegate.swift in Sources */,
+				8E690888A8F60B1813671647 /* TuistAssets+FlashForge.swift in Sources */,
+				678FC23F12E83EC2647B80F0 /* TuistBundle+FlashForge.swift in Sources */,
+				E799C4C3CB158890A026C53B /* TuistStrings+FlashForge.swift in Sources */,
+				CC9637242E4F66EAE551ABA3 /* AppNotification.swift in Sources */,
+				79D6478AB8480D7DDCDAF0A5 /* Card.swift in Sources */,
+				7C0BCB0E4C2A38DB369BF9AE /* CardTextSanitizer.swift in Sources */,
+				DDA55246A23CD41412EBBBA2 /* Deck.swift in Sources */,
+				E63DA69BBEA1639520763895 /* FSRSParameters.swift in Sources */,
+				BB9B1C01638FD190CBC90506 /* FlashCard.swift in Sources */,
+				3B5E45CCDC0D77F1E9445FAE /* PersistenceModels.swift in Sources */,
+				606266CFD934DE3628B3D8AB /* SchedulerMode.swift in Sources */,
+				751611C6D032D21CB655B467 /* StudyCard.swift in Sources */,
+				647916DADDF4BF1DD9F1CBBF /* AnkiScheduler.swift in Sources */,
+				3FE4103C0B2CCE3DDD6857BE /* CardRepository.swift in Sources */,
+				E42AA0A1947A2DA8A862AE4E /* FSRSScheduler.swift in Sources */,
+				02D22339A3244C853A6828EF /* StudyReminderService.swift in Sources */,
+				91E119AC9DDBA9AFF344F7C6 /* CardEditorViewController.swift in Sources */,
+				1C3EB5D4819DBDDB02534C2B /* DeckDetailViewController.swift in Sources */,
+				E019ABFBA476703C376B36B2 /* DecksViewController.swift in Sources */,
+				8BA6F5C1CD15803CCB7C9B2B /* HomeViewController.swift in Sources */,
+				384023342BDA62019C3E064D /* MoreViewController.swift in Sources */,
+				8F62D2671F75C0B70092317C /* OnboardingViewController.swift in Sources */,
+				51E93FB1205B0D8F6AFFE1BF /* RootTabBarController.swift in Sources */,
+				F56A7CC7966EEA138A7A63E7 /* DeckDetailViewModel.swift in Sources */,
+				34B1A5A4B783E17891789A85 /* DecksViewModel.swift in Sources */,
+				323ABBD9C7F69CAE3D0B57CC /* HomeViewModel.swift in Sources */,
+				080B94E7283BC9E25E1762DF /* GlassCardView.swift in Sources */,
+				0BA521677B2D6A433E04FAAE /* ReviewHeatmapView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7EA00BF46033AE0DE88AEDC3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FlashForge;
+			target = 7FDF7208A821E9D1D0C1D1CD /* FlashForge */;
+			targetProxy = 0157C1A348EBACED923788DE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		3DF4AA76C4B4B652F282612D /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3E0AD8E8F65454CDB75CBF66 /* en */,
+				FFC9FB5D205FA9B7F501AB63 /* ko */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		22358B7E5AFD36C871AC6ED3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = M79H9K226Y;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "Derived/InfoPlists/FlashForge-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bbdyno.app.flashFlow;
+				PRODUCT_NAME = FlashForge;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a23ea4e6-f546-448f-b9e4-ee6f5ca37ad2";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "FlashFlow App Provisioning";
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
+				SWIFT_COMPILATION_MODE = singlefile;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		28FAAA20E6A5139BBB1E8FAA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		2CB97417B57BAED299D56BAF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = M79H9K226Y;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "Derived/InfoPlists/FlashForge-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bbdyno.app.flashFlow;
+				PRODUCT_NAME = FlashForge;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a23ea4e6-f546-448f-b9e4-ee6f5ca37ad2";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "FlashFlow App Provisioning";
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		345BFB771396C55420FE31C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = "Derived/InfoPlists/FlashForgeTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bbdyno.app.flashFlowTests;
+				PRODUCT_NAME = FlashForgeTests;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
+				SWIFT_COMPILATION_MODE = singlefile;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FlashForge.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FlashForge";
+				TEST_TARGET_NAME = FlashForge;
+			};
+			name = Debug;
+		};
+		538BA2E8FE7E33B673AF137B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.9;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D8E952C545A48B49685C1643 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = "Derived/InfoPlists/FlashForgeTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bbdyno.app.flashFlowTests;
+				PRODUCT_NAME = FlashForgeTests;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FlashForge.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FlashForge";
+				TEST_TARGET_NAME = FlashForge;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8843B1F43D3BEEA8D3FF8A40 /* Build configuration list for PBXNativeTarget "FlashForge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				22358B7E5AFD36C871AC6ED3 /* Debug */,
+				2CB97417B57BAED299D56BAF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9C1F31B9C455E432962272D8 /* Build configuration list for PBXProject "FlashForge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28FAAA20E6A5139BBB1E8FAA /* Debug */,
+				538BA2E8FE7E33B673AF137B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F31C8408979FEF8A23388729 /* Build configuration list for PBXNativeTarget "FlashForgeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				345BFB771396C55420FE31C9 /* Debug */,
+				D8E952C545A48B49685C1643 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9DAD1267F36BE1A46B2F7CFE /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D55A5C72908252429091416B /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 795A4894F3B40A8B45F6184F /* Project object */;
+}

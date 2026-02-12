@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C37FB1228479DBDAD925A732"
-               BuildableName = "FlashFlow.app"
-               BlueprintName = "FlashFlow"
-               ReferencedContainer = "container:FlashFlow.xcodeproj">
+               BlueprintIdentifier = "7FDF7208A821E9D1D0C1D1CD"
+               BuildableName = "FlashForge.app"
+               BlueprintName = "FlashForge"
+               ReferencedContainer = "container:FlashForge.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,10 +33,10 @@
             parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9D8C89F0BC53C837EC1C6CDD"
-               BuildableName = "FlashFlowTests.xctest"
-               BlueprintName = "FlashFlowTests"
-               ReferencedContainer = "container:FlashFlow.xcodeproj">
+               BlueprintIdentifier = "5ABB972DCB8C677A9216AC6D"
+               BuildableName = "FlashForgeTests.xctest"
+               BlueprintName = "FlashForgeTests"
+               ReferencedContainer = "container:FlashForge.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,10 +55,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C37FB1228479DBDAD925A732"
-            BuildableName = "FlashFlow.app"
-            BlueprintName = "FlashFlow"
-            ReferencedContainer = "container:FlashFlow.xcodeproj">
+            BlueprintIdentifier = "7FDF7208A821E9D1D0C1D1CD"
+            BuildableName = "FlashForge.app"
+            BlueprintName = "FlashForge"
+            ReferencedContainer = "container:FlashForge.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,10 +72,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C37FB1228479DBDAD925A732"
-            BuildableName = "FlashFlow.app"
-            BlueprintName = "FlashFlow"
-            ReferencedContainer = "container:FlashFlow.xcodeproj">
+            BlueprintIdentifier = "7FDF7208A821E9D1D0C1D1CD"
+            BuildableName = "FlashForge.app"
+            BlueprintName = "FlashForge"
+            ReferencedContainer = "container:FlashForge.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

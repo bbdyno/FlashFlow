@@ -1,6 +1,6 @@
 //
 //  OnboardingViewController.swift
-//  FlashFlow
+//  FlashForge
 //
 //  Created by bbdyno on 2/11/26.
 //
@@ -61,7 +61,7 @@ final class OnboardingViewController: UIViewController {
 
         AppTheme.applyGradient(to: backgroundGradientLayer)
 
-        titleLabel.text = "Welcome to FlashFlow"
+        titleLabel.text = "Welcome to FlashForge"
         titleLabel.textColor = AppTheme.textPrimary
         titleLabel.numberOfLines = 2
         titleLabel.font = UIFont(name: "AvenirNext-Bold", size: 30) ?? .systemFont(ofSize: 30, weight: .bold)

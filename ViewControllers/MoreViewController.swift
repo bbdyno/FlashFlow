@@ -1,6 +1,6 @@
 //
 //  MoreViewController.swift
-//  FlashFlow
+//  FlashForge
 //
 //  Created by bbdyno on 2/11/26.
 //
@@ -513,7 +513,7 @@ final class MoreViewController: UIViewController {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "yyyyMMdd-HHmm"
-        let fileName = "FlashFlow-backup-\(formatter.string(from: Date())).\(Self.backupFileExtension)"
+        let fileName = "FlashForge-backup-\(formatter.string(from: Date())).\(Self.backupFileExtension)"
         let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
         try data.write(to: fileURL, options: .atomic)
         return fileURL

@@ -1,4 +1,4 @@
-# ⚡ FlashFlow
+# ⚡ FlashForge
 
 ![iOS](https://img.shields.io/badge/iOS-17.0%2B-black?logo=apple) ![Swift](https://img.shields.io/badge/Swift-5.9-F05138?logo=swift&logoColor=white) ![Privacy](https://img.shields.io/badge/Privacy-First-success) ![License](https://img.shields.io/badge/License-Apache%202.0-blue)
 
@@ -11,9 +11,9 @@
 
 ## 📱 About the App
 
-**FlashFlow** is a beautifully crafted, fully offline flashcard study app powered by a hybrid spaced repetition engine. Combining the proven **SM-2 (Anki)** algorithm with the cutting-edge **FSRS (Free Spaced Repetition Scheduler)**, FlashFlow optimizes your review intervals to maximize long-term retention with minimal effort.
+**FlashForge** is a beautifully crafted, fully offline flashcard study app powered by a hybrid spaced repetition engine. Combining the proven **SM-2 (Anki)** algorithm with the cutting-edge **FSRS (Free Spaced Repetition Scheduler)**, FlashForge optimizes your review intervals to maximize long-term retention with minimal effort.
 
-**FlashFlow**는 검증된 **SM-2(Anki)** 알고리즘과 최신 **FSRS** 알고리즘을 결합한 하이브리드 간격 반복 엔진을 탑재한 플래시카드 학습 앱입니다. 서버도, 회원가입도, 개인정보 수집도 없습니다. 모든 학습 데이터는 오직 당신의 기기에만 저장됩니다.
+**FlashForge**는 검증된 **SM-2(Anki)** 알고리즘과 최신 **FSRS** 알고리즘을 결합한 하이브리드 간격 반복 엔진을 탑재한 플래시카드 학습 앱입니다. 서버도, 회원가입도, 개인정보 수집도 없습니다. 모든 학습 데이터는 오직 당신의 기기에만 저장됩니다.
 
 <br>
 
@@ -133,11 +133,11 @@ This will run `tuist install` and `tuist generate` to set up the Xcode workspace
 
 1. Open the workspace:
    ```bash
-   open FlashFlow.xcworkspace
+   open FlashForge.xcworkspace
    ```
 
 2. **Important:** Select the correct scheme and destination
-   - **Scheme:** Choose `FlashFlow`
+   - **Scheme:** Choose `FlashForge`
    - **Destination:** Select an iOS Simulator (e.g., iPhone 16)
 
 3. Press `Cmd+R` to build and run
@@ -149,7 +149,7 @@ This will run `tuist install` and `tuist generate` to set up the Xcode workspace
 ## 📂 Project Structure
 
 ```
-FlashFlow/
+FlashForge/
 ├── App/                    # AppDelegate, SceneDelegate, L10n
 ├── Models/                 # Domain models, FSRS parameters
 ├── Services/               # CardRepository, FSRSScheduler, AnkiScheduler

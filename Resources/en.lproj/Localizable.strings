@@ -1,4 +1,4 @@
-"home.title" = "FlashFlow";
+"home.title" = "FlashForge";
 "home.deck.select" = "Select Deck";
 "home.due.none" = "No cards due today";
 "home.reveal" = "Show Answer";
@@ -28,7 +28,7 @@
 "more.reminder.permission.message" = "Please allow notifications to use reminders.";
 "more.common.cancel" = "Cancel";
 "more.common.open_settings" = "Open Settings";
-"more.footer" = "If reminders do not arrive, check iOS Settings > Notifications > FlashFlow.";
+"more.footer" = "If reminders do not arrive, check iOS Settings > Notifications > FlashForge.";
 
 "more.data.title" = "Data";
 "more.data.export" = "Export Backup";

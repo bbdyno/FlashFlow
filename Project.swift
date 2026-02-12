@@ -1,6 +1,6 @@
 import ProjectDescription
 
-let appName = "FlashFlow"
+let appName = "FlashForge"
 let bundleId = "com.bbdyno.app.flashFlow"
 let testBundleId = "com.bbdyno.app.flashFlowTests"
 let developmentTeamId = "M79H9K226Y"

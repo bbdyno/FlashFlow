@@ -1,19 +1,19 @@
 //
 //  CardRepositoryPersistenceTests.swift
-//  FlashFlowTests
+//  FlashForgeTests
 //
 //  Created by bbdyno on 2/12/26.
 //
 
 import XCTest
-@testable import FlashFlow
+@testable import FlashForge
 
 final class CardRepositoryPersistenceTests: XCTestCase {
     private var sandboxRootURL: URL!
 
     override func setUpWithError() throws {
         sandboxRootURL = FileManager.default.temporaryDirectory
-            .appendingPathComponent("FlashFlowTests-\(UUID().uuidString)", isDirectory: true)
+            .appendingPathComponent("FlashForgeTests-\(UUID().uuidString)", isDirectory: true)
         try FileManager.default.createDirectory(at: sandboxRootURL, withIntermediateDirectories: true)
     }
 

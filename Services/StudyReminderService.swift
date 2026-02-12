@@ -1,6 +1,6 @@
 //
 //  StudyReminderService.swift
-//  FlashFlow
+//  FlashForge
 //
 //  Created by bbdyno on 2/11/26.
 //
@@ -136,7 +136,7 @@ final class StudyReminderService {
         dateComponents.minute = minute
 
         let content = UNMutableNotificationContent()
-        content.title = "FlashFlow Study Reminder"
+        content.title = "FlashForge Study Reminder"
         content.body = "Time to review your cards."
         content.sound = .default
 

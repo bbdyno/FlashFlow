@@ -1,6 +1,6 @@
 //
 //  CardRepository.swift
-//  FlashFlow
+//  FlashForge
 //
 //  Created by bbdyno on 2/11/26.
 //
@@ -872,7 +872,7 @@ actor CardRepository {
             appropriateFor: nil,
             create: true
         )
-        let directory = rootURL.appendingPathComponent("FlashFlow", isDirectory: true)
+        let directory = rootURL.appendingPathComponent("FlashForge", isDirectory: true)
         if !fileManager.fileExists(atPath: directory.path) {
             try fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
         }
