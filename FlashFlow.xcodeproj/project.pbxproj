@@ -302,6 +302,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FE12ADC1862E2FBA10E996E6 /* Build configuration list for PBXNativeTarget "FlashFlow" */;
 			buildPhases = (
+				FFCFB576555160CC80CE34A3 /* SwiftLint */,
 				57D3A40BA4F88CF2A17FC4BA /* Sources */,
 				6A4AC093A4A447EE3E4C0EBB /* Resources */,
 				48FDFC206A34BAD97929CA39 /* Frameworks */,
@@ -373,6 +374,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		FFCFB576555160CC80CE34A3 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if test -d \"/opt/homebrew/bin\"; then\n  export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif test -d \"/usr/local/bin\"; then\n  export PATH=\"/usr/local/bin:$PATH\"\nfi\n\nif which swiftlint >/dev/null; then\n  swiftlint lint --config \"${SRCROOT}/.swiftlint.yml\" --no-cache\nelse\n  echo \"warning: SwiftLint not installed. Install with: brew install swiftlint\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4B99AC2B8F50C402D5CA43B2 /* Sources */ = {

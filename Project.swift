@@ -52,6 +52,26 @@ let project = Project(
             resources: [
                 "Resources/**"
             ],
+            scripts: [
+                .pre(
+                    script: """
+                    if test -d "/opt/homebrew/bin"; then
+                      export PATH="/opt/homebrew/bin:$PATH"
+                    fi
+
+                    if test -d "/usr/local/bin"; then
+                      export PATH="/usr/local/bin:$PATH"
+                    fi
+
+                    if which swiftlint >/dev/null; then
+                      swiftlint lint --config "${SRCROOT}/.swiftlint.yml" --no-cache
+                    else
+                      echo "warning: SwiftLint not installed. Install with: brew install swiftlint"
+                    fi
+                    """,
+                    name: "SwiftLint"
+                )
+            ],
             dependencies: [
                 .package(product: "SnapKit")
             ],

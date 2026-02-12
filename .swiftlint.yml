@@ -1,0 +1,26 @@
+disabled_rules:
+  - identifier_name
+  - type_body_length
+  - function_body_length
+  - large_tuple
+
+included:
+  - App
+  - Models
+  - Services
+  - ViewModels
+  - ViewControllers
+  - Views
+  - Tests
+
+excluded:
+  - Derived
+  - Tuist
+
+line_length:
+  warning: 140
+  error: 180
+
+file_length:
+  warning: 600
+  error: 900

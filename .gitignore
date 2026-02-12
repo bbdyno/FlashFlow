@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+
+# Xcode user data
+*.xcuserstate
+xcuserdata/
+*.xccheckout
+*.xcscmblueprint
+
+# Build artifacts
+Derived/
+DerivedData/
+build/
+.build/
+
+# Tuist artifacts
+Tuist/.build/
+Tuist/.swiftpm/
+Tuist/Dependencies/
+Tuist/Cache/
+Tuist/Build/
+Tuist/Derived/
+Tuist/Graph/
+
+# Editor
+*.swp
+*.swo
+
