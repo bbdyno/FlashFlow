@@ -45,17 +45,25 @@ final class GlassCardView: UIView {
 
     func configure(with studyCard: StudyCard) {
         let card = studyCard.content
-        titleLabel.text = CardTextSanitizer.normalizeMultiline(card.title)
+        let title = CardTextSanitizer.normalizeMultiline(card.title)
+        titleLabel.text = title
 
         let deckTitle = CardTextSanitizer.normalizeSingleLine(studyCard.deckTitle)
         let note = CardTextSanitizer.normalizeSingleLine(card.subtitle)
+        let subtitle: String
         if note.isEmpty || CardTextSanitizer.isLegacyNoNote(note) {
-            subtitleLabel.text = deckTitle
+            subtitle = deckTitle
         } else {
-            subtitleLabel.text = "\(deckTitle) · \(note)"
+            subtitle = "\(deckTitle) · \(note)"
         }
+        subtitleLabel.text = subtitle
 
-        detailLabel.text = CardTextSanitizer.normalizeMultiline(card.detail)
+        let detail = CardTextSanitizer.normalizeMultiline(card.detail)
+        detailLabel.text = detail
+
+        titleLabel.font = titleFont(for: title)
+        subtitleLabel.font = subtitleFont(for: subtitle)
+        detailLabel.font = detailFont(for: detail)
         stateBadgeLabel.text = badgeText(for: studyCard.schedule.state)
 
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 24, weight: .semibold)
@@ -174,19 +182,23 @@ final class GlassCardView: UIView {
 
         titleLabel.font = UIFont(name: "AvenirNext-Bold", size: 30) ?? .systemFont(ofSize: 30, weight: .bold)
         titleLabel.textColor = UIColor.white.withAlphaComponent(0.95)
-        titleLabel.numberOfLines = 2
+        titleLabel.numberOfLines = 0
+        titleLabel.lineBreakMode = .byWordWrapping
 
         subtitleLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 15) ?? .systemFont(ofSize: 15, weight: .semibold)
         subtitleLabel.textColor = UIColor.white.withAlphaComponent(0.74)
-        subtitleLabel.numberOfLines = 1
+        subtitleLabel.numberOfLines = 2
+        subtitleLabel.lineBreakMode = .byWordWrapping
 
         detailLabel.font = UIFont(name: "AvenirNext-Medium", size: 17) ?? .systemFont(ofSize: 17, weight: .medium)
         detailLabel.textColor = UIColor.white.withAlphaComponent(0.88)
         detailLabel.numberOfLines = 0
+        detailLabel.lineBreakMode = .byWordWrapping
 
         helperLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 14) ?? .systemFont(ofSize: 14, weight: .semibold)
         helperLabel.textColor = UIColor.white.withAlphaComponent(0.74)
         helperLabel.textAlignment = .left
+        helperLabel.numberOfLines = 0
         helperLabel.text = "Tap card to reveal answer"
     }
 
@@ -249,5 +261,55 @@ final class GlassCardView: UIView {
         case .relearning:
             return "RELEARNING"
         }
+    }
+
+    private func lineCount(in text: String) -> Int {
+        let count = text
+            .components(separatedBy: "\n")
+            .filter { !$0.isEmpty }
+            .count
+        return max(1, count)
+    }
+
+    private func titleFont(for text: String) -> UIFont {
+        let length = text.count
+        let lines = lineCount(in: text)
+        let size: CGFloat
+
+        if lines >= 4 || length >= 120 {
+            size = 24
+        } else if lines >= 3 || length >= 80 {
+            size = 26
+        } else if lines >= 2 || length >= 50 {
+            size = 28
+        } else {
+            size = 30
+        }
+
+        return UIFont(name: "AvenirNext-Bold", size: size) ?? .systemFont(ofSize: size, weight: .bold)
+    }
+
+    private func subtitleFont(for text: String) -> UIFont {
+        let length = text.count
+        let size: CGFloat = length >= 55 ? 14 : 15
+        return UIFont(name: "AvenirNext-DemiBold", size: size) ?? .systemFont(ofSize: size, weight: .semibold)
+    }
+
+    private func detailFont(for text: String) -> UIFont {
+        let length = text.count
+        let lines = lineCount(in: text)
+        let size: CGFloat
+
+        if lines >= 7 || length >= 260 {
+            size = 14.5
+        } else if lines >= 5 || length >= 180 {
+            size = 15.5
+        } else if lines >= 3 || length >= 120 {
+            size = 16
+        } else {
+            size = 17
+        }
+
+        return UIFont(name: "AvenirNext-Medium", size: size) ?? .systemFont(ofSize: size, weight: .medium)
     }
 }

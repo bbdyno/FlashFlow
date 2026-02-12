@@ -1,8 +1,11 @@
 import ProjectDescription
 
 let appName = "FlashFlow"
-let bundleId = "com.bbdyno.FlashFlow"
-let testBundleId = "com.bbdyno.FlashFlowTests"
+let bundleId = "com.bbdyno.app.flashFlow"
+let testBundleId = "com.bbdyno.app.flashFlowTests"
+let developmentTeamId = "M79H9K226Y"
+let provisioningProfileName = "FlashFlow App Provisioning"
+let provisioningProfileUUID = "a23ea4e6-f546-448f-b9e4-ee6f5ca37ad2"
 
 let project = Project(
     name: appName,
@@ -77,7 +80,12 @@ let project = Project(
             ],
             settings: .settings(
                 base: [
-                    "SWIFT_STRICT_CONCURRENCY": "complete"
+                    "SWIFT_STRICT_CONCURRENCY": .string("complete"),
+                    "DEVELOPMENT_TEAM": .string(developmentTeamId),
+                    "CODE_SIGN_STYLE": .string("Manual"),
+                    "CODE_SIGN_IDENTITY[sdk=iphoneos*]": .string("Apple Development"),
+                    "PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]": .string(provisioningProfileName),
+                    "PROVISIONING_PROFILE[sdk=iphoneos*]": .string(provisioningProfileUUID)
                 ]
             )
         ),
