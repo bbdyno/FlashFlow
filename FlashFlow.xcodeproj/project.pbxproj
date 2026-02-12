@@ -8,7 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0AAF1F9485A92CEAD6534608 /* GlassCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD9561D18F70C07ABE6B413 /* GlassCardView.swift */; };
+		19FD986284A8E07D0CB08CD2 /* CardTextSanitizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339538077D7314A0D21B6B83 /* CardTextSanitizerTests.swift */; };
 		1B457F3BD3E1CB17E7005BAF /* DecksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AF6708A787A2A463794359 /* DecksViewModel.swift */; };
+		304AF3F569E0B237C4FC60B3 /* CardTextSanitizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A671EABA05F233A55D013C8E /* CardTextSanitizer.swift */; };
 		41AAAD446A553A5118E66AD9 /* FSRSParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D23D56C820A57FC3AF7010 /* FSRSParameters.swift */; };
 		451A4D70C3B355D92DAB724F /* SchedulerMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747743885A5483EFC6C1ADD6 /* SchedulerMode.swift */; };
 		46885145CB890031A57298E5 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2313526293C26BE01F195E44 /* HomeViewController.swift */; };
@@ -80,6 +82,7 @@
 		233E5F6726A5F5E536BA8AA1 /* AppNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNotification.swift; sourceTree = "<group>"; };
 		23AF6708A787A2A463794359 /* DecksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecksViewModel.swift; sourceTree = "<group>"; };
 		23D23D56C820A57FC3AF7010 /* FSRSParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSRSParameters.swift; sourceTree = "<group>"; };
+		339538077D7314A0D21B6B83 /* CardTextSanitizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTextSanitizerTests.swift; sourceTree = "<group>"; };
 		3A446F21C9D4FCB1113E48DC /* DeckDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDetailViewModel.swift; sourceTree = "<group>"; };
 		3BCBE663070C7F504EE60C27 /* FlashFlowTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "FlashFlowTests-Info.plist"; sourceTree = "<group>"; };
 		462F2B20BD213539113EE6EF /* FlashFlowTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlashFlowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,6 +103,7 @@
 		999F8CD582E2C405F765FF27 /* CardRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardRepository.swift; sourceTree = "<group>"; };
 		9E3D5AC77D3C853F7B8C7DD6 /* StudyReminderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyReminderService.swift; sourceTree = "<group>"; };
 		A46B23186BD548F02C9F2CF6 /* AnkiScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnkiScheduler.swift; sourceTree = "<group>"; };
+		A671EABA05F233A55D013C8E /* CardTextSanitizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTextSanitizer.swift; sourceTree = "<group>"; };
 		A80BB1F51C193AED7D61B7B6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		ACD3799234C07F474D18576E /* FSRSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSRSTests.swift; sourceTree = "<group>"; };
 		ACFC617E05753B019160C7CE /* L10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
@@ -197,6 +201,7 @@
 		4127C1038A20F9CD9BEF1195 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				339538077D7314A0D21B6B83 /* CardTextSanitizerTests.swift */,
 				ACD3799234C07F474D18576E /* FSRSTests.swift */,
 			);
 			path = Tests;
@@ -254,6 +259,7 @@
 			children = (
 				233E5F6726A5F5E536BA8AA1 /* AppNotification.swift */,
 				869715261FFE220B82F29861 /* Card.swift */,
+				A671EABA05F233A55D013C8E /* CardTextSanitizer.swift */,
 				8E0E6051F8B961EF644CE30C /* Deck.swift */,
 				5A9BFDC169682A843298F3F4 /* FlashCard.swift */,
 				23D23D56C820A57FC3AF7010 /* FSRSParameters.swift */,
@@ -401,6 +407,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				19FD986284A8E07D0CB08CD2 /* CardTextSanitizerTests.swift in Sources */,
 				E2787E7C3A737CD5F1DE2E8D /* FSRSTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -416,6 +423,7 @@
 				BA9E74C6B759BFF29B1759C5 /* TuistStrings+FlashFlow.swift in Sources */,
 				EA0008FAB74F24FCC7879AF6 /* AppNotification.swift in Sources */,
 				515DB0549CC52175684AD3D5 /* Card.swift in Sources */,
+				304AF3F569E0B237C4FC60B3 /* CardTextSanitizer.swift in Sources */,
 				64E02E057E0E291050E8FB4F /* Deck.swift in Sources */,
 				41AAAD446A553A5118E66AD9 /* FSRSParameters.swift in Sources */,
 				DC7680A36A0F7BCE10548937 /* FlashCard.swift in Sources */,

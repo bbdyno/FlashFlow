@@ -256,11 +256,11 @@ final class CardEditorViewController: UIViewController {
             return
         }
 
-        frontField.text = card.content.title
-        backTextView.text = card.content.detail
-        let note = card.content.subtitle
-        noteField.text = (note == "No Note" || note == "No note") ? "" : note
-        backPlaceholder.isHidden = !(backTextView.text ?? "").isEmpty
+        frontField.text = CardTextSanitizer.normalizeSingleLine(card.content.title)
+        backTextView.text = CardTextSanitizer.normalizeMultiline(card.content.detail)
+        let note = CardTextSanitizer.normalizeSingleLine(card.content.subtitle)
+        noteField.text = CardTextSanitizer.isLegacyNoNote(note) ? "" : note
+        backPlaceholder.isHidden = !CardTextSanitizer.normalizeMultiline(backTextView.text ?? "").isEmpty
     }
 
     private var modeTitle: String {
@@ -307,12 +307,39 @@ final class CardEditorViewController: UIViewController {
         )
     }
 
+    private func presentValidationError() {
+        guard presentedViewController == nil else {
+            return
+        }
+        let alert = UIAlertController(
+            title: "Invalid Card",
+            message: "Front and back must contain text.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+
     @objc
     private func didTapSave() {
+        let normalizedFront = CardTextSanitizer.normalizeMultiline(frontField.text ?? "")
+        let normalizedBack = CardTextSanitizer.normalizeMultiline(backTextView.text ?? "")
+        let normalizedNote = CardTextSanitizer.normalizeSingleLine(noteField.text ?? "")
+
+        guard !normalizedFront.isEmpty, !normalizedBack.isEmpty else {
+            presentValidationError()
+            return
+        }
+
+        frontField.text = normalizedFront
+        backTextView.text = normalizedBack
+        noteField.text = normalizedNote
+        backPlaceholder.isHidden = true
+
         let draft = DeckDetailViewModel.CardDraft(
-            front: frontField.text ?? "",
-            back: backTextView.text ?? "",
-            note: noteField.text ?? ""
+            front: normalizedFront,
+            back: normalizedBack,
+            note: normalizedNote
         )
         onSave(draft)
         navigationController?.popViewController(animated: true)
@@ -321,6 +348,6 @@ final class CardEditorViewController: UIViewController {
 
 extension CardEditorViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        backPlaceholder.isHidden = !(textView.text ?? "").isEmpty
+        backPlaceholder.isHidden = !CardTextSanitizer.normalizeMultiline(textView.text ?? "").isEmpty
     }
 }

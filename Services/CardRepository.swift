@@ -605,13 +605,13 @@ actor CardRepository {
     }
 
     private func normalizedCardContent(front: String, back: String, note: String) throws -> (front: String, back: String, note: String) {
-        let trimmedFront = front.trimmingCharacters(in: .whitespacesAndNewlines)
-        let trimmedBack = back.trimmingCharacters(in: .whitespacesAndNewlines)
-        let trimmedNote = note.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmedFront.isEmpty, !trimmedBack.isEmpty else {
+        let normalizedFront = CardTextSanitizer.normalizeMultiline(front)
+        let normalizedBack = CardTextSanitizer.normalizeMultiline(back)
+        let normalizedNote = CardTextSanitizer.normalizeSingleLine(note)
+        guard !normalizedFront.isEmpty, !normalizedBack.isEmpty else {
             throw RepositoryError.invalidCardContent
         }
-        return (trimmedFront, trimmedBack, trimmedNote)
+        return (normalizedFront, normalizedBack, normalizedNote)
     }
 
     private func suggestedImageName(from seed: String) -> String {

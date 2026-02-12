@@ -45,14 +45,17 @@ final class GlassCardView: UIView {
 
     func configure(with studyCard: StudyCard) {
         let card = studyCard.content
-        titleLabel.text = card.title
-        let note = card.subtitle.trimmingCharacters(in: .whitespacesAndNewlines)
-        if note.isEmpty || note == "No Note" || note == "No note" {
-            subtitleLabel.text = studyCard.deckTitle
+        titleLabel.text = CardTextSanitizer.normalizeMultiline(card.title)
+
+        let deckTitle = CardTextSanitizer.normalizeSingleLine(studyCard.deckTitle)
+        let note = CardTextSanitizer.normalizeSingleLine(card.subtitle)
+        if note.isEmpty || CardTextSanitizer.isLegacyNoNote(note) {
+            subtitleLabel.text = deckTitle
         } else {
-            subtitleLabel.text = "\(studyCard.deckTitle) · \(note)"
+            subtitleLabel.text = "\(deckTitle) · \(note)"
         }
-        detailLabel.text = card.detail
+
+        detailLabel.text = CardTextSanitizer.normalizeMultiline(card.detail)
         stateBadgeLabel.text = badgeText(for: studyCard.schedule.state)
 
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 24, weight: .semibold)

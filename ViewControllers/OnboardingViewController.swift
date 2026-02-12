@@ -9,6 +9,13 @@ import UIKit
 import SnapKit
 
 final class OnboardingViewController: UIViewController {
+    private struct OnboardingDraft {
+        let deckTitle: String
+        let front: String
+        let back: String
+        let note: String
+    }
+
     private let repository: CardRepository
     var onCompleted: (() -> Void)?
 
@@ -150,6 +157,10 @@ final class OnboardingViewController: UIViewController {
 
     @objc
     private func didTapStart() {
+        guard let draft = normalizedDraft() else {
+            return
+        }
+
         setLoading(true)
         Task { @MainActor [weak self] in
             guard let self else { return }
@@ -157,12 +168,12 @@ final class OnboardingViewController: UIViewController {
 
             do {
                 try await self.repository.prepare()
-                let deck = try await self.repository.createDeck(title: self.deckField.text ?? "")
+                let deck = try await self.repository.createDeck(title: draft.deckTitle)
                 _ = try await self.repository.addCard(
                     to: deck.id,
-                    front: self.frontField.text ?? "",
-                    back: self.backField.text ?? "",
-                    note: self.noteField.text ?? ""
+                    front: draft.front,
+                    back: draft.back,
+                    note: draft.note
                 )
                 self.onCompleted?()
                 self.dismiss(animated: true)
@@ -170,6 +181,41 @@ final class OnboardingViewController: UIViewController {
                 self.presentError(message: Self.userFacingMessage(from: error))
             }
         }
+    }
+
+    private func normalizedDraft() -> OnboardingDraft? {
+        let deckTitle = CardTextSanitizer.normalizeSingleLine(deckField.text ?? "")
+        let front = CardTextSanitizer.normalizeMultiline(frontField.text ?? "")
+        let back = CardTextSanitizer.normalizeMultiline(backField.text ?? "")
+        let note = CardTextSanitizer.normalizeSingleLine(noteField.text ?? "")
+
+        guard !deckTitle.isEmpty else {
+            presentValidationError(
+                title: "Invalid Deck Name",
+                message: "Please enter a deck title."
+            )
+            return nil
+        }
+
+        guard !front.isEmpty, !back.isEmpty else {
+            presentValidationError(
+                title: "Invalid Card",
+                message: "Front and back must contain text."
+            )
+            return nil
+        }
+
+        deckField.text = deckTitle
+        frontField.text = front
+        backField.text = back
+        noteField.text = note
+
+        return OnboardingDraft(
+            deckTitle: deckTitle,
+            front: front,
+            back: back,
+            note: note
+        )
     }
 
     private func setLoading(_ isLoading: Bool) {
@@ -189,6 +235,16 @@ final class OnboardingViewController: UIViewController {
 
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+        present(alert, animated: true)
+    }
+
+    private func presentValidationError(title: String, message: String) {
+        guard presentedViewController == nil else {
+            return
+        }
+
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
 

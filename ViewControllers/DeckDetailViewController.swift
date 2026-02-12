@@ -208,9 +208,18 @@ final class DeckDetailViewController: UIViewController {
         return "Due \(DateFormatter.deckDueDate.string(from: date))"
     }
 
+    private func frontPreview(for card: DeckCard) -> String {
+        CardTextSanitizer.previewLine(
+            from: card.content.title,
+            emptyFallback: "No front content yet"
+        )
+    }
+
     private func backPreview(for card: DeckCard) -> String {
-        let text = card.content.detail.trimmingCharacters(in: .whitespacesAndNewlines)
-        return text.isEmpty ? "No back content yet" : text
+        CardTextSanitizer.previewLine(
+            from: card.content.detail,
+            emptyFallback: "No back content yet"
+        )
     }
 }
 
@@ -228,7 +237,7 @@ extension DeckDetailViewController: UITableViewDataSource {
         }
         let card = cards[indexPath.row]
         cell.configure(
-            front: card.content.title,
+            front: frontPreview(for: card),
             back: backPreview(for: card),
             state: stateText(for: card),
             due: dueText(for: card.schedule.dueDate)
