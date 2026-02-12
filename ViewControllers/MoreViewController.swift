@@ -68,7 +68,7 @@ final class MoreViewController: UIViewController {
 
     private func configureUI() {
         title = L10n.tr("more.title")
-        navigationItem.largeTitleDisplayMode = .always
+        navigationItem.largeTitleDisplayMode = .automatic
 
         view.layer.insertSublayer(backgroundGradientLayer, at: 0)
         AppTheme.applyGradient(to: backgroundGradientLayer)
@@ -101,7 +101,7 @@ final class MoreViewController: UIViewController {
         stackView.addArrangedSubview(footerLabel)
 
         scrollView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
+            make.edges.equalToSuperview()
         }
 
         contentView.snp.makeConstraints { make in

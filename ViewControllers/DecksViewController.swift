@@ -79,7 +79,7 @@ final class DecksViewController: UIViewController {
 
     private func configureUI() {
         title = "Decks"
-        navigationItem.largeTitleDisplayMode = .always
+        navigationItem.largeTitleDisplayMode = .automatic
 
         view.layer.insertSublayer(backgroundGradientLayer, at: 0)
         AppTheme.applyGradient(to: backgroundGradientLayer)
