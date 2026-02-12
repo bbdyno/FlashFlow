@@ -16,6 +16,7 @@ actor CardRepository {
         case cardNotFound
         case persistenceFailed
         case invalidBackupFile
+        case invalidDeckImportFile
 
         var errorDescription: String? {
             switch self {
@@ -31,6 +32,8 @@ actor CardRepository {
                 return "Failed to save data."
             case .invalidBackupFile:
                 return "Invalid backup file format."
+            case .invalidDeckImportFile:
+                return "Invalid deck file format."
             }
         }
     }
@@ -56,6 +59,65 @@ actor CardRepository {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             decks = try container.decodeIfPresent([Deck].self, forKey: .decks) ?? []
             schedulerMode = try container.decodeIfPresent(SchedulerMode.self, forKey: .schedulerMode) ?? .fsrs
+        }
+    }
+
+    private struct ImportedDeckPayload: Decodable, Sendable {
+        struct ImportedCardPayload: Decodable, Sendable {
+            let front: String
+            let back: String
+            let note: String
+
+            private enum CodingKeys: String, CodingKey {
+                case front
+                case back
+                case note
+                case question
+                case answer
+                case hint
+            }
+
+            init(from decoder: Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                let front = try container.decodeIfPresent(String.self, forKey: .front)
+                    ?? container.decodeIfPresent(String.self, forKey: .question)
+                let back = try container.decodeIfPresent(String.self, forKey: .back)
+                    ?? container.decodeIfPresent(String.self, forKey: .answer)
+                let note = try container.decodeIfPresent(String.self, forKey: .note)
+                    ?? container.decodeIfPresent(String.self, forKey: .hint)
+                    ?? ""
+
+                guard let front, let back else {
+                    throw RepositoryError.invalidDeckImportFile
+                }
+
+                self.front = front
+                self.back = back
+                self.note = note
+            }
+        }
+
+        let title: String
+        let cards: [ImportedCardPayload]
+
+        private enum CodingKeys: String, CodingKey {
+            case title
+            case deckTitle
+            case name
+            case cards
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            let title = try container.decodeIfPresent(String.self, forKey: .title)
+                ?? container.decodeIfPresent(String.self, forKey: .deckTitle)
+                ?? container.decodeIfPresent(String.self, forKey: .name)
+            guard let title else {
+                throw RepositoryError.invalidDeckImportFile
+            }
+
+            self.title = title
+            self.cards = try container.decode([ImportedCardPayload].self, forKey: .cards)
         }
     }
 
@@ -167,6 +229,38 @@ actor CardRepository {
             sum + deck.cards.reduce(0) { $0 + $1.schedule.reviewHistory.count }
         }
         return BackupPreview(deckCount: deckCount, cardCount: cardCount, reviewCount: reviewCount)
+    }
+
+    @discardableResult
+    func importDeckData(_ data: Data) throws -> Deck {
+        try ensurePrepared()
+        let payload = try decodeDeckPayload(data)
+
+        let trimmedTitle = payload.title.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedTitle.isEmpty else {
+            throw RepositoryError.invalidTitle
+        }
+
+        let context = try makeContext()
+        let deckEntity = DeckEntity(title: trimmedTitle)
+        context.insert(deckEntity)
+
+        for card in payload.cards {
+            let normalized = try normalizedCardContent(front: card.front, back: card.back, note: card.note)
+            let content = FlashCard(
+                title: normalized.front,
+                subtitle: normalized.note,
+                detail: normalized.back,
+                imageName: suggestedImageName(from: normalized.front)
+            )
+            let deckCard = DeckCard(content: content)
+            let cardEntity = makeCardEntity(from: deckCard)
+            cardEntity.deck = deckEntity
+            deckEntity.cards.append(cardEntity)
+        }
+
+        try save(context: context)
+        return domainDeck(from: deckEntity)
     }
 
     @discardableResult
@@ -599,6 +693,16 @@ actor CardRepository {
             return store
         } catch {
             throw RepositoryError.invalidBackupFile
+        }
+    }
+
+    private func decodeDeckPayload(_ data: Data) throws -> ImportedDeckPayload {
+        do {
+            return try backupDecoder.decode(ImportedDeckPayload.self, from: data)
+        } catch let repositoryError as RepositoryError {
+            throw repositoryError
+        } catch {
+            throw RepositoryError.invalidDeckImportFile
         }
     }
 

@@ -7,8 +7,11 @@
 
 import UIKit
 import SnapKit
+import UniformTypeIdentifiers
 
 final class DecksViewController: UIViewController {
+    private static let deckImportFileExtension = "ffdeck"
+
     private let repository: CardRepository
 
     private let backgroundGradientLayer = CAGradientLayer()
@@ -171,6 +174,23 @@ final class DecksViewController: UIViewController {
 
     @objc
     private func didTapAddDeck() {
+        let actionSheet = UIAlertController(
+            title: "Add Deck",
+            message: "Choose how to add a deck.",
+            preferredStyle: .actionSheet
+        )
+        actionSheet.addAction(UIAlertAction(title: "Create Manually", style: .default, handler: { [weak self] _ in
+            self?.presentCreateDeckPrompt()
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Import from File", style: .default, handler: { [weak self] _ in
+            self?.presentDeckImportPicker()
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        actionSheet.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(actionSheet, animated: true)
+    }
+
+    private func presentCreateDeckPrompt() {
         let alert = UIAlertController(title: "New Deck", message: "Enter a deck name.", preferredStyle: .alert)
         alert.addTextField { textField in
             textField.placeholder = "e.g. iOS Interview"
@@ -185,6 +205,14 @@ final class DecksViewController: UIViewController {
             }
         }))
         present(alert, animated: true)
+    }
+
+    private func presentDeckImportPicker() {
+        let importType = UTType(filenameExtension: Self.deckImportFileExtension) ?? .json
+        let picker = UIDocumentPickerViewController(forOpeningContentTypes: [importType, .json])
+        picker.delegate = self
+        picker.allowsMultipleSelection = false
+        present(picker, animated: true)
     }
 
     private func presentRenamePrompt(for deck: DeckSummary) {
@@ -211,6 +239,33 @@ final class DecksViewController: UIViewController {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Close", style: .cancel))
         present(alert, animated: true)
+    }
+}
+
+extension DecksViewController: UIDocumentPickerDelegate {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        guard let fileURL = urls.first else {
+            presentError("Please select a deck file.")
+            return
+        }
+
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+
+            let didStartAccessing = fileURL.startAccessingSecurityScopedResource()
+            defer {
+                if didStartAccessing {
+                    fileURL.stopAccessingSecurityScopedResource()
+                }
+            }
+
+            do {
+                let data = try Data(contentsOf: fileURL)
+                await self.viewModel.send(.importDeckData(data))
+            } catch {
+                self.presentError("Failed to read the selected file.")
+            }
+        }
     }
 }
 

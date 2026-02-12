@@ -110,4 +110,62 @@ final class CardRepositoryPersistenceTests: XCTestCase {
 
         XCTAssertFalse(FileManager.default.fileExists(atPath: legacyStorageURL.path))
     }
+
+    func testImportDeckDataCreatesDeckWithCards() async throws {
+        let repositoryURL = sandboxRootURL.appendingPathComponent("deck-import", isDirectory: true)
+        let repository = CardRepository(appSupportDirectoryOverride: repositoryURL)
+        try await repository.prepare()
+
+        let payload = """
+        {
+          "title": "Imported Deck",
+          "cards": [
+            {
+              "front": "Question 1",
+              "back": "Answer 1",
+              "note": "Note 1"
+            },
+            {
+              "question": "Question 2",
+              "answer": "Answer 2",
+              "hint": "Hint 2"
+            }
+          ]
+        }
+        """
+
+        _ = try await repository.importDeckData(Data(payload.utf8))
+
+        let summaries = try await repository.deckSummaries()
+        XCTAssertEqual(summaries.count, 1)
+        XCTAssertEqual(summaries.first?.title, "Imported Deck")
+        XCTAssertEqual(summaries.first?.totalCardCount, 2)
+    }
+
+    func testImportDeckDataRejectsInvalidPayload() async throws {
+        let repositoryURL = sandboxRootURL.appendingPathComponent("deck-import-invalid", isDirectory: true)
+        let repository = CardRepository(appSupportDirectoryOverride: repositoryURL)
+        try await repository.prepare()
+
+        let payload = """
+        {
+          "title": "Broken Deck",
+          "cards": [
+            {
+              "front": "Only front"
+            }
+          ]
+        }
+        """
+
+        do {
+            _ = try await repository.importDeckData(Data(payload.utf8))
+            XCTFail("Expected invalid deck import file error")
+        } catch let error as CardRepository.RepositoryError {
+            guard case .invalidDeckImportFile = error else {
+                XCTFail("Expected invalidDeckImportFile, got \(error)")
+                return
+            }
+        }
+    }
 }

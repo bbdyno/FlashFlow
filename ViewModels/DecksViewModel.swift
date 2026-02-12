@@ -13,6 +13,7 @@ final class DecksViewModel {
         case viewDidLoad
         case didTapReload
         case createDeck(String)
+        case importDeckData(Data)
         case renameDeck(deckID: UUID, title: String)
         case deleteDeck(UUID)
     }
@@ -51,6 +52,8 @@ final class DecksViewModel {
             await refreshDecks()
         case let .createDeck(title):
             await createDeck(title)
+        case let .importDeckData(data):
+            await importDeckData(data)
         case let .renameDeck(deckID, title):
             await renameDeck(deckID: deckID, title: title)
         case let .deleteDeck(deckID):
@@ -84,6 +87,16 @@ final class DecksViewModel {
     private func renameDeck(deckID: UUID, title: String) async {
         do {
             try await repository.renameDeck(deckID: deckID, title: title)
+            notifyDeckDataChanged()
+            await refreshDecks()
+        } catch {
+            output.didReceiveError(Self.userFacingMessage(from: error))
+        }
+    }
+
+    private func importDeckData(_ data: Data) async {
+        do {
+            _ = try await repository.importDeckData(data)
             notifyDeckDataChanged()
             await refreshDecks()
         } catch {
