@@ -67,7 +67,7 @@ final class MoreViewController: UIViewController {
     }
 
     private func configureUI() {
-        title = L10n.tr("more.title")
+        title = FlashForgeStrings.More.title
         navigationItem.largeTitleDisplayMode = .automatic
 
         view.layer.insertSublayer(backgroundGradientLayer, at: 0)
@@ -94,7 +94,7 @@ final class MoreViewController: UIViewController {
         stackView.addArrangedSubview(appInfoCard)
 
         let footerLabel = UILabel()
-        footerLabel.text = L10n.tr("more.footer")
+        footerLabel.text = FlashForgeStrings.More.footer
         footerLabel.font = UIFont(name: "AvenirNext-Medium", size: 12) ?? .systemFont(ofSize: 12, weight: .medium)
         footerLabel.textColor = AppTheme.textSecondary
         footerLabel.numberOfLines = 0
@@ -123,11 +123,11 @@ final class MoreViewController: UIViewController {
         reminderCard.layer.cornerRadius = 16
         reminderCard.layer.cornerCurve = .continuous
 
-        reminderTitleLabel.text = L10n.tr("more.reminder.title")
+        reminderTitleLabel.text = FlashForgeStrings.More.Reminder.title
         reminderTitleLabel.font = UIFont(name: "AvenirNext-Bold", size: 19) ?? .systemFont(ofSize: 19, weight: .bold)
         reminderTitleLabel.textColor = AppTheme.textPrimary
 
-        reminderDescriptionLabel.text = L10n.tr("more.reminder.description")
+        reminderDescriptionLabel.text = FlashForgeStrings.More.Reminder.description
         reminderDescriptionLabel.font = UIFont(name: "AvenirNext-Medium", size: 14) ?? .systemFont(ofSize: 14, weight: .medium)
         reminderDescriptionLabel.textColor = AppTheme.textSecondary
         reminderDescriptionLabel.numberOfLines = 0
@@ -192,22 +192,25 @@ final class MoreViewController: UIViewController {
         dataCard.layer.cornerRadius = 16
         dataCard.layer.cornerCurve = .continuous
 
-        dataTitleLabel.text = L10n.tr("more.data.title")
+        dataTitleLabel.text = FlashForgeStrings.More.Data.title
         dataTitleLabel.font = UIFont(name: "AvenirNext-Bold", size: 19) ?? .systemFont(ofSize: 19, weight: .bold)
         dataTitleLabel.textColor = AppTheme.textPrimary
 
-        configureActionButton(backupButton, title: L10n.tr("more.data.export"), tint: AppTheme.accent)
+        configureActionButton(backupButton, title: FlashForgeStrings.More.Data.export, tint: AppTheme.accent)
+        backupButton.accessibilityIdentifier = "more.backupButton"
         backupButton.addTarget(self, action: #selector(didTapBackup), for: .touchUpInside)
 
-        configureActionButton(restoreButton, title: L10n.tr("more.data.import"), tint: AppTheme.infoBlue)
+        configureActionButton(restoreButton, title: FlashForgeStrings.More.Data.`import`, tint: AppTheme.infoBlue)
+        restoreButton.accessibilityIdentifier = "more.restoreButton"
         restoreButton.addTarget(self, action: #selector(didTapRestore), for: .touchUpInside)
 
-        configureActionButton(resetButton, title: L10n.tr("more.data.reset"), tint: AppTheme.dangerRed)
+        configureActionButton(resetButton, title: FlashForgeStrings.More.Data.reset, tint: AppTheme.dangerRed)
+        resetButton.accessibilityIdentifier = "more.resetButton"
         resetButton.addTarget(self, action: #selector(didTapReset), for: .touchUpInside)
 
         dataStatusLabel.font = UIFont(name: "AvenirNext-Medium", size: 13) ?? .systemFont(ofSize: 13, weight: .medium)
         dataStatusLabel.textColor = AppTheme.textSecondary
-        dataStatusLabel.text = L10n.tr("more.data.description")
+        dataStatusLabel.text = FlashForgeStrings.More.Data.description
         dataStatusLabel.numberOfLines = 2
 
         let buttonStack = UIStackView(arrangedSubviews: [backupButton, restoreButton, resetButton])
@@ -248,7 +251,7 @@ final class MoreViewController: UIViewController {
         appInfoCard.layer.cornerRadius = 16
         appInfoCard.layer.cornerCurve = .continuous
 
-        appInfoTitleLabel.text = L10n.tr("more.appinfo.title")
+        appInfoTitleLabel.text = FlashForgeStrings.More.Appinfo.title
         appInfoTitleLabel.font = UIFont(name: "AvenirNext-Bold", size: 19) ?? .systemFont(ofSize: 19, weight: .bold)
         appInfoTitleLabel.textColor = AppTheme.textPrimary
 
@@ -278,16 +281,16 @@ final class MoreViewController: UIViewController {
         developerCard.layer.cornerRadius = 16
         developerCard.layer.cornerCurve = .continuous
 
-        developerTitleLabel.text = L10n.tr("more.developer.title")
+        developerTitleLabel.text = FlashForgeStrings.More.Developer.title
         developerTitleLabel.font = UIFont(name: "AvenirNext-Bold", size: 19) ?? .systemFont(ofSize: 19, weight: .bold)
         developerTitleLabel.textColor = AppTheme.textPrimary
 
-        configureActionButton(generateSamplesButton, title: L10n.tr("more.developer.generate_samples"), tint: AppTheme.accentTeal)
+        configureActionButton(generateSamplesButton, title: FlashForgeStrings.More.Developer.generateSamples, tint: AppTheme.accentTeal)
         generateSamplesButton.addTarget(self, action: #selector(didTapGenerateSamples), for: .touchUpInside)
 
         developerStatusLabel.font = UIFont(name: "AvenirNext-Medium", size: 13) ?? .systemFont(ofSize: 13, weight: .medium)
         developerStatusLabel.textColor = AppTheme.textSecondary
-        developerStatusLabel.text = L10n.tr("more.developer.description")
+        developerStatusLabel.text = FlashForgeStrings.More.Developer.description
         developerStatusLabel.numberOfLines = 2
 
         developerCard.addSubview(developerTitleLabel)
@@ -329,13 +332,12 @@ final class MoreViewController: UIViewController {
         reminderTimePicker.isEnabled = settings.isEnabled
 
         if settings.isEnabled {
-            reminderStatusLabel.text = String(
-                format: L10n.tr("more.reminder.status.on"),
+            reminderStatusLabel.text = FlashForgeStrings.More.Reminder.Status.on(
                 settings.hour,
                 settings.minute
             )
         } else {
-            reminderStatusLabel.text = L10n.tr("more.reminder.status.off")
+            reminderStatusLabel.text = FlashForgeStrings.More.Reminder.Status.off
         }
     }
 
@@ -343,7 +345,7 @@ final class MoreViewController: UIViewController {
         let info = Bundle.main.infoDictionary
         let version = info?["CFBundleShortVersionString"] as? String ?? "-"
         let build = info?["CFBundleVersion"] as? String ?? "-"
-        appInfoBodyLabel.text = String(format: L10n.tr("more.appinfo.body"), version, build)
+        appInfoBodyLabel.text = FlashForgeStrings.More.Appinfo.body(version, build)
     }
 
     @objc
@@ -371,7 +373,7 @@ final class MoreViewController: UIViewController {
                 let backupData = try await self.repository.exportBackupData()
                 let fileURL = try self.writeBackupFile(data: backupData)
                 self.presentShareSheet(fileURL: fileURL, sourceView: self.backupButton)
-                self.dataStatusLabel.text = L10n.tr("more.data.export.done")
+                self.dataStatusLabel.text = FlashForgeStrings.More.Data.Export.done
             } catch {
                 self.dataStatusLabel.text = Self.userFacingMessage(from: error)
             }
@@ -392,10 +394,7 @@ final class MoreViewController: UIViewController {
 
             do {
                 let created = try await self.repository.createSampleDecksIfNeeded()
-                self.developerStatusLabel.text = String(
-                    format: L10n.tr("more.developer.created_result"),
-                    created
-                )
+                self.developerStatusLabel.text = FlashForgeStrings.More.Developer.createdResult(created)
                 NotificationCenter.default.post(name: .deckDataDidChange, object: nil)
             } catch {
                 self.developerStatusLabel.text = Self.userFacingMessage(from: error)
@@ -415,12 +414,12 @@ final class MoreViewController: UIViewController {
     @objc
     private func didTapReset() {
         let alert = UIAlertController(
-            title: L10n.tr("more.data.reset.confirm.title"),
-            message: L10n.tr("more.data.reset.confirm.message"),
+            title: FlashForgeStrings.More.Data.Reset.Confirm.title,
+            message: FlashForgeStrings.More.Data.Reset.Confirm.message,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: L10n.tr("more.common.cancel"), style: .cancel))
-        alert.addAction(UIAlertAction(title: L10n.tr("more.data.reset.confirm.action"), style: .destructive, handler: { [weak self] _ in
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.More.Common.cancel, style: .cancel))
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.More.Data.Reset.Confirm.action, style: .destructive, handler: { [weak self] _ in
             self?.resetAllData()
         }))
         present(alert, animated: true)
@@ -437,7 +436,7 @@ final class MoreViewController: UIViewController {
                 try await self.repository.resetAllData()
                 self.service.disableWithoutPrompt()
                 self.applySettings(self.service.loadSettings())
-                self.dataStatusLabel.text = L10n.tr("more.data.reset.done")
+                self.dataStatusLabel.text = FlashForgeStrings.More.Data.Reset.done
                 NotificationCenter.default.post(name: .deckDataDidChange, object: nil)
             } catch {
                 self.dataStatusLabel.text = Self.userFacingMessage(from: error)
@@ -466,7 +465,7 @@ final class MoreViewController: UIViewController {
             } catch {
                 self.reminderSwitch.setOn(false, animated: true)
                 self.reminderTimePicker.isEnabled = false
-                self.reminderStatusLabel.text = L10n.tr("error.generic")
+                self.reminderStatusLabel.text = FlashForgeStrings.Error.generic
             }
         }
     }
@@ -487,12 +486,12 @@ final class MoreViewController: UIViewController {
 
     private func presentPermissionAlert() {
         let alert = UIAlertController(
-            title: L10n.tr("more.reminder.permission.title"),
-            message: L10n.tr("more.reminder.permission.message"),
+            title: FlashForgeStrings.More.Reminder.Permission.title,
+            message: FlashForgeStrings.More.Reminder.Permission.message,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: L10n.tr("more.common.cancel"), style: .cancel))
-        alert.addAction(UIAlertAction(title: L10n.tr("more.common.open_settings"), style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.More.Common.cancel, style: .cancel))
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.More.Common.openSettings, style: .default, handler: { _ in
             guard let url = URL(string: UIApplication.openSettingsURLString) else {
                 return
             }
@@ -532,27 +531,23 @@ final class MoreViewController: UIViewController {
            !description.isEmpty {
             return description
         }
-        return L10n.tr("error.generic")
+        return FlashForgeStrings.Error.generic
     }
 
     private func presentImportConfirmation(data: Data, preview: BackupPreview) {
-        let previewText = String(
-            format: L10n.tr("more.data.import.preview"),
+        let previewText = FlashForgeStrings.More.Data.Import.preview(
             preview.deckCount,
             preview.cardCount,
             preview.reviewCount
         )
-        let message = String(
-            format: L10n.tr("more.data.import.confirm.message"),
-            previewText
-        )
+        let message = FlashForgeStrings.More.Data.Import.Confirm.message(previewText)
         let alert = UIAlertController(
-            title: L10n.tr("more.data.import.confirm.title"),
+            title: FlashForgeStrings.More.Data.Import.Confirm.title,
             message: message,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: L10n.tr("more.common.cancel"), style: .cancel))
-        alert.addAction(UIAlertAction(title: L10n.tr("more.data.import.confirm.action"), style: .default, handler: { [weak self] _ in
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.More.Common.cancel, style: .cancel))
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.More.Data.Import.Confirm.action, style: .default, handler: { [weak self] _ in
             self?.importBackupData(data)
         }))
         present(alert, animated: true)
@@ -566,7 +561,7 @@ final class MoreViewController: UIViewController {
 
             do {
                 try await self.repository.importBackupData(data)
-                self.dataStatusLabel.text = L10n.tr("more.data.import.done")
+                self.dataStatusLabel.text = FlashForgeStrings.More.Data.Import.done
                 NotificationCenter.default.post(name: .deckDataDidChange, object: nil)
             } catch {
                 self.dataStatusLabel.text = Self.userFacingMessage(from: error)
@@ -577,12 +572,12 @@ final class MoreViewController: UIViewController {
 
 extension MoreViewController: UIDocumentPickerDelegate {
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-        dataStatusLabel.text = L10n.tr("more.data.import.cancelled")
+        dataStatusLabel.text = FlashForgeStrings.More.Data.Import.cancelled
     }
 
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let fileURL = urls.first else {
-            dataStatusLabel.text = L10n.tr("more.data.import.invalid_selection")
+            dataStatusLabel.text = FlashForgeStrings.More.Data.Import.invalidSelection
             return
         }
 
@@ -600,13 +595,12 @@ extension MoreViewController: UIDocumentPickerDelegate {
 
             do {
                 guard fileURL.pathExtension.lowercased() == Self.backupFileExtension else {
-                    self.dataStatusLabel.text = L10n.tr("more.data.import.invalid_selection")
+                    self.dataStatusLabel.text = FlashForgeStrings.More.Data.Import.invalidSelection
                     return
                 }
                 let data = try Data(contentsOf: fileURL)
                 let preview = try await self.repository.previewBackupData(data)
-                self.dataStatusLabel.text = String(
-                    format: L10n.tr("more.data.import.preview"),
+                self.dataStatusLabel.text = FlashForgeStrings.More.Data.Import.preview(
                     preview.deckCount,
                     preview.cardCount,
                     preview.reviewCount

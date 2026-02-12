@@ -42,6 +42,10 @@ enum AppTheme {
 }
 
 final class RootTabBarController: UITabBarController {
+    private enum UITestLaunchArgument {
+        static let skipOnboarding = "UITEST_SKIP_ONBOARDING"
+    }
+
     private let repository: CardRepository
     private var hasCheckedOnboarding = false
     private var isPresentingOnboarding = false
@@ -85,6 +89,7 @@ final class RootTabBarController: UITabBarController {
             image: UIImage(systemName: "bolt.fill"),
             selectedImage: UIImage(systemName: "bolt.fill")
         )
+        studyNavigation.tabBarItem.accessibilityIdentifier = "tab.study"
 
         let decks = DecksViewController(repository: repository)
         let decksNavigation = UINavigationController(rootViewController: decks)
@@ -94,6 +99,7 @@ final class RootTabBarController: UITabBarController {
             image: UIImage(systemName: "square.stack.3d.up.fill"),
             selectedImage: UIImage(systemName: "square.stack.3d.up.fill")
         )
+        decksNavigation.tabBarItem.accessibilityIdentifier = "tab.decks"
 
         let more = MoreViewController(repository: repository)
         let moreNavigation = UINavigationController(rootViewController: more)
@@ -103,6 +109,7 @@ final class RootTabBarController: UITabBarController {
             image: UIImage(systemName: "ellipsis.circle"),
             selectedImage: UIImage(systemName: "ellipsis.circle.fill")
         )
+        moreNavigation.tabBarItem.accessibilityIdentifier = "tab.more"
 
         viewControllers = [studyNavigation, decksNavigation, moreNavigation]
         tabBar.tintColor = AppTheme.accent
@@ -111,6 +118,10 @@ final class RootTabBarController: UITabBarController {
     }
 
     private func presentOnboardingIfNeeded() {
+        if ProcessInfo.processInfo.arguments.contains(UITestLaunchArgument.skipOnboarding) {
+            return
+        }
+
         guard !isPresentingOnboarding else {
             return
         }

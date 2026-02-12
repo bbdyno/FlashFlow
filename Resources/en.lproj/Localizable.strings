@@ -56,4 +56,22 @@
 "more.appinfo.title" = "App Info";
 "more.appinfo.body" = "Version: %@ (%@)\nNotifications: Local Push";
 
+"decks.title" = "Decks";
+"decks.empty" = "No decks yet.\nTap + to create your first deck.";
+"decks.row.subtitle" = "Today %d · New %d / Review %d · Remaining %d";
+"decks.add.title" = "Add Deck";
+"decks.add.message" = "Choose how to add a deck.";
+"decks.add.manual" = "Create Manually";
+"decks.add.import" = "Import from File";
+"decks.create.title" = "New Deck";
+"decks.create.message" = "Enter a deck name.";
+"decks.create.placeholder" = "e.g. iOS Interview";
+"decks.create.action" = "Create";
+"decks.rename.title" = "Rename Deck";
+"decks.rename.action" = "Save";
+"decks.import.select_error" = "Please select a deck file.";
+"decks.import.read_error" = "Failed to read the selected file.";
+"decks.action.rename" = "Rename";
+"decks.action.delete" = "Delete";
+
 "error.generic" = "An error occurred.";

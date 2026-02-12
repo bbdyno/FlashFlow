@@ -37,13 +37,14 @@
 		AD0262810281751BE87930FA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A34BEB8690A7E0022ADD56 /* AppDelegate.swift */; };
 		BB9B1C01638FD190CBC90506 /* FlashCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F2218C1D27BFD8C0FA63EE /* FlashCard.swift */; };
 		CC9637242E4F66EAE551ABA3 /* AppNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA66B93FA8114B912CE7A7AC /* AppNotification.swift */; };
+		D73C02E053050CFDD2C4A3BF /* FlashForgeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA23FB069A0C9939055C1301 /* FlashForgeUITests.swift */; };
+		D9919DCF5C4954F99CC45480 /* CardRepositoryDeckImportValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FA8E96F1711FC7AACED0ED /* CardRepositoryDeckImportValidationTests.swift */; };
 		DDA55246A23CD41412EBBBA2 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37760F3BF153FDC5EF8BEFDC /* Deck.swift */; };
 		E019ABFBA476703C376B36B2 /* DecksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BA7B4C4BA63469CF1D48A8 /* DecksViewController.swift */; };
 		E42AA0A1947A2DA8A862AE4E /* FSRSScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FE9F3EE624612B657115E5 /* FSRSScheduler.swift */; };
 		E63DA69BBEA1639520763895 /* FSRSParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADB34A41A0F1A04AB626218 /* FSRSParameters.swift */; };
 		E799C4C3CB158890A026C53B /* TuistStrings+FlashForge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2645A56C4A455169870C4A2E /* TuistStrings+FlashForge.swift */; };
 		F56A7CC7966EEA138A7A63E7 /* DeckDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2D145E0784B9C06BF5572D /* DeckDetailViewModel.swift */; };
-		FCAD0A0EE491D89F4137BA0A /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B8F05D884CA05818AE1F3C /* L10n.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,10 +55,27 @@
 			remoteGlobalIDString = 7FDF7208A821E9D1D0C1D1CD;
 			remoteInfo = FlashForge;
 		};
+		FE1620C2BF02E4F49D23AC88 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 795A4894F3B40A8B45F6184F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7FDF7208A821E9D1D0C1D1CD;
+			remoteInfo = FlashForge;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		73E5DF4C83BC8929513AE10E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A5EE1F3030592212D9FBBD7B /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
@@ -92,10 +110,11 @@
 		3ADB34A41A0F1A04AB626218 /* FSRSParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSRSParameters.swift; sourceTree = "<group>"; };
 		3E0AD8E8F65454CDB75CBF66 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		43063C25FD351D73CFC1A701 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		43FA8E96F1711FC7AACED0ED /* CardRepositoryDeckImportValidationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardRepositoryDeckImportValidationTests.swift; sourceTree = "<group>"; };
 		4A99F301ADDA6EC2EBF192A3 /* DecksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecksViewModel.swift; sourceTree = "<group>"; };
 		4CBFE84B93A991370BC52944 /* CardTextSanitizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTextSanitizerTests.swift; sourceTree = "<group>"; };
 		4FDF11FE5547DC426B932AFE /* PersistenceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceModels.swift; sourceTree = "<group>"; };
-		52B8F05D884CA05818AE1F3C /* L10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
+		500A5ECFA833BCC0766E720B /* FlashForgeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlashForgeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		56638997A259354801A20F6A /* SchedulerMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerMode.swift; sourceTree = "<group>"; };
 		67A3B3161796298FDD85D8F8 /* FlashForge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlashForge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		700AFB3B4CDA3F2F8FD9176C /* GlassCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassCardView.swift; sourceTree = "<group>"; };
@@ -103,6 +122,7 @@
 		75FE9F3EE624612B657115E5 /* FSRSScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSRSScheduler.swift; sourceTree = "<group>"; };
 		8FBB59EE0B5DFD2C7459A881 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		94841623693077402111778D /* MoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
+		97589DD14631A8CE9AA6E1BE /* FlashForgeUITests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "FlashForgeUITests-Info.plist"; sourceTree = "<group>"; };
 		AAD0BD0EAECA19D54900CC25 /* StudyCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyCard.swift; sourceTree = "<group>"; };
 		AAFA33D699D6866CF70033EE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		B95BA1C7163594BF5A62BC85 /* CardEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardEditorViewController.swift; sourceTree = "<group>"; };
@@ -119,6 +139,7 @@
 		F34E594E97AF0B69E7790D09 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		F6F2218C1D27BFD8C0FA63EE /* FlashCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCard.swift; sourceTree = "<group>"; };
 		F77538CCCA5E1FEC22D41C3D /* CardTextSanitizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTextSanitizer.swift; sourceTree = "<group>"; };
+		FA23FB069A0C9939055C1301 /* FlashForgeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashForgeUITests.swift; sourceTree = "<group>"; };
 		FA66B93FA8114B912CE7A7AC /* AppNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNotification.swift; sourceTree = "<group>"; };
 		FFC9FB5D205FA9B7F501AB63 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -136,6 +157,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				1CC9655C2C282ACBEF8D4F28 /* SnapKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		87F9F3898F95343C7E1AD1F5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,6 +251,7 @@
 		442A19A737FB31EFFC1655CE /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				43FA8E96F1711FC7AACED0ED /* CardRepositoryDeckImportValidationTests.swift */,
 				2EC48DFDD7AD6F63201B93A3 /* CardRepositoryPersistenceTests.swift */,
 				4CBFE84B93A991370BC52944 /* CardTextSanitizerTests.swift */,
 				29096BBEA211227493FBF7C2 /* FSRSTests.swift */,
@@ -235,6 +264,7 @@
 			children = (
 				DBE82C9F0B7059D892DC38A1 /* FlashForge-Info.plist */,
 				BF22BD610B18E1204D750A34 /* FlashForgeTests-Info.plist */,
+				97589DD14631A8CE9AA6E1BE /* FlashForgeUITests-Info.plist */,
 			);
 			path = InfoPlists;
 			sourceTree = "<group>";
@@ -243,7 +273,6 @@
 			isa = PBXGroup;
 			children = (
 				E2A34BEB8690A7E0022ADD56 /* AppDelegate.swift */,
-				52B8F05D884CA05818AE1F3C /* L10n.swift */,
 				AAFA33D699D6866CF70033EE /* SceneDelegate.swift */,
 			);
 			path = App;
@@ -267,6 +296,14 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		BFD79758412EF392E49D7724 /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				FA23FB069A0C9939055C1301 /* FlashForgeUITests.swift */,
+			);
+			path = UITests;
+			sourceTree = "<group>";
+		};
 		EF17BA3CDDDEF9DCBF3905E4 /* Project */ = {
 			isa = PBXGroup;
 			children = (
@@ -276,6 +313,7 @@
 				3155B3FF019698EE5191A77E /* Resources */,
 				20B51723166122151970EC1C /* Services */,
 				442A19A737FB31EFFC1655CE /* Tests */,
+				BFD79758412EF392E49D7724 /* UITests */,
 				224E887DDF0F320EA851D6FD /* ViewControllers */,
 				92C0AA41AFECC4F234F91590 /* ViewModels */,
 				0685E4CBCF218C4D6FBE1DDE /* Views */,
@@ -288,6 +326,7 @@
 			children = (
 				67A3B3161796298FDD85D8F8 /* FlashForge.app */,
 				D34EF64EDE96A0D476D7A915 /* FlashForgeTests.xctest */,
+				500A5ECFA833BCC0766E720B /* FlashForgeUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -295,6 +334,27 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		2BF0FEF141BB0618E0C071A5 /* FlashForgeUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1283D97DF4799B7255DEB5EE /* Build configuration list for PBXNativeTarget "FlashForgeUITests" */;
+			buildPhases = (
+				AF196284F5F5CD9C6C635073 /* Sources */,
+				5D522C937C5C7CEEC564E144 /* Resources */,
+				87F9F3898F95343C7E1AD1F5 /* Frameworks */,
+				A5EE1F3030592212D9FBBD7B /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8721A4F6D117FEF918456AC5 /* PBXTargetDependency */,
+			);
+			name = FlashForgeUITests;
+			packageProductDependencies = (
+			);
+			productName = FlashForgeUITests;
+			productReference = 500A5ECFA833BCC0766E720B /* FlashForgeUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		5ABB972DCB8C677A9216AC6D /* FlashForgeTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F31C8408979FEF8A23388729 /* Build configuration list for PBXNativeTarget "FlashForgeTests" */;
@@ -347,6 +407,9 @@
 				BuildIndependentTargetsInParallel = YES;
 				ORGANIZATIONNAME = bbdyno;
 				TargetAttributes = {
+					2BF0FEF141BB0618E0C071A5 = {
+						TestTargetID = 7FDF7208A821E9D1D0C1D1CD;
+					};
 					5ABB972DCB8C677A9216AC6D = {
 						TestTargetID = 7FDF7208A821E9D1D0C1D1CD;
 					};
@@ -371,11 +434,19 @@
 			targets = (
 				7FDF7208A821E9D1D0C1D1CD /* FlashForge */,
 				5ABB972DCB8C677A9216AC6D /* FlashForgeTests */,
+				2BF0FEF141BB0618E0C071A5 /* FlashForgeUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		5D522C937C5C7CEEC564E144 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8A93B2DCE95E7F1A5E61BDC3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -420,9 +491,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9919DCF5C4954F99CC45480 /* CardRepositoryDeckImportValidationTests.swift in Sources */,
 				799053F61A2BE2684417ADD6 /* CardRepositoryPersistenceTests.swift in Sources */,
 				78E39DE8C508097318652D3F /* CardTextSanitizerTests.swift in Sources */,
 				8FFEFA9C00BFB71C8EE0DBDC /* FSRSTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AF196284F5F5CD9C6C635073 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D73C02E053050CFDD2C4A3BF /* FlashForgeUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,7 +511,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD0262810281751BE87930FA /* AppDelegate.swift in Sources */,
-				FCAD0A0EE491D89F4137BA0A /* L10n.swift in Sources */,
 				67E01180A67B9AA704B1BD88 /* SceneDelegate.swift in Sources */,
 				8E690888A8F60B1813671647 /* TuistAssets+FlashForge.swift in Sources */,
 				678FC23F12E83EC2647B80F0 /* TuistBundle+FlashForge.swift in Sources */,
@@ -472,6 +551,12 @@
 			name = FlashForge;
 			target = 7FDF7208A821E9D1D0C1D1CD /* FlashForge */;
 			targetProxy = 0157C1A348EBACED923788DE /* PBXContainerItemProxy */;
+		};
+		8721A4F6D117FEF918456AC5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FlashForge;
+			target = 7FDF7208A821E9D1D0C1D1CD /* FlashForge */;
+			targetProxy = FE1620C2BF02E4F49D23AC88 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -615,6 +700,60 @@
 			};
 			name = Release;
 		};
+		30133B7BB97F909F6BFD0583 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = "Derived/InfoPlists/FlashForgeUITests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bbdyno.app.flashFlowUITests;
+				PRODUCT_NAME = FlashForgeUITests;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FlashForge;
+			};
+			name = Release;
+		};
+		33FA66A086F795D5E96AD3A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = "Derived/InfoPlists/FlashForgeUITests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bbdyno.app.flashFlowUITests;
+				PRODUCT_NAME = FlashForgeUITests;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
+				SWIFT_COMPILATION_MODE = singlefile;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FlashForge;
+			};
+			name = Debug;
+		};
 		345BFB771396C55420FE31C9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -731,6 +870,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1283D97DF4799B7255DEB5EE /* Build configuration list for PBXNativeTarget "FlashForgeUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				33FA66A086F795D5E96AD3A4 /* Debug */,
+				30133B7BB97F909F6BFD0583 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		8843B1F43D3BEEA8D3FF8A40 /* Build configuration list for PBXNativeTarget "FlashForge" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

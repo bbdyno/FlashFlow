@@ -34,6 +34,20 @@
                ReferencedContainer = "container:FlashForge.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2BF0FEF141BB0618E0C071A5"
+               BuildableName = "FlashForgeUITests.xctest"
+               BlueprintName = "FlashForgeUITests"
+               ReferencedContainer = "container:FlashForge.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -50,6 +64,17 @@
                BlueprintIdentifier = "5ABB972DCB8C677A9216AC6D"
                BuildableName = "FlashForgeTests.xctest"
                BlueprintName = "FlashForgeTests"
+               ReferencedContainer = "container:FlashForge.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2BF0FEF141BB0618E0C071A5"
+               BuildableName = "FlashForgeUITests.xctest"
+               BlueprintName = "FlashForgeUITests"
                ReferencedContainer = "container:FlashForge.xcodeproj">
             </BuildableReference>
          </TestableReference>

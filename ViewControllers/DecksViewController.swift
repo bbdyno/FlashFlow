@@ -81,7 +81,7 @@ final class DecksViewController: UIViewController {
     }
 
     private func configureUI() {
-        title = "Decks"
+        title = FlashForgeStrings.Decks.title
         navigationItem.largeTitleDisplayMode = .automatic
 
         view.layer.insertSublayer(backgroundGradientLayer, at: 0)
@@ -110,6 +110,7 @@ final class DecksViewController: UIViewController {
             action: #selector(didTapAddDeck)
         )
         navigationItem.rightBarButtonItem?.tintColor = AppTheme.textPrimary
+        navigationItem.rightBarButtonItem?.accessibilityIdentifier = "decks.addButton"
 
         tableView.register(DeckSummaryCell.self, forCellReuseIdentifier: DeckSummaryCell.reuseIdentifier)
         tableView.dataSource = self
@@ -119,9 +120,10 @@ final class DecksViewController: UIViewController {
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
+        tableView.accessibilityIdentifier = "decks.table"
         view.addSubview(tableView)
 
-        emptyLabel.text = "No decks yet.\nTap + to create your first deck."
+        emptyLabel.text = FlashForgeStrings.Decks.empty
         emptyLabel.textAlignment = .center
         emptyLabel.numberOfLines = 2
         emptyLabel.textColor = AppTheme.textSecondary
@@ -175,28 +177,32 @@ final class DecksViewController: UIViewController {
     @objc
     private func didTapAddDeck() {
         let actionSheet = UIAlertController(
-            title: "Add Deck",
-            message: "Choose how to add a deck.",
+            title: FlashForgeStrings.Decks.Add.title,
+            message: FlashForgeStrings.Decks.Add.message,
             preferredStyle: .actionSheet
         )
-        actionSheet.addAction(UIAlertAction(title: "Create Manually", style: .default, handler: { [weak self] _ in
+        actionSheet.addAction(UIAlertAction(title: FlashForgeStrings.Decks.Add.manual, style: .default, handler: { [weak self] _ in
             self?.presentCreateDeckPrompt()
         }))
-        actionSheet.addAction(UIAlertAction(title: "Import from File", style: .default, handler: { [weak self] _ in
+        actionSheet.addAction(UIAlertAction(title: FlashForgeStrings.Decks.Add.`import`, style: .default, handler: { [weak self] _ in
             self?.presentDeckImportPicker()
         }))
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        actionSheet.addAction(UIAlertAction(title: FlashForgeStrings.More.Common.cancel, style: .cancel))
         actionSheet.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
         present(actionSheet, animated: true)
     }
 
     private func presentCreateDeckPrompt() {
-        let alert = UIAlertController(title: "New Deck", message: "Enter a deck name.", preferredStyle: .alert)
+        let alert = UIAlertController(
+            title: FlashForgeStrings.Decks.Create.title,
+            message: FlashForgeStrings.Decks.Create.message,
+            preferredStyle: .alert
+        )
         alert.addTextField { textField in
-            textField.placeholder = "e.g. iOS Interview"
+            textField.placeholder = FlashForgeStrings.Decks.Create.placeholder
         }
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Create", style: .default, handler: { [weak self, weak alert] _ in
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.More.Common.cancel, style: .cancel))
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.Decks.Create.action, style: .default, handler: { [weak self, weak alert] _ in
             guard let self else { return }
             let title = alert?.textFields?.first?.text ?? ""
             Task { @MainActor [weak self] in
@@ -216,12 +222,12 @@ final class DecksViewController: UIViewController {
     }
 
     private func presentRenamePrompt(for deck: DeckSummary) {
-        let alert = UIAlertController(title: "Rename Deck", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: FlashForgeStrings.Decks.Rename.title, message: nil, preferredStyle: .alert)
         alert.addTextField { textField in
             textField.text = deck.title
         }
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { [weak self, weak alert] _ in
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.More.Common.cancel, style: .cancel))
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.Decks.Rename.action, style: .default, handler: { [weak self, weak alert] _ in
             guard let self else { return }
             let newTitle = alert?.textFields?.first?.text ?? ""
             Task { @MainActor [weak self] in
@@ -236,8 +242,8 @@ final class DecksViewController: UIViewController {
         guard presentedViewController == nil else {
             return
         }
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Close", style: .cancel))
+        let alert = UIAlertController(title: FlashForgeStrings.Home.Error.title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.Home.Error.close, style: .cancel))
         present(alert, animated: true)
     }
 }
@@ -245,7 +251,7 @@ final class DecksViewController: UIViewController {
 extension DecksViewController: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let fileURL = urls.first else {
-            presentError("Please select a deck file.")
+            presentError(FlashForgeStrings.Decks.Import.selectError)
             return
         }
 
@@ -263,7 +269,7 @@ extension DecksViewController: UIDocumentPickerDelegate {
                 let data = try Data(contentsOf: fileURL)
                 await self.viewModel.send(.importDeckData(data))
             } catch {
-                self.presentError("Failed to read the selected file.")
+                self.presentError(FlashForgeStrings.Decks.Import.readError)
             }
         }
     }
@@ -287,7 +293,12 @@ extension DecksViewController: UITableViewDataSource {
         let remaining = max(0, deck.totalCardCount - dueToday)
         cell.configure(
             title: deck.title,
-            subtitle: "Today \(dueToday) · New \(deck.dueCounts.learning) / Review \(deck.dueCounts.review) · Remaining \(remaining)"
+            subtitle: FlashForgeStrings.Decks.Row.subtitle(
+                dueToday,
+                deck.dueCounts.learning,
+                deck.dueCounts.review,
+                remaining
+            )
         )
         return cell
     }
@@ -307,13 +318,13 @@ extension DecksViewController: UITableViewDelegate {
     ) -> UISwipeActionsConfiguration? {
         let deck = deckSummaries[indexPath.row]
 
-        let rename = UIContextualAction(style: .normal, title: "Rename") { [weak self] _, _, completion in
+        let rename = UIContextualAction(style: .normal, title: FlashForgeStrings.Decks.Action.rename) { [weak self] _, _, completion in
             self?.presentRenamePrompt(for: deck)
             completion(true)
         }
         rename.backgroundColor = .systemBlue
 
-        let delete = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, completion in
+        let delete = UIContextualAction(style: .destructive, title: FlashForgeStrings.Decks.Action.delete) { [weak self] _, _, completion in
             guard let self else {
                 completion(false)
                 return

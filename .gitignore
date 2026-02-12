@@ -26,3 +26,8 @@ Tuist/Graph/
 *.swp
 *.swo
 
+# Local tool settings
+.claude/
+
+# Xcode generated shared workspace data
+FlashForge.xcodeproj/project.xcworkspace/xcshareddata/

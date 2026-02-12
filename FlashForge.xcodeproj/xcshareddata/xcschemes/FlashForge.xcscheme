@@ -39,6 +39,17 @@
                ReferencedContainer = "container:FlashForge.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2BF0FEF141BB0618E0C071A5"
+               BuildableName = "FlashForgeUITests.xctest"
+               BlueprintName = "FlashForgeUITests"
+               ReferencedContainer = "container:FlashForge.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

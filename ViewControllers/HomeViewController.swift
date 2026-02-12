@@ -142,7 +142,7 @@ final class HomeViewController: UIViewController {
         bottomGlowView.layer.shadowRadius = 52
         bottomGlowView.layer.shadowOffset = .zero
 
-        titleLabel.text = L10n.tr("home.title")
+        titleLabel.text = FlashForgeStrings.Home.title
         titleLabel.font = UIFont(name: "AvenirNext-Bold", size: 34) ?? .systemFont(ofSize: 34, weight: .bold)
         titleLabel.textColor = AppTheme.textPrimary
 
@@ -158,7 +158,8 @@ final class HomeViewController: UIViewController {
         deckButton.layer.borderColor = AppTheme.cardBorder.cgColor
         deckButton.backgroundColor = AppTheme.cardBackground
         deckButton.showsMenuAsPrimaryAction = true
-        setDeckButtonTitle(L10n.tr("home.deck.select"))
+        deckButton.accessibilityIdentifier = "home.deckButton"
+        setDeckButtonTitle(FlashForgeStrings.Home.Deck.select)
 
         dueSummaryContainer.backgroundColor = .clear
         dueSummaryContainer.layer.cornerRadius = 0
@@ -177,10 +178,10 @@ final class HomeViewController: UIViewController {
         dueSummaryTextLabel.lineBreakMode = .byTruncatingTail
         dueSummaryTextLabel.adjustsFontSizeToFitWidth = true
         dueSummaryTextLabel.minimumScaleFactor = 0.85
-        dueSummaryTextLabel.text = L10n.tr("home.due.none")
+        dueSummaryTextLabel.text = FlashForgeStrings.Home.Due.none
         dueSummaryTextLabel.isUserInteractionEnabled = false
 
-        revealAnswerButton.setTitle(L10n.tr("home.reveal"), for: .normal)
+        revealAnswerButton.setTitle(FlashForgeStrings.Home.reveal, for: .normal)
         revealAnswerButton.setTitleColor(AppTheme.textPrimary, for: .normal)
         revealAnswerButton.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 15) ?? .systemFont(ofSize: 15, weight: .bold)
         revealAnswerButton.backgroundColor = AppTheme.accent.withAlphaComponent(0.55)
@@ -191,7 +192,7 @@ final class HomeViewController: UIViewController {
         revealAnswerButton.addTarget(self, action: #selector(didTapRevealAnswer), for: .touchUpInside)
         revealAnswerButton.isHidden = true
 
-        gradePromptLabel.text = L10n.tr("home.grade.prompt")
+        gradePromptLabel.text = FlashForgeStrings.Home.Grade.prompt
         gradePromptLabel.textColor = AppTheme.textSecondary
         gradePromptLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 13) ?? .systemFont(ofSize: 13, weight: .semibold)
         gradePromptLabel.textAlignment = .center
@@ -210,7 +211,7 @@ final class HomeViewController: UIViewController {
         emptyStateLabel.textColor = AppTheme.textPrimary
         emptyStateLabel.isHidden = true
 
-        reloadButton.setTitle(L10n.tr("home.reload"), for: .normal)
+        reloadButton.setTitle(FlashForgeStrings.Home.reload, for: .normal)
         reloadButton.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 15) ?? .systemFont(ofSize: 15, weight: .bold)
         reloadButton.setTitleColor(AppTheme.textPrimary, for: .normal)
         reloadButton.backgroundColor = AppTheme.cardBackground
@@ -313,10 +314,10 @@ final class HomeViewController: UIViewController {
 
     private func configureGradeButtons() {
         let configs: [(title: String, subtitle: String, grade: UserGrade, tint: UIColor)] = [
-            (L10n.tr("home.grade.again.title"), L10n.tr("home.grade.again.subtitle"), .again, AppTheme.gradeAgain),
-            (L10n.tr("home.grade.hard.title"), L10n.tr("home.grade.hard.subtitle"), .hard, AppTheme.gradeHard),
-            (L10n.tr("home.grade.good.title"), L10n.tr("home.grade.good.subtitle"), .good, AppTheme.gradeGood),
-            (L10n.tr("home.grade.easy.title"), L10n.tr("home.grade.easy.subtitle"), .easy, AppTheme.gradeEasy)
+            (FlashForgeStrings.Home.Grade.Again.title, FlashForgeStrings.Home.Grade.Again.subtitle, .again, AppTheme.gradeAgain),
+            (FlashForgeStrings.Home.Grade.Hard.title, FlashForgeStrings.Home.Grade.Hard.subtitle, .hard, AppTheme.gradeHard),
+            (FlashForgeStrings.Home.Grade.Good.title, FlashForgeStrings.Home.Grade.Good.subtitle, .good, AppTheme.gradeGood),
+            (FlashForgeStrings.Home.Grade.Easy.title, FlashForgeStrings.Home.Grade.Easy.subtitle, .easy, AppTheme.gradeEasy)
         ]
 
         let topRow = UIStackView()
@@ -413,7 +414,7 @@ final class HomeViewController: UIViewController {
            let summary = summaries.first(where: { $0.id == selectedDeckID }) {
             setDeckButtonTitle(summary.title)
         } else {
-            setDeckButtonTitle(L10n.tr("home.deck.select"))
+            setDeckButtonTitle(FlashForgeStrings.Home.Deck.select)
         }
 
         rebuildDeckMenu()
@@ -436,7 +437,7 @@ final class HomeViewController: UIViewController {
                 }
             }
         }
-        deckButton.menu = UIMenu(title: L10n.tr("home.deck.select"), children: actions)
+        deckButton.menu = UIMenu(title: FlashForgeStrings.Home.Deck.select, children: actions)
     }
 
     private func render(card: StudyCard) {
@@ -509,17 +510,23 @@ final class HomeViewController: UIViewController {
         dueSummaryIconView.tintColor = counts.total == 0 ? AppTheme.accentTeal.withAlphaComponent(0.9) : AppTheme.textSecondary
 
         if counts.total == 0 {
-            dueSummaryTextLabel.text = L10n.tr("home.due.none")
+            dueSummaryTextLabel.text = FlashForgeStrings.Home.Due.none
             return
         }
 
-        let key = view.bounds.width <= 360 ? "home.due.inline.compact" : "home.due.inline"
-        dueSummaryTextLabel.text = String(
-            format: L10n.tr(key),
-            counts.total,
-            counts.learning,
-            counts.review
-        )
+        if view.bounds.width <= 360 {
+            dueSummaryTextLabel.text = FlashForgeStrings.Home.Due.Inline.compact(
+                counts.total,
+                counts.learning,
+                counts.review
+            )
+        } else {
+            dueSummaryTextLabel.text = FlashForgeStrings.Home.Due.inline(
+                counts.total,
+                counts.learning,
+                counts.review
+            )
+        }
     }
 
     private func presentErrorAlert(message: String) {
@@ -527,9 +534,9 @@ final class HomeViewController: UIViewController {
             return
         }
 
-        let alert = UIAlertController(title: L10n.tr("home.error.title"), message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: L10n.tr("home.error.close"), style: .cancel))
-        alert.addAction(UIAlertAction(title: L10n.tr("home.error.retry"), style: .default, handler: { [weak self] _ in
+        let alert = UIAlertController(title: FlashForgeStrings.Home.Error.title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.Home.Error.close, style: .cancel))
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.Home.Error.retry, style: .default, handler: { [weak self] _ in
             Task { @MainActor [weak self] in
                 guard let self else { return }
                 await self.viewModel.send(.didTapReload)

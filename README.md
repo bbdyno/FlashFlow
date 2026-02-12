@@ -150,7 +150,7 @@ This will run `tuist install` and `tuist generate` to set up the Xcode workspace
 
 ```
 FlashForge/
-├── App/                    # AppDelegate, SceneDelegate, L10n
+├── App/                    # AppDelegate, SceneDelegate
 ├── Models/                 # Domain models, FSRS parameters
 ├── Services/               # CardRepository, FSRSScheduler, AnkiScheduler
 ├── ViewModels/             # HomeViewModel, DecksViewModel, DeckDetailViewModel

@@ -3,6 +3,7 @@ import ProjectDescription
 let appName = "FlashForge"
 let bundleId = "com.bbdyno.app.flashFlow"
 let testBundleId = "com.bbdyno.app.flashFlowTests"
+let uiTestBundleId = "com.bbdyno.app.flashFlowUITests"
 let developmentTeamId = "M79H9K226Y"
 let provisioningProfileName = "FlashFlow App Provisioning"
 let provisioningProfileUUID = "a23ea4e6-f546-448f-b9e4-ee6f5ca37ad2"
@@ -31,6 +32,7 @@ let project = Project(
             bundleId: bundleId,
             deploymentTargets: .iOS("17.0"),
             infoPlist: .extendingDefault(with: [
+                "CFBundleDevelopmentRegion": .string("en"),
                 "UILaunchScreen": .dictionary([:]),
                 "UIApplicationSceneManifest": .dictionary([
                     "UIApplicationSupportsMultipleScenes": .boolean(false),
@@ -98,6 +100,25 @@ let project = Project(
             infoPlist: .default,
             sources: [
                 "Tests/**"
+            ],
+            dependencies: [
+                .target(name: appName)
+            ],
+            settings: .settings(
+                base: [
+                    "SWIFT_STRICT_CONCURRENCY": "complete"
+                ]
+            )
+        ),
+        .target(
+            name: "\(appName)UITests",
+            destinations: .iOS,
+            product: .uiTests,
+            bundleId: uiTestBundleId,
+            deploymentTargets: .iOS("17.0"),
+            infoPlist: .default,
+            sources: [
+                "UITests/**"
             ],
             dependencies: [
                 .target(name: appName)
