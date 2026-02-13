@@ -21,19 +21,19 @@ actor CardRepository {
         var errorDescription: String? {
             switch self {
             case .invalidTitle:
-                return "Please enter a deck title."
+                return FlashForgeStrings.Repository.Error.invalidTitle
             case .invalidCardContent:
-                return "Please fill in both front and back."
+                return FlashForgeStrings.Repository.Error.invalidCardContent
             case .deckNotFound:
-                return "Deck not found."
+                return FlashForgeStrings.Repository.Error.deckNotFound
             case .cardNotFound:
-                return "Card not found."
+                return FlashForgeStrings.Repository.Error.cardNotFound
             case .persistenceFailed:
-                return "Failed to save data."
+                return FlashForgeStrings.Repository.Error.persistenceFailed
             case .invalidBackupFile:
-                return "Invalid backup file format."
+                return FlashForgeStrings.Repository.Error.invalidBackupFile
             case .invalidDeckImportFile:
-                return "Invalid deck file format."
+                return FlashForgeStrings.Repository.Error.invalidDeckImportFile
             }
         }
     }
@@ -492,6 +492,19 @@ actor CardRepository {
             throw RepositoryError.deckNotFound
         }
         return dueCounts(for: domainDeck(from: deckEntity), now: now)
+    }
+
+    func reviewCountToday(deckID: UUID, now: Date = .now) throws -> Int {
+        try ensurePrepared()
+        let context = try makeContext()
+        guard let deckEntity = try fetchDeckEntity(deckID: deckID, context: context) else {
+            throw RepositoryError.deckNotFound
+        }
+
+        let deck = domainDeck(from: deckEntity)
+        return deck.cards.reduce(0) { total, card in
+            total + card.schedule.reviewHistory.filter { calendar.isDate($0, inSameDayAs: now) }.count
+        }
     }
 
     func nextDueCard(deckID: UUID, queue: StudyQueue, now: Date = .now) throws -> StudyCard? {

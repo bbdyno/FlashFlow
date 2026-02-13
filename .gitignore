@@ -31,3 +31,7 @@ Tuist/Graph/
 
 # Xcode generated shared workspace data
 FlashForge.xcodeproj/project.xcworkspace/xcshareddata/
+
+# Tuist-generated scheme noise
+FlashForge.xcodeproj/xcshareddata/xcschemes/FlashForgeWidgets.xcscheme
+FlashForge.xcworkspace/xcshareddata/xcschemes/FlashForge-Workspace.xcscheme

@@ -13,6 +13,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private lazy var cloudSyncService = ICloudSyncService(repository: repository)
     private var deckDataObserver: NSObjectProtocol?
     private var manualSyncObserver: NSObjectProtocol?
+    private var syncStatusObserver: NSObjectProtocol?
 
     func scene(
         _ scene: UIScene,
@@ -54,6 +55,26 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
         }
 
+        if syncStatusObserver == nil {
+            syncStatusObserver = NotificationCenter.default.addObserver(
+                forName: .iCloudSyncStatusDidChange,
+                object: nil,
+                queue: nil
+            ) { notification in
+                let userInfo = notification.userInfo ?? [:]
+                let isSyncing = (userInfo[ICloudSyncNotificationKey.isSyncing] as? Bool) ?? false
+                let lastSyncedAt = userInfo[ICloudSyncNotificationKey.lastSyncedAt] as? Date
+                let hasError = ((userInfo[ICloudSyncNotificationKey.errorMessage] as? String) ?? "").isEmpty == false
+                Task { @MainActor in
+                    StudyStatusService.shared.updateSyncStatus(
+                        isSyncing: isSyncing,
+                        lastSyncedAt: lastSyncedAt,
+                        hasError: hasError
+                    )
+                }
+            }
+        }
+
         Task {
             await cloudSyncService.bootstrap()
         }
@@ -74,5 +95,10 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             NotificationCenter.default.removeObserver(manualSyncObserver)
             self.manualSyncObserver = nil
         }
+        if let syncStatusObserver {
+            NotificationCenter.default.removeObserver(syncStatusObserver)
+            self.syncStatusObserver = nil
+        }
     }
+
 }

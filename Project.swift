@@ -2,6 +2,7 @@ import ProjectDescription
 
 let appName = "FlashForge"
 let bundleId = "com.bbdyno.app.flashFlow"
+let widgetBundleId = "com.bbdyno.app.flashFlow.widgets"
 let testBundleId = "com.bbdyno.app.flashFlowTests"
 let uiTestBundleId = "com.bbdyno.app.flashFlowUITests"
 let developmentTeamId = "M79H9K226Y"
@@ -34,6 +35,7 @@ let project = Project(
             infoPlist: .extendingDefault(with: [
                 "CFBundleDevelopmentRegion": .string("en"),
                 "UILaunchScreen": .dictionary([:]),
+                "NSSupportsLiveActivities": .boolean(true),
                 "UIApplicationSceneManifest": .dictionary([
                     "UIApplicationSupportsMultipleScenes": .boolean(false),
                     "UISceneConfigurations": .dictionary([
@@ -50,6 +52,7 @@ let project = Project(
                 "App/**",
                 "Models/**",
                 "Services/**",
+                "Shared/**",
                 "ViewModels/**",
                 "Views/**",
                 "ViewControllers/**"
@@ -78,6 +81,7 @@ let project = Project(
                 )
             ],
             dependencies: [
+                .target(name: "\(appName)Widgets"),
                 .package(product: "SnapKit")
             ],
             settings: .settings(
@@ -89,6 +93,35 @@ let project = Project(
                     "CODE_SIGN_IDENTITY[sdk=iphoneos*]": .string("Apple Development"),
                     "PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]": .string(provisioningProfileName),
                     "PROVISIONING_PROFILE[sdk=iphoneos*]": .string(provisioningProfileUUID)
+                ]
+            )
+        ),
+        .target(
+            name: "\(appName)Widgets",
+            destinations: .iOS,
+            product: .appExtension,
+            bundleId: widgetBundleId,
+            deploymentTargets: .iOS("17.0"),
+            infoPlist: .extendingDefault(with: [
+                "CFBundleDevelopmentRegion": .string("en"),
+                "CFBundleDisplayName": .string("FlashFlow Widgets"),
+                "NSExtension": .dictionary([
+                    "NSExtensionPointIdentifier": .string("com.apple.widgetkit-extension")
+                ])
+            ]),
+            sources: [
+                "WidgetExtension/**/*.swift",
+                "Shared/**/*.swift"
+            ],
+            resources: [
+                "WidgetExtension/Resources/**"
+            ],
+            settings: .settings(
+                base: [
+                    "SWIFT_STRICT_CONCURRENCY": .string("complete"),
+                    "CODE_SIGN_ENTITLEMENTS": .string("Config/FlashForgeWidgets.entitlements"),
+                    "DEVELOPMENT_TEAM": .string(developmentTeamId),
+                    "CODE_SIGN_STYLE": .string("Automatic")
                 ]
             )
         ),

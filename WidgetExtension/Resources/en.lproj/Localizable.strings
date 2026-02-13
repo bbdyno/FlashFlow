@@ -1,0 +1,15 @@
+"widget.today.title" = "Today's Study";
+"widget.deck.none" = "All Decks";
+"widget.remaining" = "Remaining";
+"widget.completed" = "Completed";
+"widget.open_app" = "Open App";
+"widget.config.title" = "Today's Study";
+"widget.config.description" = "Quick glance at your learning progress and remaining cards.";
+"live.label" = "Studying";
+"live.done_short" = "Done";
+"live.left_short" = "Left";
+"live.sync.idle" = "Idle";
+"live.sync.syncing" = "Syncing";
+"live.sync.synced" = "Synced";
+"live.sync.failed" = "Sync Failed";
+"live.complete" = "Completed";

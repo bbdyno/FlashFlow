@@ -16,5 +16,9 @@
 	</array>
 	<key>com.apple.developer.ubiquity-kvstore-identifier</key>
 	<string>$(TeamIdentifierPrefix)com.bbdyno.app.flashFlow</string>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.com.bbdyno.app.flashFlow</string>
+	</array>
 </dict>
 </plist>

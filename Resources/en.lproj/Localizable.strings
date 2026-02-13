@@ -137,4 +137,12 @@
 
 "review_heatmap.title" = "Review Heatmap";
 
+"repository.error.invalid_title" = "Please enter a deck title.";
+"repository.error.invalid_card_content" = "Please fill in both front and back.";
+"repository.error.deck_not_found" = "Deck not found.";
+"repository.error.card_not_found" = "Card not found.";
+"repository.error.persistence_failed" = "Failed to save data.";
+"repository.error.invalid_backup_file" = "Invalid backup file format.";
+"repository.error.invalid_deck_import_file" = "Invalid deck file format.";
+
 "error.generic" = "An error occurred.";

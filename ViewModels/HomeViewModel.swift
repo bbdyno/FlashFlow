@@ -43,13 +43,20 @@ final class HomeViewModel {
     }
 
     private let repository: CardRepository
+    private let studyStatusService: StudyStatusService
     private var output: Output
 
     private var selectedDeckID: UUID?
     private var currentCardID: UUID?
+    private var latestDeckSummaries: [DeckSummary] = []
 
-    init(repository: CardRepository, output: Output = .init()) {
+    init(
+        repository: CardRepository,
+        studyStatusService: StudyStatusService = .shared,
+        output: Output = .init()
+    ) {
         self.repository = repository
+        self.studyStatusService = studyStatusService
         self.output = output
     }
 
@@ -90,14 +97,22 @@ final class HomeViewModel {
         do {
             let summaries = try await repository.deckSummaries()
             if summaries.isEmpty {
+                latestDeckSummaries = []
                 selectedDeckID = nil
                 currentCardID = nil
                 output.didUpdateDeckSummaries([], nil)
                 output.didUpdateQueueCounts(QueueDueCounts(learning: 0, review: 0))
                 output.didShowEmptyState("Create a deck and add your first card to begin.")
+                studyStatusService.updateStudyProgress(
+                    counts: QueueDueCounts(learning: 0, review: 0),
+                    completedCount: 0,
+                    selectedDeckTitle: nil,
+                    hasCurrentCard: false
+                )
                 return
             }
 
+            latestDeckSummaries = summaries
             if resetDeckSelection || selectedDeckID == nil || !summaries.contains(where: { $0.id == selectedDeckID }) {
                 selectedDeckID = summaries.first?.id
             }
@@ -114,12 +129,19 @@ final class HomeViewModel {
             currentCardID = nil
             output.didUpdateQueueCounts(QueueDueCounts(learning: 0, review: 0))
             output.didShowEmptyState("Please select a deck.")
+            studyStatusService.updateStudyProgress(
+                counts: QueueDueCounts(learning: 0, review: 0),
+                completedCount: 0,
+                selectedDeckTitle: nil,
+                hasCurrentCard: false
+            )
             return
         }
 
         do {
             let counts = try await repository.queueDueCounts(deckID: selectedDeckID)
             let nextCard = try await nextDueCard(deckID: selectedDeckID)
+            let completedToday = try await repository.reviewCountToday(deckID: selectedDeckID)
 
             output.didUpdateQueueCounts(counts)
 
@@ -130,6 +152,13 @@ final class HomeViewModel {
                 currentCardID = nil
                 output.didShowEmptyState(emptyMessage())
             }
+
+            studyStatusService.updateStudyProgress(
+                counts: counts,
+                completedCount: completedToday,
+                selectedDeckTitle: selectedDeckTitle(for: selectedDeckID),
+                hasCurrentCard: nextCard != nil
+            )
         } catch {
             output.didReceiveError(Self.userFacingMessage(from: error))
         }
@@ -157,6 +186,10 @@ final class HomeViewModel {
 
     private func emptyMessage() -> String {
         "No cards due today."
+    }
+
+    private func selectedDeckTitle(for deckID: UUID) -> String? {
+        latestDeckSummaries.first(where: { $0.id == deckID })?.title
     }
 
     private static func userFacingMessage(from error: Error) -> String {

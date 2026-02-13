@@ -137,4 +137,12 @@
 
 "review_heatmap.title" = "복습 히트맵";
 
+"repository.error.invalid_title" = "덱 이름을 입력해 주세요.";
+"repository.error.invalid_card_content" = "앞면과 뒷면을 모두 입력해 주세요.";
+"repository.error.deck_not_found" = "덱을 찾을 수 없습니다.";
+"repository.error.card_not_found" = "카드를 찾을 수 없습니다.";
+"repository.error.persistence_failed" = "데이터 저장에 실패했습니다.";
+"repository.error.invalid_backup_file" = "백업 파일 형식이 올바르지 않습니다.";
+"repository.error.invalid_deck_import_file" = "덱 파일 형식이 올바르지 않습니다.";
+
 "error.generic" = "오류가 발생했습니다.";
