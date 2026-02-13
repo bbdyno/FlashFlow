@@ -34,4 +34,6 @@ FlashForge.xcodeproj/project.xcworkspace/xcshareddata/
 
 # Tuist-generated scheme noise
 FlashForge.xcodeproj/xcshareddata/xcschemes/FlashForgeWidgets.xcscheme
+FlashForge.xcodeproj/xcshareddata/xcschemes/SharedResources.xcscheme
 FlashForge.xcworkspace/xcshareddata/xcschemes/FlashForge-Workspace.xcscheme
+SharedResources/SharedResources.xcodeproj/xcshareddata/xcschemes/SharedResources.xcscheme

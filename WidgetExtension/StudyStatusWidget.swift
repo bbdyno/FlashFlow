@@ -1,4 +1,5 @@
 import ActivityKit
+import SharedResources
 import SwiftUI
 import WidgetKit
 
@@ -17,7 +18,7 @@ private enum WidgetText {
     static var complete: String { localized("live.complete", fallback: "Completed") }
 
     static func localized(_ key: String, fallback: String) -> String {
-        NSLocalizedString(key, tableName: nil, bundle: .main, value: fallback, comment: "")
+        SharedL10n.localized(key, fallback: fallback)
     }
 }
 
@@ -113,22 +114,23 @@ private struct StudyStatusCard: View {
                 Spacer(minLength: 6)
                 Text(progressText)
                     .font(compact ? .caption2 : .subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.white.opacity(0.78))
             }
 
             Text(deckTitle)
                 .font(compact ? .caption : .subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.white.opacity(0.72))
                 .lineLimit(1)
 
             ProgressView(value: progressValue)
                 .progressViewStyle(.linear)
+                .tint(Color(red: 0.41, green: 0.84, blue: 0.98))
 
             HStack(spacing: compact ? 8 : 12) {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(WidgetText.completed)
                         .font(.caption2)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.white.opacity(0.72))
                     Text("\(snapshot.completedCount)")
                         .font(compact ? .callout : .title3)
                         .fontWeight(.bold)
@@ -137,7 +139,7 @@ private struct StudyStatusCard: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(WidgetText.remaining)
                         .font(.caption2)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.white.opacity(0.72))
                     Text("\(snapshot.remainingCount)")
                         .font(compact ? .callout : .title3)
                         .fontWeight(.bold)
@@ -145,15 +147,28 @@ private struct StudyStatusCard: View {
                 Spacer(minLength: 0)
             }
         }
+        .foregroundStyle(.white)
+        .padding(compact ? 10 : 12)
+        .background(
+            RoundedRectangle(cornerRadius: compact ? 15 : 17, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            Color(red: 0.05, green: 0.11, blue: 0.19),
+                            Color(red: 0.09, green: 0.19, blue: 0.31),
+                            Color(red: 0.12, green: 0.24, blue: 0.40)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: compact ? 15 : 17, style: .continuous)
+                        .stroke(Color.white.opacity(0.14), lineWidth: 0.8)
+                )
+        )
         .containerBackground(for: .widget) {
-            LinearGradient(
-                colors: [
-                    Color(red: 0.07, green: 0.13, blue: 0.21),
-                    Color(red: 0.11, green: 0.22, blue: 0.35)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            Color.black
         }
     }
 }
@@ -164,6 +179,7 @@ struct StudyStatusWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: StudyStatusProvider()) { entry in
             StudyStatusWidgetView(entry: entry)
+                .environment(\.colorScheme, .dark)
         }
         .configurationDisplayName(WidgetText.localized("widget.config.title", fallback: "Today's Study"))
         .description(WidgetText.localized("widget.config.description", fallback: "Quick glance at your learning progress and remaining cards."))
@@ -196,7 +212,7 @@ private struct StudyStatusWidgetView: View {
                     .fontWeight(.semibold)
                 Text(entry.snapshot.selectedDeckTitle.isEmpty ? WidgetText.noDeck : entry.snapshot.selectedDeckTitle)
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.white.opacity(0.72))
                     .lineLimit(1)
             }
             Spacer(minLength: 6)
@@ -204,6 +220,7 @@ private struct StudyStatusWidgetView: View {
                 .font(.caption)
                 .fontWeight(.bold)
         }
+        .foregroundStyle(.white)
     }
 }
 
@@ -237,7 +254,7 @@ struct StudySessionLiveActivityWidget: Widget {
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
                         .background(Color.white.opacity(0.14), in: Capsule())
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.white.opacity(0.8))
                 }
                 .padding(.top, 8)
 
@@ -246,13 +263,15 @@ struct StudySessionLiveActivityWidget: Widget {
                         .font(.system(size: 30, weight: .bold, design: .rounded))
                     Text("\(context.state.completedCount)/\(max(context.state.goalCount, context.state.completedCount))")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.white.opacity(0.78))
                 }
 
                 ProgressView(value: ratio)
                     .progressViewStyle(.linear)
+                    .tint(Color(red: 0.41, green: 0.84, blue: 0.98))
                     .padding(.bottom, 8)
             }
+            .foregroundStyle(.white)
             .padding(.horizontal, 16)
             .padding(.vertical, 16)
             .background(
@@ -260,16 +279,22 @@ struct StudySessionLiveActivityWidget: Widget {
                     .fill(
                         LinearGradient(
                             colors: [
-                                Color(red: 0.08, green: 0.14, blue: 0.24),
-                                Color(red: 0.12, green: 0.24, blue: 0.38)
+                                Color(red: 0.05, green: 0.11, blue: 0.19),
+                                Color(red: 0.09, green: 0.19, blue: 0.31),
+                                Color(red: 0.12, green: 0.24, blue: 0.40)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
                     )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            .stroke(Color.white.opacity(0.14), lineWidth: 0.8)
+                    )
             )
             .padding(.horizontal, 4)
             .padding(.vertical, 10)
+            .environment(\.colorScheme, .dark)
             .activityBackgroundTint(Color(red: 0.07, green: 0.13, blue: 0.21))
             .activitySystemActionForegroundColor(.white)
         } dynamicIsland: { context in

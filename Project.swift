@@ -2,12 +2,13 @@ import ProjectDescription
 
 let appName = "FlashForge"
 let bundleId = "com.bbdyno.app.flashFlow"
-let widgetBundleId = "com.bbdyno.app.flashFlow.widgets"
+let widgetBundleId = "com.bbdyno.app.flashFlow.widget"
 let testBundleId = "com.bbdyno.app.flashFlowTests"
 let uiTestBundleId = "com.bbdyno.app.flashFlowUITests"
 let developmentTeamId = "M79H9K226Y"
 let provisioningProfileName = "FlashFlow App Provisioning"
 let provisioningProfileUUID = "a23ea4e6-f546-448f-b9e4-ee6f5ca37ad2"
+let widgetProvisioningProfileName = "FlashFlow WidgetExtension Provisioning"
 
 let project = Project(
     name: appName,
@@ -58,7 +59,7 @@ let project = Project(
                 "ViewControllers/**"
             ],
             resources: [
-                "Resources/**"
+                "Resources/AppAssets.xcassets"
             ],
             scripts: [
                 .pre(
@@ -82,6 +83,7 @@ let project = Project(
             ],
             dependencies: [
                 .target(name: "\(appName)Widgets"),
+                .project(target: "SharedResources", path: "SharedResources"),
                 .package(product: "SnapKit")
             ],
             settings: .settings(
@@ -90,7 +92,7 @@ let project = Project(
                     "CODE_SIGN_ENTITLEMENTS": .string("Config/FlashForge.entitlements"),
                     "DEVELOPMENT_TEAM": .string(developmentTeamId),
                     "CODE_SIGN_STYLE": .string("Manual"),
-                    "CODE_SIGN_IDENTITY[sdk=iphoneos*]": .string("Apple Development"),
+                    "CODE_SIGN_IDENTITY[sdk=iphoneos*]": .string("iOS Development"),
                     "PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]": .string(provisioningProfileName),
                     "PROVISIONING_PROFILE[sdk=iphoneos*]": .string(provisioningProfileUUID)
                 ]
@@ -113,15 +115,17 @@ let project = Project(
                 "WidgetExtension/**/*.swift",
                 "Shared/**/*.swift"
             ],
-            resources: [
-                "WidgetExtension/Resources/**"
+            dependencies: [
+                .project(target: "SharedResources", path: "SharedResources")
             ],
             settings: .settings(
                 base: [
                     "SWIFT_STRICT_CONCURRENCY": .string("complete"),
                     "CODE_SIGN_ENTITLEMENTS": .string("Config/FlashForgeWidgets.entitlements"),
                     "DEVELOPMENT_TEAM": .string(developmentTeamId),
-                    "CODE_SIGN_STYLE": .string("Automatic")
+                    "CODE_SIGN_STYLE": .string("Manual"),
+                    "CODE_SIGN_IDENTITY[sdk=iphoneos*]": .string("iOS Development"),
+                    "PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]": .string(widgetProvisioningProfileName)
                 ]
             )
         ),

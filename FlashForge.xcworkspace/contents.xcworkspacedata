@@ -4,4 +4,7 @@
    <FileRef
       location = "group:FlashForge.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:SharedResources/SharedResources.xcodeproj">
+   </FileRef>
 </Workspace>
