@@ -19,7 +19,6 @@
 		3FE4103C0B2CCE3DDD6857BE /* CardRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9AD08B6C3F0A200AEE26108 /* CardRepository.swift */; };
 		51E93FB1205B0D8F6AFFE1BF /* RootTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461C4D4DA11970FCB8ACF50 /* RootTabBarController.swift */; };
 		606266CFD934DE3628B3D8AB /* SchedulerMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56638997A259354801A20F6A /* SchedulerMode.swift */; };
-		647916DADDF4BF1DD9F1CBBF /* AnkiScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DD93CCC11EDF1E2CA57CC0 /* AnkiScheduler.swift */; };
 		678FC23F12E83EC2647B80F0 /* TuistBundle+FlashForge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D472DD1C95FE3A90AF4B0E /* TuistBundle+FlashForge.swift */; };
 		67E01180A67B9AA704B1BD88 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFA33D699D6866CF70033EE /* SceneDelegate.swift */; };
 		751611C6D032D21CB655B467 /* StudyCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD0BD0EAECA19D54900CC25 /* StudyCard.swift */; };
@@ -27,6 +26,8 @@
 		799053F61A2BE2684417ADD6 /* CardRepositoryPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC48DFDD7AD6F63201B93A3 /* CardRepositoryPersistenceTests.swift */; };
 		79D6478AB8480D7DDCDAF0A5 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43063C25FD351D73CFC1A701 /* Card.swift */; };
 		7C0BCB0E4C2A38DB369BF9AE /* CardTextSanitizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77538CCCA5E1FEC22D41C3D /* CardTextSanitizer.swift */; };
+		7E697AC2FAEA1469C2FECB44 /* ICloudSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5089BB74B6F760A0A723FE /* ICloudSyncServiceTests.swift */; };
+		8857D0B5B1AC9B3D9E713079 /* ICloudSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B3C59043609F78126C9494B /* ICloudSyncService.swift */; };
 		8BA6F5C1CD15803CCB7C9B2B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28642A0E5702194F0DF7B3AD /* HomeViewController.swift */; };
 		8E690888A8F60B1813671647 /* TuistAssets+FlashForge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12AD161F2369835545014CA /* TuistAssets+FlashForge.swift */; };
 		8F62D2671F75C0B70092317C /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBB59EE0B5DFD2C7459A881 /* OnboardingViewController.swift */; };
@@ -35,6 +36,7 @@
 		91E119AC9DDBA9AFF344F7C6 /* CardEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95BA1C7163594BF5A62BC85 /* CardEditorViewController.swift */; };
 		968D162A5D90A953F5D5A59D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3DF4AA76C4B4B652F282612D /* Localizable.strings */; };
 		AD0262810281751BE87930FA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A34BEB8690A7E0022ADD56 /* AppDelegate.swift */; };
+		B1B79DE952EA5EC4D52915EC /* SM2Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1B5E6F6E6CA28D5F2AF965 /* SM2Scheduler.swift */; };
 		BB9B1C01638FD190CBC90506 /* FlashCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F2218C1D27BFD8C0FA63EE /* FlashCard.swift */; };
 		CC9637242E4F66EAE551ABA3 /* AppNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA66B93FA8114B912CE7A7AC /* AppNotification.swift */; };
 		D73C02E053050CFDD2C4A3BF /* FlashForgeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA23FB069A0C9939055C1301 /* FlashForgeUITests.swift */; };
@@ -102,17 +104,19 @@
 		1A1E198DE7F4EAE36BF2902B /* StudyReminderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyReminderService.swift; sourceTree = "<group>"; };
 		2645A56C4A455169870C4A2E /* TuistStrings+FlashForge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistStrings+FlashForge.swift"; sourceTree = "<group>"; };
 		28642A0E5702194F0DF7B3AD /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
-		28DD93CCC11EDF1E2CA57CC0 /* AnkiScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnkiScheduler.swift; sourceTree = "<group>"; };
 		29096BBEA211227493FBF7C2 /* FSRSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSRSTests.swift; sourceTree = "<group>"; };
+		2B3C59043609F78126C9494B /* ICloudSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICloudSyncService.swift; sourceTree = "<group>"; };
 		2EC48DFDD7AD6F63201B93A3 /* CardRepositoryPersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardRepositoryPersistenceTests.swift; sourceTree = "<group>"; };
 		317D0E3C03BFEE59297F78D4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		37760F3BF153FDC5EF8BEFDC /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
+		3A1B5E6F6E6CA28D5F2AF965 /* SM2Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SM2Scheduler.swift; sourceTree = "<group>"; };
 		3ADB34A41A0F1A04AB626218 /* FSRSParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSRSParameters.swift; sourceTree = "<group>"; };
 		3E0AD8E8F65454CDB75CBF66 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		43063C25FD351D73CFC1A701 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		43FA8E96F1711FC7AACED0ED /* CardRepositoryDeckImportValidationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardRepositoryDeckImportValidationTests.swift; sourceTree = "<group>"; };
 		4A99F301ADDA6EC2EBF192A3 /* DecksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecksViewModel.swift; sourceTree = "<group>"; };
 		4CBFE84B93A991370BC52944 /* CardTextSanitizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTextSanitizerTests.swift; sourceTree = "<group>"; };
+		4E5089BB74B6F760A0A723FE /* ICloudSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICloudSyncServiceTests.swift; sourceTree = "<group>"; };
 		4FDF11FE5547DC426B932AFE /* PersistenceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceModels.swift; sourceTree = "<group>"; };
 		500A5ECFA833BCC0766E720B /* FlashForgeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlashForgeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		56638997A259354801A20F6A /* SchedulerMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerMode.swift; sourceTree = "<group>"; };
@@ -201,9 +205,10 @@
 		20B51723166122151970EC1C /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				28DD93CCC11EDF1E2CA57CC0 /* AnkiScheduler.swift */,
 				D9AD08B6C3F0A200AEE26108 /* CardRepository.swift */,
 				75FE9F3EE624612B657115E5 /* FSRSScheduler.swift */,
+				2B3C59043609F78126C9494B /* ICloudSyncService.swift */,
+				3A1B5E6F6E6CA28D5F2AF965 /* SM2Scheduler.swift */,
 				1A1E198DE7F4EAE36BF2902B /* StudyReminderService.swift */,
 			);
 			path = Services;
@@ -255,6 +260,7 @@
 				2EC48DFDD7AD6F63201B93A3 /* CardRepositoryPersistenceTests.swift */,
 				4CBFE84B93A991370BC52944 /* CardTextSanitizerTests.swift */,
 				29096BBEA211227493FBF7C2 /* FSRSTests.swift */,
+				4E5089BB74B6F760A0A723FE /* ICloudSyncServiceTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -495,6 +501,7 @@
 				799053F61A2BE2684417ADD6 /* CardRepositoryPersistenceTests.swift in Sources */,
 				78E39DE8C508097318652D3F /* CardTextSanitizerTests.swift in Sources */,
 				8FFEFA9C00BFB71C8EE0DBDC /* FSRSTests.swift in Sources */,
+				7E697AC2FAEA1469C2FECB44 /* ICloudSyncServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -524,9 +531,10 @@
 				3B5E45CCDC0D77F1E9445FAE /* PersistenceModels.swift in Sources */,
 				606266CFD934DE3628B3D8AB /* SchedulerMode.swift in Sources */,
 				751611C6D032D21CB655B467 /* StudyCard.swift in Sources */,
-				647916DADDF4BF1DD9F1CBBF /* AnkiScheduler.swift in Sources */,
 				3FE4103C0B2CCE3DDD6857BE /* CardRepository.swift in Sources */,
 				E42AA0A1947A2DA8A862AE4E /* FSRSScheduler.swift in Sources */,
+				8857D0B5B1AC9B3D9E713079 /* ICloudSyncService.swift in Sources */,
+				B1B79DE952EA5EC4D52915EC /* SM2Scheduler.swift in Sources */,
 				02D22339A3244C853A6828EF /* StudyReminderService.swift in Sources */,
 				91E119AC9DDBA9AFF344F7C6 /* CardEditorViewController.swift in Sources */,
 				1C3EB5D4819DBDDB02534C2B /* DeckDetailViewController.swift in Sources */,
@@ -578,6 +586,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Config/FlashForge.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
@@ -674,6 +683,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Config/FlashForge.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;

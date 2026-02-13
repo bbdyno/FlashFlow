@@ -80,12 +80,21 @@ final class DecksViewController: UIViewController {
         bottomGlowView.layer.cornerRadius = bottomGlowView.bounds.height / 2
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true else {
+            return
+        }
+        applyTheme()
+        tableView.reloadData()
+    }
+
     private func configureUI() {
         title = FlashForgeStrings.Decks.title
         navigationItem.largeTitleDisplayMode = .automatic
 
         view.layer.insertSublayer(backgroundGradientLayer, at: 0)
-        AppTheme.applyGradient(to: backgroundGradientLayer)
+        AppTheme.applyGradient(to: backgroundGradientLayer, traitCollection: traitCollection)
         view.backgroundColor = .clear
 
         topGlowView.backgroundColor = AppTheme.accent.withAlphaComponent(0.22)
@@ -160,6 +169,22 @@ final class DecksViewController: UIViewController {
             make.top.equalTo(view.safeAreaLayoutGuide).offset(8)
             make.centerX.equalToSuperview()
         }
+
+        applyTheme()
+    }
+
+    private func applyTheme() {
+        AppTheme.applyGradient(to: backgroundGradientLayer, traitCollection: traitCollection)
+
+        topGlowView.backgroundColor = AppTheme.accent.withAlphaComponent(0.22)
+        topGlowView.layer.shadowColor = AppTheme.resolved(AppTheme.accent, for: traitCollection).cgColor
+
+        bottomGlowView.backgroundColor = AppTheme.accentTeal.withAlphaComponent(0.16)
+        bottomGlowView.layer.shadowColor = AppTheme.resolved(AppTheme.accentTeal, for: traitCollection).cgColor
+
+        navigationItem.rightBarButtonItem?.tintColor = AppTheme.textPrimary
+        emptyLabel.textColor = AppTheme.textSecondary
+        loadingIndicator.color = AppTheme.textPrimary
     }
 
     private func configureObserver() {
@@ -361,6 +386,14 @@ private final class DeckSummaryCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true else {
+            return
+        }
+        applyTheme()
+    }
+
     func configure(title: String, subtitle: String) {
         titleLabel.text = title
         subtitleLabel.text = subtitle
@@ -391,6 +424,16 @@ private final class DeckSummaryCell: UITableViewCell {
         cardView.addSubview(titleLabel)
         cardView.addSubview(subtitleLabel)
         cardView.addSubview(chevronImageView)
+
+        applyTheme()
+    }
+
+    private func applyTheme() {
+        cardView.backgroundColor = AppTheme.cardBackground
+        cardView.layer.borderColor = AppTheme.resolved(AppTheme.cardBorder, for: traitCollection).cgColor
+        titleLabel.textColor = AppTheme.textPrimary
+        subtitleLabel.textColor = AppTheme.textSecondary
+        chevronImageView.tintColor = AppTheme.textSecondary
     }
 
     private func configureLayout() {

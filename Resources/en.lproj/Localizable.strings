@@ -55,6 +55,11 @@
 
 "more.appinfo.title" = "App Info";
 "more.appinfo.body" = "Version: %@ (%@)\nNotifications: Local Push";
+"more.icloud.sync_now" = "Sync iCloud Now";
+"more.icloud.status.idle" = "iCloud sync is idle.";
+"more.icloud.status.syncing" = "Syncing with iCloud...";
+"more.icloud.status.updated" = "Last synced: %@";
+"more.icloud.status.error" = "iCloud sync failed: %@";
 
 "decks.title" = "Decks";
 "decks.empty" = "No decks yet.\nTap + to create your first deck.";
@@ -73,5 +78,63 @@
 "decks.import.read_error" = "Failed to read the selected file.";
 "decks.action.rename" = "Rename";
 "decks.action.delete" = "Delete";
+
+"common.ok" = "OK";
+"tab.study" = "Study";
+"tab.decks" = "Decks";
+"tab.more" = "More";
+
+"onboarding.title" = "Welcome to FlashForge";
+"onboarding.subtitle" = "Create your first deck and card to start studying right away.";
+"onboarding.field.deck.placeholder" = "Deck name (e.g. Vocabulary)";
+"onboarding.field.front.placeholder" = "First card front";
+"onboarding.field.back.placeholder" = "First card back";
+"onboarding.field.note.placeholder" = "Note (optional)";
+"onboarding.start" = "Create First Deck";
+"onboarding.import" = "Import Backup Instead";
+"onboarding.validation.deck.title" = "Invalid Deck Name";
+"onboarding.validation.deck.message" = "Please enter a deck title.";
+"onboarding.validation.card.title" = "Invalid Card";
+"onboarding.validation.card.message" = "Front and back must contain text.";
+"onboarding.import.confirm.title" = "Import Backup";
+"onboarding.import.confirm.message" = "Decks: %d\nCards: %d\nReviews: %d\n\nImport this backup now?";
+"onboarding.error.fallback" = "An error occurred during onboarding.";
+"onboarding.backup.invalid.title" = "Invalid Backup";
+"onboarding.backup.invalid.selection" = "Please select a valid backup file.";
+"onboarding.backup.invalid.extension" = "File extension must be .%@.";
+
+"card_editor.save" = "Save";
+"card_editor.intro.title" = "Card Editor";
+"card_editor.intro.description" = "Front is shown first. Back appears after reveal in study mode.";
+"card_editor.back.placeholder" = "Type the answer shown after reveal";
+"card_editor.front.placeholder" = "e.g. What does ARC stand for?";
+"card_editor.note.placeholder" = "Optional context, hint, source";
+"card_editor.section.front" = "Front (Question)";
+"card_editor.section.back" = "Back (Answer)";
+"card_editor.section.note" = "Note (Optional)";
+"card_editor.mode.add" = "Add Card";
+"card_editor.mode.edit" = "Edit Card";
+"card_editor.validation.title" = "Invalid Card";
+"card_editor.validation.message" = "Front and back must contain text.";
+
+"deck_detail.empty" = "No cards yet.\nTap + to add a card.";
+"deck_detail.state.new" = "New Card";
+"deck_detail.state.learning" = "In Learning";
+"deck_detail.state.review" = "In Review";
+"deck_detail.state.relearning" = "Relearning";
+"deck_detail.due.today" = "Due today";
+"deck_detail.due.tomorrow" = "Due tomorrow";
+"deck_detail.due.date" = "Due %@";
+"deck_detail.preview.front_empty" = "No front content yet";
+"deck_detail.preview.back_empty" = "No back content yet";
+"deck_detail.action.delete" = "Delete";
+
+"study_card.helper" = "Tap card to reveal answer";
+"study_card.badge.new" = "NEW";
+"study_card.badge.learning" = "LEARNING";
+"study_card.badge.review" = "REVIEW";
+"study_card.badge.relearning" = "RELEARNING";
+
+"review_heatmap.title" = "Review Heatmap";
 
 "error.generic" = "An error occurred.";

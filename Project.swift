@@ -83,6 +83,7 @@ let project = Project(
             settings: .settings(
                 base: [
                     "SWIFT_STRICT_CONCURRENCY": .string("complete"),
+                    "CODE_SIGN_ENTITLEMENTS": .string("Config/FlashForge.entitlements"),
                     "DEVELOPMENT_TEAM": .string(developmentTeamId),
                     "CODE_SIGN_STYLE": .string("Manual"),
                     "CODE_SIGN_IDENTITY[sdk=iphoneos*]": .string("Apple Development"),

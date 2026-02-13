@@ -1,5 +1,5 @@
 //
-//  AnkiScheduler.swift
+//  SM2Scheduler.swift
 //  FlashForge
 //
 //  Created by bbdyno on 2/11/26.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct AnkiScheduler: Sendable {
+struct SM2Scheduler: Sendable {
     struct Configuration: Sendable {
         let learningSteps: [TimeInterval]
         let relearningSteps: [TimeInterval]

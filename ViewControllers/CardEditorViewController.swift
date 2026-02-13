@@ -63,9 +63,17 @@ final class CardEditorViewController: UIViewController {
         bottomGlowView.layer.cornerRadius = bottomGlowView.bounds.height / 2
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true else {
+            return
+        }
+        applyTheme()
+    }
+
     private func configureUI() {
         view.layer.insertSublayer(backgroundGradientLayer, at: 0)
-        AppTheme.applyGradient(to: backgroundGradientLayer)
+        AppTheme.applyGradient(to: backgroundGradientLayer, traitCollection: traitCollection)
         view.backgroundColor = .clear
         title = modeTitle
 
@@ -85,7 +93,7 @@ final class CardEditorViewController: UIViewController {
         view.addSubview(bottomGlowView)
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "Save",
+            title: FlashForgeStrings.CardEditor.save,
             style: .done,
             target: self,
             action: #selector(didTapSave)
@@ -107,18 +115,18 @@ final class CardEditorViewController: UIViewController {
         configureCard(backCard)
         configureCard(noteCard)
 
-        introTitleLabel.text = "Card Editor"
+        introTitleLabel.text = FlashForgeStrings.CardEditor.Intro.title
         introTitleLabel.font = UIFont(name: "AvenirNext-Bold", size: 20) ?? .systemFont(ofSize: 20, weight: .bold)
         introTitleLabel.textColor = AppTheme.textPrimary
 
-        introDescriptionLabel.text = "Front is shown first. Back appears after reveal in study mode."
+        introDescriptionLabel.text = FlashForgeStrings.CardEditor.Intro.description
         introDescriptionLabel.numberOfLines = 0
         introDescriptionLabel.font = UIFont(name: "AvenirNext-Medium", size: 14) ?? .systemFont(ofSize: 14, weight: .medium)
         introDescriptionLabel.textColor = AppTheme.textSecondary
 
         backTextView.font = UIFont.systemFont(ofSize: 16)
         backTextView.textColor = AppTheme.textPrimary
-        backTextView.backgroundColor = UIColor.white.withAlphaComponent(0.06)
+        backTextView.backgroundColor = AppTheme.inputBackground
         backTextView.layer.borderColor = AppTheme.cardBorder.cgColor
         backTextView.layer.borderWidth = 1
         backTextView.layer.cornerRadius = 12
@@ -126,18 +134,18 @@ final class CardEditorViewController: UIViewController {
         backTextView.textContainerInset = UIEdgeInsets(top: 12, left: 10, bottom: 12, right: 10)
         backTextView.delegate = self
 
-        backPlaceholder.text = "Type the answer shown after reveal"
+        backPlaceholder.text = FlashForgeStrings.CardEditor.Back.placeholder
         backPlaceholder.textColor = AppTheme.textSecondary
         backPlaceholder.font = UIFont.systemFont(ofSize: 15)
 
         styleTextField(
             frontField,
-            placeholder: "e.g. What does ARC stand for?",
+            placeholder: FlashForgeStrings.CardEditor.Front.placeholder,
             keyboardType: .default
         )
         styleTextField(
             noteField,
-            placeholder: "Optional context, hint, source",
+            placeholder: FlashForgeStrings.CardEditor.Note.placeholder,
             keyboardType: .default
         )
 
@@ -148,9 +156,9 @@ final class CardEditorViewController: UIViewController {
         backContainer.addSubview(backTextView)
         backContainer.addSubview(backPlaceholder)
 
-        let frontHeader = makeSectionHeader(title: "Front (Question)")
-        let backHeader = makeSectionHeader(title: "Back (Answer)")
-        let noteHeader = makeSectionHeader(title: "Note (Optional)")
+        let frontHeader = makeSectionHeader(title: FlashForgeStrings.CardEditor.Section.front)
+        let backHeader = makeSectionHeader(title: FlashForgeStrings.CardEditor.Section.back)
+        let noteHeader = makeSectionHeader(title: FlashForgeStrings.CardEditor.Section.note)
 
         introCard.addSubview(introTitleLabel)
         introCard.addSubview(introDescriptionLabel)
@@ -249,6 +257,8 @@ final class CardEditorViewController: UIViewController {
             make.height.equalTo(46)
             make.bottom.equalToSuperview().inset(14)
         }
+
+        applyTheme()
     }
 
     private func applyInitialValues() {
@@ -266,9 +276,9 @@ final class CardEditorViewController: UIViewController {
     private var modeTitle: String {
         switch mode {
         case .create:
-            return "Add Card"
+            return FlashForgeStrings.CardEditor.Mode.add
         case .edit:
-            return "Edit Card"
+            return FlashForgeStrings.CardEditor.Mode.edit
         }
     }
 
@@ -294,7 +304,7 @@ final class CardEditorViewController: UIViewController {
         field.clearButtonMode = .whileEditing
         field.font = .systemFont(ofSize: 16, weight: .medium)
         field.textColor = AppTheme.textPrimary
-        field.backgroundColor = UIColor.white.withAlphaComponent(0.06)
+        field.backgroundColor = AppTheme.inputBackground
         field.layer.borderWidth = 1
         field.layer.borderColor = AppTheme.cardBorder.cgColor
         field.layer.cornerRadius = 12
@@ -307,16 +317,51 @@ final class CardEditorViewController: UIViewController {
         )
     }
 
+    private func applyTheme() {
+        AppTheme.applyGradient(to: backgroundGradientLayer, traitCollection: traitCollection)
+
+        topGlowView.backgroundColor = AppTheme.accent.withAlphaComponent(0.22)
+        topGlowView.layer.shadowColor = AppTheme.resolved(AppTheme.accent, for: traitCollection).cgColor
+
+        bottomGlowView.backgroundColor = AppTheme.accentTeal.withAlphaComponent(0.16)
+        bottomGlowView.layer.shadowColor = AppTheme.resolved(AppTheme.accentTeal, for: traitCollection).cgColor
+
+        navigationItem.rightBarButtonItem?.tintColor = AppTheme.accent
+
+        [introCard, frontCard, backCard, noteCard].forEach { card in
+            card.backgroundColor = AppTheme.cardBackground
+            card.layer.borderColor = AppTheme.resolved(AppTheme.cardBorder, for: traitCollection).cgColor
+        }
+
+        introTitleLabel.textColor = AppTheme.textPrimary
+        introDescriptionLabel.textColor = AppTheme.textSecondary
+
+        [frontField, noteField].forEach { field in
+            field.textColor = AppTheme.textPrimary
+            field.backgroundColor = AppTheme.inputBackground
+            field.layer.borderColor = AppTheme.resolved(AppTheme.cardBorder, for: traitCollection).cgColor
+            field.attributedPlaceholder = NSAttributedString(
+                string: field.placeholder ?? "",
+                attributes: [.foregroundColor: AppTheme.textSecondary]
+            )
+        }
+
+        backTextView.textColor = AppTheme.textPrimary
+        backTextView.backgroundColor = AppTheme.inputBackground
+        backTextView.layer.borderColor = AppTheme.resolved(AppTheme.cardBorder, for: traitCollection).cgColor
+        backPlaceholder.textColor = AppTheme.textSecondary
+    }
+
     private func presentValidationError() {
         guard presentedViewController == nil else {
             return
         }
         let alert = UIAlertController(
-            title: "Invalid Card",
-            message: "Front and back must contain text.",
+            title: FlashForgeStrings.CardEditor.Validation.title,
+            message: FlashForgeStrings.CardEditor.Validation.message,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.Common.ok, style: .default))
         present(alert, animated: true)
     }
 

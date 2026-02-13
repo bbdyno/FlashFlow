@@ -55,6 +55,11 @@
 
 "more.appinfo.title" = "앱 정보";
 "more.appinfo.body" = "버전: %@ (%@)\n알림: 로컬 푸시";
+"more.icloud.sync_now" = "iCloud 지금 동기화";
+"more.icloud.status.idle" = "iCloud 동기화가 대기 중입니다.";
+"more.icloud.status.syncing" = "iCloud와 동기화 중...";
+"more.icloud.status.updated" = "마지막 동기화: %@";
+"more.icloud.status.error" = "iCloud 동기화 실패: %@";
 
 "decks.title" = "덱";
 "decks.empty" = "아직 덱이 없습니다.\n+ 버튼을 눌러 첫 덱을 만들어 보세요.";
@@ -73,5 +78,63 @@
 "decks.import.read_error" = "선택한 파일을 읽지 못했습니다.";
 "decks.action.rename" = "이름 변경";
 "decks.action.delete" = "삭제";
+
+"common.ok" = "확인";
+"tab.study" = "학습";
+"tab.decks" = "덱";
+"tab.more" = "더보기";
+
+"onboarding.title" = "FlashForge에 오신 것을 환영합니다";
+"onboarding.subtitle" = "첫 덱과 카드를 만들고 바로 학습을 시작하세요.";
+"onboarding.field.deck.placeholder" = "덱 이름 (예: 단어장)";
+"onboarding.field.front.placeholder" = "첫 카드 앞면";
+"onboarding.field.back.placeholder" = "첫 카드 뒷면";
+"onboarding.field.note.placeholder" = "메모 (선택)";
+"onboarding.start" = "첫 덱 만들기";
+"onboarding.import" = "대신 백업 가져오기";
+"onboarding.validation.deck.title" = "덱 이름이 올바르지 않습니다";
+"onboarding.validation.deck.message" = "덱 이름을 입력해 주세요.";
+"onboarding.validation.card.title" = "카드가 올바르지 않습니다";
+"onboarding.validation.card.message" = "앞면과 뒷면에 텍스트를 입력해 주세요.";
+"onboarding.import.confirm.title" = "백업 가져오기";
+"onboarding.import.confirm.message" = "덱: %d개\n카드: %d개\n복습: %d개\n\n지금 이 백업을 가져올까요?";
+"onboarding.error.fallback" = "온보딩 중 오류가 발생했습니다.";
+"onboarding.backup.invalid.title" = "백업 파일이 올바르지 않습니다";
+"onboarding.backup.invalid.selection" = "유효한 백업 파일을 선택해 주세요.";
+"onboarding.backup.invalid.extension" = "파일 확장자는 .%@ 이어야 합니다.";
+
+"card_editor.save" = "저장";
+"card_editor.intro.title" = "카드 편집";
+"card_editor.intro.description" = "학습 모드에서는 앞면이 먼저 보이고, 공개 후 뒷면이 나타납니다.";
+"card_editor.back.placeholder" = "공개 후 표시할 정답을 입력하세요";
+"card_editor.front.placeholder" = "예: ARC는 무엇의 약자인가요?";
+"card_editor.note.placeholder" = "선택 입력: 맥락, 힌트, 출처";
+"card_editor.section.front" = "앞면 (질문)";
+"card_editor.section.back" = "뒷면 (정답)";
+"card_editor.section.note" = "메모 (선택)";
+"card_editor.mode.add" = "카드 추가";
+"card_editor.mode.edit" = "카드 편집";
+"card_editor.validation.title" = "카드가 올바르지 않습니다";
+"card_editor.validation.message" = "앞면과 뒷면에 텍스트를 입력해 주세요.";
+
+"deck_detail.empty" = "아직 카드가 없습니다.\n+를 눌러 카드를 추가하세요.";
+"deck_detail.state.new" = "새 카드";
+"deck_detail.state.learning" = "학습 중";
+"deck_detail.state.review" = "복습 중";
+"deck_detail.state.relearning" = "재학습 중";
+"deck_detail.due.today" = "오늘 예정";
+"deck_detail.due.tomorrow" = "내일 예정";
+"deck_detail.due.date" = "예정 %@";
+"deck_detail.preview.front_empty" = "앞면 내용이 없습니다";
+"deck_detail.preview.back_empty" = "뒷면 내용이 없습니다";
+"deck_detail.action.delete" = "삭제";
+
+"study_card.helper" = "카드를 탭해 정답 보기";
+"study_card.badge.new" = "신규";
+"study_card.badge.learning" = "학습";
+"study_card.badge.review" = "복습";
+"study_card.badge.relearning" = "재학습";
+
+"review_heatmap.title" = "복습 히트맵";
 
 "error.generic" = "오류가 발생했습니다.";

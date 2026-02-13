@@ -28,6 +28,15 @@ final class ReviewHeatmapView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true else {
+            return
+        }
+        applyTheme()
+        collectionView.reloadData()
+    }
+
     func update(reviewCountByDate: [Date: Int], totalDays: Int = 140, today: Date = .now) {
         let days = max(7, totalDays)
         let startOfToday = calendar.startOfDay(for: today)
@@ -56,18 +65,26 @@ final class ReviewHeatmapView: UIView {
         layer.cornerRadius = 20
         layer.cornerCurve = .continuous
         layer.borderWidth = 1
-        layer.borderColor = UIColor.white.withAlphaComponent(0.16).cgColor
-        backgroundColor = UIColor.white.withAlphaComponent(0.08)
+        layer.borderColor = AppTheme.resolved(AppTheme.cardBorder, for: traitCollection).cgColor
+        backgroundColor = AppTheme.cardBackground
 
-        titleLabel.text = "Review Heatmap"
+        titleLabel.text = FlashForgeStrings.ReviewHeatmap.title
         titleLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 14) ?? .systemFont(ofSize: 14, weight: .semibold)
-        titleLabel.textColor = UIColor.white.withAlphaComponent(0.88)
+        titleLabel.textColor = AppTheme.textPrimary
 
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         collectionView.dataSource = self
         collectionView.register(ReviewHeatmapCell.self, forCellWithReuseIdentifier: ReviewHeatmapCell.reuseIdentifier)
+
+        applyTheme()
+    }
+
+    private func applyTheme() {
+        layer.borderColor = AppTheme.resolved(AppTheme.cardBorder, for: traitCollection).cgColor
+        backgroundColor = AppTheme.cardBackground
+        titleLabel.textColor = AppTheme.textPrimary
     }
 
     private func configureLayout() {
@@ -171,29 +188,40 @@ private final class ReviewHeatmapFlowLayout: UICollectionViewLayout {
 
 private final class ReviewHeatmapCell: UICollectionViewCell {
     static let reuseIdentifier = "ReviewHeatmapCell"
+    private var lastCount = 0
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.layer.cornerRadius = 3
         contentView.layer.cornerCurve = .continuous
         contentView.layer.borderWidth = 0.5
-        contentView.layer.borderColor = UIColor.white.withAlphaComponent(0.08).cgColor
+        contentView.layer.borderColor = AppTheme.resolved(AppTheme.cardBorder, for: traitCollection).cgColor
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true else {
+            return
+        }
+        contentView.layer.borderColor = AppTheme.resolved(AppTheme.cardBorder, for: traitCollection).cgColor
+        configure(count: lastCount)
+    }
+
     func configure(count: Int) {
+        lastCount = count
         switch count {
         case ...0:
-            contentView.backgroundColor = UIColor.white.withAlphaComponent(0.10)
+            contentView.backgroundColor = AppTheme.cardBackground.withAlphaComponent(0.85)
         case 1...10:
-            contentView.backgroundColor = UIColor(red: 0.58, green: 0.85, blue: 0.58, alpha: 0.92)
+            contentView.backgroundColor = AppTheme.accentTeal.withAlphaComponent(0.45)
         case 11...50:
-            contentView.backgroundColor = UIColor(red: 0.30, green: 0.72, blue: 0.38, alpha: 0.95)
+            contentView.backgroundColor = AppTheme.accentTeal.withAlphaComponent(0.72)
         default:
-            contentView.backgroundColor = UIColor(red: 0.12, green: 0.52, blue: 0.20, alpha: 1.0)
+            contentView.backgroundColor = AppTheme.accentTeal.withAlphaComponent(0.94)
         }
     }
 }

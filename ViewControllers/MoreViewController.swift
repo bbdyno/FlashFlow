@@ -31,7 +31,12 @@ final class MoreViewController: UIViewController {
     private let backupButton = UIButton(type: .system)
     private let restoreButton = UIButton(type: .system)
     private let resetButton = UIButton(type: .system)
+    private let syncNowButton = UIButton(type: .system)
     private let dataStatusLabel = UILabel()
+    private let iCloudSyncSpinner = UIActivityIndicatorView(style: .medium)
+    private let iCloudStatusLabel = UILabel()
+    private let syncToastView = UIView()
+    private let syncToastLabel = UILabel()
 
     private let developerCard = UIView()
     private let developerTitleLabel = UILabel()
@@ -41,8 +46,19 @@ final class MoreViewController: UIViewController {
     private let appInfoCard = UIView()
     private let appInfoTitleLabel = UILabel()
     private let appInfoBodyLabel = UILabel()
+    private let footerLabel = UILabel()
 
     private let service = StudyReminderService.shared
+    private let iCloudDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return formatter
+    }()
+    private var isICloudSyncInProgress = false
+    private var isDataActionInProgress = false
+    private var shouldShowSyncToastForCurrentCycle = false
+    private var syncToastHideWorkItem: DispatchWorkItem?
 
     init(repository: CardRepository) {
         self.repository = repository
@@ -59,6 +75,12 @@ final class MoreViewController: UIViewController {
         configureUI()
         applySettings(service.loadSettings())
         updateAppInfo()
+        configureICloudSyncObserver()
+        renderICloudStatusIdle()
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .iCloudSyncStatusDidChange, object: nil)
     }
 
     override func viewDidLayoutSubviews() {
@@ -66,12 +88,20 @@ final class MoreViewController: UIViewController {
         backgroundGradientLayer.frame = view.bounds
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true else {
+            return
+        }
+        applyTheme()
+    }
+
     private func configureUI() {
         title = FlashForgeStrings.More.title
         navigationItem.largeTitleDisplayMode = .automatic
 
         view.layer.insertSublayer(backgroundGradientLayer, at: 0)
-        AppTheme.applyGradient(to: backgroundGradientLayer)
+        AppTheme.applyGradient(to: backgroundGradientLayer, traitCollection: traitCollection)
         view.backgroundColor = .clear
 
         view.addSubview(scrollView)
@@ -87,13 +117,13 @@ final class MoreViewController: UIViewController {
         configureDataCard()
         configureDeveloperCard()
         configureAppInfoCard()
+        configureSyncToast()
 
         stackView.addArrangedSubview(reminderCard)
         stackView.addArrangedSubview(dataCard)
         stackView.addArrangedSubview(developerCard)
         stackView.addArrangedSubview(appInfoCard)
 
-        let footerLabel = UILabel()
         footerLabel.text = FlashForgeStrings.More.footer
         footerLabel.font = UIFont(name: "AvenirNext-Medium", size: 12) ?? .systemFont(ofSize: 12, weight: .medium)
         footerLabel.textColor = AppTheme.textSecondary
@@ -114,6 +144,8 @@ final class MoreViewController: UIViewController {
             make.leading.trailing.equalToSuperview().inset(20)
             make.bottom.equalToSuperview().inset(20)
         }
+
+        applyTheme()
     }
 
     private func configureReminderCard() {
@@ -139,10 +171,9 @@ final class MoreViewController: UIViewController {
         reminderTimePicker.preferredDatePickerStyle = .wheels
         reminderTimePicker.locale = Locale(identifier: "en_US_POSIX")
         reminderTimePicker.tintColor = AppTheme.accent
-        reminderTimePicker.backgroundColor = UIColor.white.withAlphaComponent(0.06)
+        reminderTimePicker.backgroundColor = AppTheme.inputBackground
         reminderTimePicker.layer.cornerRadius = 12
         reminderTimePicker.layer.cornerCurve = .continuous
-        reminderTimePicker.overrideUserInterfaceStyle = .dark
         reminderTimePicker.setValue(AppTheme.textPrimary, forKey: "textColor")
         reminderTimePicker.addTarget(self, action: #selector(didChangeReminderTime(_:)), for: .valueChanged)
 
@@ -208,18 +239,36 @@ final class MoreViewController: UIViewController {
         resetButton.accessibilityIdentifier = "more.resetButton"
         resetButton.addTarget(self, action: #selector(didTapReset), for: .touchUpInside)
 
+        configureActionButton(syncNowButton, title: FlashForgeStrings.More.Icloud.syncNow, tint: AppTheme.accentTeal)
+        syncNowButton.accessibilityIdentifier = "more.syncNowButton"
+        syncNowButton.addTarget(self, action: #selector(didTapSyncNow), for: .touchUpInside)
+
         dataStatusLabel.font = UIFont(name: "AvenirNext-Medium", size: 13) ?? .systemFont(ofSize: 13, weight: .medium)
         dataStatusLabel.textColor = AppTheme.textSecondary
         dataStatusLabel.text = FlashForgeStrings.More.Data.description
         dataStatusLabel.numberOfLines = 2
 
-        let buttonStack = UIStackView(arrangedSubviews: [backupButton, restoreButton, resetButton])
+        iCloudStatusLabel.font = UIFont(name: "AvenirNext-Medium", size: 13) ?? .systemFont(ofSize: 13, weight: .medium)
+        iCloudStatusLabel.textColor = AppTheme.textSecondary
+        iCloudStatusLabel.numberOfLines = 2
+
+        iCloudSyncSpinner.color = AppTheme.accentTeal
+        iCloudSyncSpinner.hidesWhenStopped = true
+        iCloudSyncSpinner.setContentHuggingPriority(.required, for: .horizontal)
+        iCloudSyncSpinner.setContentCompressionResistancePriority(.required, for: .horizontal)
+
+        let buttonStack = UIStackView(arrangedSubviews: [backupButton, restoreButton, resetButton, syncNowButton])
         buttonStack.axis = .vertical
         buttonStack.spacing = 10
 
         dataCard.addSubview(dataTitleLabel)
         dataCard.addSubview(buttonStack)
         dataCard.addSubview(dataStatusLabel)
+        let iCloudStatusRow = UIStackView(arrangedSubviews: [iCloudSyncSpinner, iCloudStatusLabel])
+        iCloudStatusRow.axis = .horizontal
+        iCloudStatusRow.alignment = .top
+        iCloudStatusRow.spacing = 8
+        dataCard.addSubview(iCloudStatusRow)
 
         dataTitleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16)
@@ -231,7 +280,7 @@ final class MoreViewController: UIViewController {
             make.leading.trailing.equalToSuperview().inset(16)
         }
 
-        [backupButton, restoreButton, resetButton].forEach { button in
+        [backupButton, restoreButton, resetButton, syncNowButton].forEach { button in
             button.snp.makeConstraints { make in
                 make.height.equalTo(42)
             }
@@ -240,7 +289,39 @@ final class MoreViewController: UIViewController {
         dataStatusLabel.snp.makeConstraints { make in
             make.top.equalTo(buttonStack.snp.bottom).offset(10)
             make.leading.trailing.equalToSuperview().inset(16)
+        }
+
+        iCloudStatusRow.snp.makeConstraints { make in
+            make.top.equalTo(dataStatusLabel.snp.bottom).offset(6)
+            make.leading.trailing.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().inset(16)
+        }
+    }
+
+    private func configureSyncToast() {
+        syncToastView.backgroundColor = AppTheme.infoBlue.withAlphaComponent(0.95)
+        syncToastView.layer.cornerRadius = 12
+        syncToastView.layer.cornerCurve = .continuous
+        syncToastView.layer.borderWidth = 1
+        syncToastView.layer.borderColor = AppTheme.cardBorder.cgColor
+        syncToastView.alpha = 0
+        syncToastView.isHidden = true
+
+        syncToastLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 13) ?? .systemFont(ofSize: 13, weight: .semibold)
+        syncToastLabel.textColor = AppTheme.textPrimary
+        syncToastLabel.numberOfLines = 0
+        syncToastLabel.textAlignment = .center
+
+        syncToastView.addSubview(syncToastLabel)
+        view.addSubview(syncToastView)
+
+        syncToastView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(24)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(12)
+        }
+
+        syncToastLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
         }
     }
 
@@ -319,11 +400,57 @@ final class MoreViewController: UIViewController {
         button.setTitle(title, for: .normal)
         button.setTitleColor(AppTheme.textPrimary, for: .normal)
         button.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 14) ?? .systemFont(ofSize: 14, weight: .semibold)
-        button.backgroundColor = tint.withAlphaComponent(0.40)
+        button.backgroundColor = AppTheme.buttonFill(from: tint, for: traitCollection)
         button.layer.cornerRadius = 12
         button.layer.cornerCurve = .continuous
         button.layer.borderWidth = 1
         button.layer.borderColor = AppTheme.cardBorder.cgColor
+    }
+
+    private func applyTheme() {
+        AppTheme.applyGradient(to: backgroundGradientLayer, traitCollection: traitCollection)
+
+        let cardBorderColor = AppTheme.resolved(AppTheme.cardBorder, for: traitCollection).cgColor
+
+        reminderCard.backgroundColor = AppTheme.cardBackground
+        reminderCard.layer.borderColor = cardBorderColor
+        reminderTitleLabel.textColor = AppTheme.textPrimary
+        reminderDescriptionLabel.textColor = AppTheme.textSecondary
+        reminderSwitch.onTintColor = AppTheme.accent
+        reminderTimePicker.tintColor = AppTheme.accent
+        reminderTimePicker.backgroundColor = AppTheme.inputBackground
+        reminderTimePicker.setValue(AppTheme.textPrimary, forKey: "textColor")
+        reminderStatusLabel.textColor = AppTheme.textSecondary
+
+        dataCard.backgroundColor = AppTheme.cardBackground
+        dataCard.layer.borderColor = cardBorderColor
+        dataTitleLabel.textColor = AppTheme.textPrimary
+        dataStatusLabel.textColor = AppTheme.textSecondary
+        iCloudStatusLabel.textColor = AppTheme.textSecondary
+        iCloudSyncSpinner.color = AppTheme.accentTeal
+
+        developerCard.backgroundColor = AppTheme.cardBackground
+        developerCard.layer.borderColor = cardBorderColor
+        developerTitleLabel.textColor = AppTheme.textPrimary
+        developerStatusLabel.textColor = AppTheme.textSecondary
+
+        appInfoCard.backgroundColor = AppTheme.cardBackground
+        appInfoCard.layer.borderColor = cardBorderColor
+        appInfoTitleLabel.textColor = AppTheme.textPrimary
+        appInfoBodyLabel.textColor = AppTheme.textSecondary
+
+        syncToastView.layer.borderColor = cardBorderColor
+        syncToastLabel.textColor = AppTheme.textPrimary
+        footerLabel.textColor = AppTheme.textSecondary
+        applyActionButtonThemes()
+    }
+
+    private func applyActionButtonThemes() {
+        configureActionButton(backupButton, title: FlashForgeStrings.More.Data.export, tint: AppTheme.accent)
+        configureActionButton(restoreButton, title: FlashForgeStrings.More.Data.`import`, tint: AppTheme.infoBlue)
+        configureActionButton(resetButton, title: FlashForgeStrings.More.Data.reset, tint: AppTheme.dangerRed)
+        configureActionButton(syncNowButton, title: FlashForgeStrings.More.Icloud.syncNow, tint: AppTheme.accentTeal)
+        configureActionButton(generateSamplesButton, title: FlashForgeStrings.More.Developer.generateSamples, tint: AppTheme.accentTeal)
     }
 
     private func applySettings(_ settings: StudyReminderSettings) {
@@ -425,6 +552,18 @@ final class MoreViewController: UIViewController {
         present(alert, animated: true)
     }
 
+    @objc
+    private func didTapSyncNow() {
+        shouldShowSyncToastForCurrentCycle = true
+        renderICloudStatusSyncing()
+        showSyncToast(
+            message: FlashForgeStrings.More.Icloud.Status.syncing,
+            tint: AppTheme.infoBlue,
+            autoDismiss: false
+        )
+        NotificationCenter.default.post(name: .iCloudSyncManualRequested, object: nil)
+    }
+
     private func resetAllData() {
         setDataButtonsEnabled(false)
 
@@ -476,12 +615,157 @@ final class MoreViewController: UIViewController {
     }
 
     private func setDataButtonsEnabled(_ isEnabled: Bool) {
-        backupButton.isEnabled = isEnabled
-        restoreButton.isEnabled = isEnabled
-        resetButton.isEnabled = isEnabled
+        isDataActionInProgress = !isEnabled
+        let areDataButtonsEnabled = !isDataActionInProgress
+        backupButton.isEnabled = areDataButtonsEnabled
+        restoreButton.isEnabled = areDataButtonsEnabled
+        resetButton.isEnabled = areDataButtonsEnabled
         [backupButton, restoreButton, resetButton].forEach { button in
-            button.alpha = isEnabled ? 1.0 : 0.55
+            button.alpha = areDataButtonsEnabled ? 1.0 : 0.55
         }
+        updateSyncButtonState()
+    }
+
+    private func configureICloudSyncObserver() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleICloudSyncStatusDidChange(_:)),
+            name: .iCloudSyncStatusDidChange,
+            object: nil
+        )
+    }
+
+    @objc
+    private func handleICloudSyncStatusDidChange(_ notification: Notification) {
+        let userInfo = notification.userInfo ?? [:]
+        let isSyncing = (userInfo[ICloudSyncNotificationKey.isSyncing] as? Bool) ?? false
+        let lastSyncedAt = userInfo[ICloudSyncNotificationKey.lastSyncedAt] as? Date
+        let errorMessage = userInfo[ICloudSyncNotificationKey.errorMessage] as? String
+
+        if isSyncing {
+            renderICloudStatusSyncing()
+            if shouldShowSyncToastForCurrentCycle {
+                showSyncToast(
+                    message: FlashForgeStrings.More.Icloud.Status.syncing,
+                    tint: AppTheme.infoBlue,
+                    autoDismiss: false
+                )
+            }
+            return
+        }
+
+        if let errorMessage, !errorMessage.isEmpty {
+            iCloudStatusLabel.text = FlashForgeStrings.More.Icloud.Status.error(errorMessage)
+            renderICloudStatusFinished()
+            if shouldShowSyncToastForCurrentCycle {
+                shouldShowSyncToastForCurrentCycle = false
+                showSyncToast(
+                    message: FlashForgeStrings.More.Icloud.Status.error(errorMessage),
+                    tint: AppTheme.dangerRed,
+                    autoDismiss: true
+                )
+            }
+            return
+        }
+
+        if let lastSyncedAt {
+            iCloudStatusLabel.text = FlashForgeStrings.More.Icloud.Status.updated(
+                iCloudDateFormatter.string(from: lastSyncedAt)
+            )
+            renderICloudStatusFinished()
+            if shouldShowSyncToastForCurrentCycle {
+                shouldShowSyncToastForCurrentCycle = false
+                showSyncToast(
+                    message: FlashForgeStrings.More.Icloud.Status.updated(
+                        iCloudDateFormatter.string(from: lastSyncedAt)
+                    ),
+                    tint: AppTheme.accentTeal,
+                    autoDismiss: true
+                )
+            }
+        } else {
+            renderICloudStatusIdle()
+            renderICloudStatusFinished()
+            if shouldShowSyncToastForCurrentCycle {
+                shouldShowSyncToastForCurrentCycle = false
+                showSyncToast(
+                    message: FlashForgeStrings.More.Icloud.Status.idle,
+                    tint: AppTheme.accentTeal,
+                    autoDismiss: true
+                )
+            } else if !syncToastView.isHidden {
+                hideSyncToast()
+            }
+        }
+    }
+
+    private func renderICloudStatusIdle() {
+        iCloudStatusLabel.text = FlashForgeStrings.More.Icloud.Status.idle
+    }
+
+    private func renderICloudStatusSyncing() {
+        isICloudSyncInProgress = true
+        updateSyncButtonState()
+        iCloudSyncSpinner.startAnimating()
+        iCloudStatusLabel.text = FlashForgeStrings.More.Icloud.Status.syncing
+    }
+
+    private func renderICloudStatusFinished() {
+        isICloudSyncInProgress = false
+        updateSyncButtonState()
+        iCloudSyncSpinner.stopAnimating()
+    }
+
+    private func updateSyncButtonState() {
+        let isEnabled = !isDataActionInProgress && !isICloudSyncInProgress
+        syncNowButton.isEnabled = isEnabled
+        syncNowButton.alpha = isEnabled ? 1.0 : 0.55
+    }
+
+    private func showSyncToast(message: String, tint: UIColor, autoDismiss: Bool) {
+        syncToastHideWorkItem?.cancel()
+
+        syncToastLabel.text = message
+        syncToastView.backgroundColor = tint.withAlphaComponent(0.95)
+
+        let animateIn = {
+            self.syncToastView.alpha = 1
+            self.syncToastView.transform = .identity
+        }
+
+        if syncToastView.isHidden {
+            syncToastView.isHidden = false
+            syncToastView.alpha = 0
+            syncToastView.transform = CGAffineTransform(translationX: 0, y: 12)
+            UIView.animate(withDuration: 0.2, animations: animateIn)
+        } else {
+            UIView.animate(withDuration: 0.18, animations: animateIn)
+        }
+
+        guard autoDismiss else { return }
+
+        let hideWorkItem = DispatchWorkItem { [weak self] in
+            self?.hideSyncToast()
+        }
+        syncToastHideWorkItem = hideWorkItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.4, execute: hideWorkItem)
+    }
+
+    private func hideSyncToast() {
+        syncToastHideWorkItem?.cancel()
+        syncToastHideWorkItem = nil
+
+        UIView.animate(
+            withDuration: 0.2,
+            animations: {
+                self.syncToastView.alpha = 0
+                self.syncToastView.transform = CGAffineTransform(translationX: 0, y: 12)
+            },
+            completion: { _ in
+                self.syncToastView.isHidden = true
+                self.syncToastView.transform = .identity
+            }
+        )
     }
 
     private func presentPermissionAlert() {

@@ -54,19 +54,27 @@ final class OnboardingViewController: UIViewController {
         backgroundGradientLayer.frame = view.bounds
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true else {
+            return
+        }
+        applyTheme()
+    }
+
     private func configureUI() {
         view.layer.insertSublayer(backgroundGradientLayer, at: 0)
         view.backgroundColor = .clear
         navigationItem.hidesBackButton = true
 
-        AppTheme.applyGradient(to: backgroundGradientLayer)
+        AppTheme.applyGradient(to: backgroundGradientLayer, traitCollection: traitCollection)
 
-        titleLabel.text = "Welcome to FlashForge"
+        titleLabel.text = FlashForgeStrings.Onboarding.title
         titleLabel.textColor = AppTheme.textPrimary
         titleLabel.numberOfLines = 2
         titleLabel.font = UIFont(name: "AvenirNext-Bold", size: 30) ?? .systemFont(ofSize: 30, weight: .bold)
 
-        subtitleLabel.text = "Create your first deck and card to start studying right away."
+        subtitleLabel.text = FlashForgeStrings.Onboarding.subtitle
         subtitleLabel.textColor = AppTheme.textSecondary
         subtitleLabel.numberOfLines = 2
         subtitleLabel.font = UIFont(name: "AvenirNext-Medium", size: 16) ?? .systemFont(ofSize: 16, weight: .medium)
@@ -84,10 +92,10 @@ final class OnboardingViewController: UIViewController {
             field.leftViewMode = .always
         }
 
-        deckField.placeholder = "Deck name (e.g. Vocabulary)"
-        frontField.placeholder = "First card front"
-        backField.placeholder = "First card back"
-        noteField.placeholder = "Note (optional)"
+        deckField.placeholder = FlashForgeStrings.Onboarding.Field.Deck.placeholder
+        frontField.placeholder = FlashForgeStrings.Onboarding.Field.Front.placeholder
+        backField.placeholder = FlashForgeStrings.Onboarding.Field.Back.placeholder
+        noteField.placeholder = FlashForgeStrings.Onboarding.Field.Note.placeholder
 
         [deckField, frontField, backField, noteField].forEach { field in
             field.attributedPlaceholder = NSAttributedString(
@@ -96,18 +104,18 @@ final class OnboardingViewController: UIViewController {
             )
         }
 
-        startButton.setTitle("Create First Deck", for: .normal)
+        startButton.setTitle(FlashForgeStrings.Onboarding.start, for: .normal)
         startButton.setTitleColor(AppTheme.textPrimary, for: .normal)
         startButton.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 16) ?? .systemFont(ofSize: 16, weight: .bold)
-        startButton.backgroundColor = AppTheme.accent.withAlphaComponent(0.86)
+        startButton.backgroundColor = AppTheme.buttonFill(from: AppTheme.accent, for: traitCollection)
         startButton.layer.cornerRadius = 14
         startButton.layer.cornerCurve = .continuous
         startButton.addTarget(self, action: #selector(didTapStart), for: .touchUpInside)
 
-        importButton.setTitle("Import Backup Instead", for: .normal)
+        importButton.setTitle(FlashForgeStrings.Onboarding.`import`, for: .normal)
         importButton.setTitleColor(AppTheme.textPrimary, for: .normal)
         importButton.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 15) ?? .systemFont(ofSize: 15, weight: .semibold)
-        importButton.backgroundColor = AppTheme.infoBlue.withAlphaComponent(0.42)
+        importButton.backgroundColor = AppTheme.buttonFill(from: AppTheme.infoBlue, for: traitCollection)
         importButton.layer.cornerRadius = 12
         importButton.layer.cornerCurve = .continuous
         importButton.layer.borderWidth = 1
@@ -174,6 +182,34 @@ final class OnboardingViewController: UIViewController {
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().inset(16)
         }
+
+        applyTheme()
+    }
+
+    private func applyTheme() {
+        AppTheme.applyGradient(to: backgroundGradientLayer, traitCollection: traitCollection)
+
+        titleLabel.textColor = AppTheme.textPrimary
+        subtitleLabel.textColor = AppTheme.textSecondary
+
+        [deckField, frontField, backField, noteField].forEach { field in
+            field.backgroundColor = AppTheme.cardBackground
+            field.textColor = AppTheme.textPrimary
+            field.layer.borderColor = AppTheme.resolved(AppTheme.cardBorder, for: traitCollection).cgColor
+            field.attributedPlaceholder = NSAttributedString(
+                string: field.placeholder ?? "",
+                attributes: [.foregroundColor: AppTheme.textSecondary]
+            )
+        }
+
+        startButton.setTitleColor(AppTheme.textPrimary, for: .normal)
+        startButton.backgroundColor = AppTheme.buttonFill(from: AppTheme.accent, for: traitCollection)
+
+        importButton.setTitleColor(AppTheme.textPrimary, for: .normal)
+        importButton.backgroundColor = AppTheme.buttonFill(from: AppTheme.infoBlue, for: traitCollection)
+        importButton.layer.borderColor = AppTheme.resolved(AppTheme.cardBorder, for: traitCollection).cgColor
+
+        loadingIndicator.color = AppTheme.textPrimary
     }
 
     @objc
@@ -221,16 +257,16 @@ final class OnboardingViewController: UIViewController {
 
         guard !deckTitle.isEmpty else {
             presentValidationError(
-                title: "Invalid Deck Name",
-                message: "Please enter a deck title."
+                title: FlashForgeStrings.Onboarding.Validation.Deck.title,
+                message: FlashForgeStrings.Onboarding.Validation.Deck.message
             )
             return nil
         }
 
         guard !front.isEmpty, !back.isEmpty else {
             presentValidationError(
-                title: "Invalid Card",
-                message: "Front and back must contain text."
+                title: FlashForgeStrings.Onboarding.Validation.Card.title,
+                message: FlashForgeStrings.Onboarding.Validation.Card.message
             )
             return nil
         }
@@ -263,8 +299,8 @@ final class OnboardingViewController: UIViewController {
             return
         }
 
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+        let alert = UIAlertController(title: FlashForgeStrings.Home.Error.title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.Common.ok, style: .cancel))
         present(alert, animated: true)
     }
 
@@ -274,7 +310,7 @@ final class OnboardingViewController: UIViewController {
         }
 
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.Common.ok, style: .default))
         present(alert, animated: true)
     }
 
@@ -283,14 +319,18 @@ final class OnboardingViewController: UIViewController {
             return
         }
 
-        let message = "Decks: \(preview.deckCount)\nCards: \(preview.cardCount)\nReviews: \(preview.reviewCount)\n\nImport this backup now?"
+        let message = FlashForgeStrings.Onboarding.Import.Confirm.message(
+            preview.deckCount,
+            preview.cardCount,
+            preview.reviewCount
+        )
         let alert = UIAlertController(
-            title: "Import Backup",
+            title: FlashForgeStrings.Onboarding.Import.Confirm.title,
             message: message,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Import", style: .default, handler: { [weak self] _ in
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.More.Common.cancel, style: .cancel))
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.More.Data.Import.Confirm.action, style: .default, handler: { [weak self] _ in
             self?.importBackupData(data)
         }))
         present(alert, animated: true)
@@ -319,7 +359,7 @@ final class OnboardingViewController: UIViewController {
            !description.isEmpty {
             return description
         }
-        return "An error occurred during onboarding."
+        return FlashForgeStrings.Onboarding.Error.fallback
     }
 }
 
@@ -329,8 +369,8 @@ extension OnboardingViewController: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let fileURL = urls.first else {
             presentValidationError(
-                title: "Invalid Backup",
-                message: "Please select a valid backup file."
+                title: FlashForgeStrings.Onboarding.Backup.Invalid.title,
+                message: FlashForgeStrings.Onboarding.Backup.Invalid.selection
             )
             return
         }
@@ -350,8 +390,8 @@ extension OnboardingViewController: UIDocumentPickerDelegate {
             do {
                 guard fileURL.pathExtension.lowercased() == Self.backupFileExtension else {
                     self.presentValidationError(
-                        title: "Invalid Backup",
-                        message: "File extension must be .\(Self.backupFileExtension)."
+                        title: FlashForgeStrings.Onboarding.Backup.Invalid.title,
+                        message: FlashForgeStrings.Onboarding.Backup.Invalid.extension(Self.backupFileExtension)
                     )
                     return
                 }

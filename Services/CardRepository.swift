@@ -126,7 +126,7 @@ actor CardRepository {
     private var hasPrepared = false
     private var container: ModelContainer?
 
-    private let ankiScheduler: AnkiScheduler
+    private let sm2Scheduler: SM2Scheduler
     private let fsrsScheduler: FSRSScheduler
     private let calendar: Calendar
     private let fileManager: FileManager
@@ -137,13 +137,13 @@ actor CardRepository {
     private let payloadEncoder: JSONEncoder
 
     init(
-        ankiScheduler: AnkiScheduler = AnkiScheduler(),
+        sm2Scheduler: SM2Scheduler = SM2Scheduler(),
         fsrsScheduler: FSRSScheduler = FSRSScheduler(parameters: .default),
         calendar: Calendar = .current,
         fileManager: FileManager = .default,
         appSupportDirectoryOverride: URL? = nil
     ) {
-        self.ankiScheduler = ankiScheduler
+        self.sm2Scheduler = sm2Scheduler
         self.fsrsScheduler = fsrsScheduler
         self.calendar = calendar
         self.fileManager = fileManager
@@ -584,7 +584,10 @@ actor CardRepository {
         }
 
         do {
-            let configuration = ModelConfiguration(url: try swiftDataFileURL())
+            let configuration = ModelConfiguration(
+                url: try swiftDataFileURL(),
+                cloudKitDatabase: .none
+            )
             let container = try ModelContainer(
                 for: DeckEntity.self,
                 CardEntryEntity.self,
@@ -820,7 +823,7 @@ actor CardRepository {
     private func scheduleWithFSRSHybrid(card: Card, grade: UserGrade, now: Date) -> Card {
         switch card.state {
         case .new, .learning, .relearning:
-            var next = ankiScheduler.schedule(card: card, grade: grade, now: now)
+            var next = sm2Scheduler.schedule(card: card, grade: grade, now: now)
             if next.state == .review {
                 next.fsrsState = seededFSRSState(from: next, now: now)
             }
@@ -835,7 +838,7 @@ actor CardRepository {
         let fsrsOutput = fsrsScheduler.schedule(card: fsrsInput, grade: grade)
 
         if grade == .again {
-            var relearning = ankiScheduler.schedule(card: card, grade: grade, now: now)
+            var relearning = sm2Scheduler.schedule(card: card, grade: grade, now: now)
             relearning.fsrsState = FSRSReviewState(
                 id: card.id,
                 stability: fsrsOutput.stability,

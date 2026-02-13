@@ -54,6 +54,15 @@ final class DeckDetailViewController: UIViewController {
         bottomGlowView.layer.cornerRadius = bottomGlowView.bounds.height / 2
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true else {
+            return
+        }
+        applyTheme()
+        tableView.reloadData()
+    }
+
     private func makeOutput() -> DeckDetailViewModel.Output {
         DeckDetailViewModel.Output(
             didChangeLoading: { [weak self] isLoading in
@@ -79,7 +88,7 @@ final class DeckDetailViewController: UIViewController {
 
     private func configureUI() {
         view.layer.insertSublayer(backgroundGradientLayer, at: 0)
-        AppTheme.applyGradient(to: backgroundGradientLayer)
+        AppTheme.applyGradient(to: backgroundGradientLayer, traitCollection: traitCollection)
         view.backgroundColor = .clear
 
         topGlowView.backgroundColor = AppTheme.accent.withAlphaComponent(0.22)
@@ -115,7 +124,7 @@ final class DeckDetailViewController: UIViewController {
         tableView.showsVerticalScrollIndicator = false
         view.addSubview(tableView)
 
-        emptyLabel.text = "No cards yet.\nTap + to add a card."
+        emptyLabel.text = FlashForgeStrings.DeckDetail.empty
         emptyLabel.textAlignment = .center
         emptyLabel.numberOfLines = 2
         emptyLabel.textColor = AppTheme.textSecondary
@@ -152,6 +161,22 @@ final class DeckDetailViewController: UIViewController {
             make.top.equalTo(view.safeAreaLayoutGuide).offset(8)
             make.centerX.equalToSuperview()
         }
+
+        applyTheme()
+    }
+
+    private func applyTheme() {
+        AppTheme.applyGradient(to: backgroundGradientLayer, traitCollection: traitCollection)
+
+        topGlowView.backgroundColor = AppTheme.accent.withAlphaComponent(0.22)
+        topGlowView.layer.shadowColor = AppTheme.resolved(AppTheme.accent, for: traitCollection).cgColor
+
+        bottomGlowView.backgroundColor = AppTheme.accentTeal.withAlphaComponent(0.16)
+        bottomGlowView.layer.shadowColor = AppTheme.resolved(AppTheme.accentTeal, for: traitCollection).cgColor
+
+        navigationItem.rightBarButtonItem?.tintColor = AppTheme.textPrimary
+        emptyLabel.textColor = AppTheme.textSecondary
+        loadingIndicator.color = AppTheme.textPrimary
     }
 
     @objc
@@ -179,46 +204,46 @@ final class DeckDetailViewController: UIViewController {
         guard presentedViewController == nil else {
             return
         }
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Close", style: .cancel))
+        let alert = UIAlertController(title: FlashForgeStrings.Home.Error.title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: FlashForgeStrings.Home.Error.close, style: .cancel))
         present(alert, animated: true)
     }
 
     private func stateText(for card: DeckCard) -> String {
         switch card.schedule.state {
         case .new:
-            return "New Card"
+            return FlashForgeStrings.DeckDetail.State.new
         case .learning:
-            return "In Learning"
+            return FlashForgeStrings.DeckDetail.State.learning
         case .review:
-            return "In Review"
+            return FlashForgeStrings.DeckDetail.State.review
         case .relearning:
-            return "Relearning"
+            return FlashForgeStrings.DeckDetail.State.relearning
         }
     }
 
     private func dueText(for date: Date) -> String {
         let calendar = Calendar.current
         if calendar.isDateInToday(date) {
-            return "Due today"
+            return FlashForgeStrings.DeckDetail.Due.today
         }
         if calendar.isDateInTomorrow(date) {
-            return "Due tomorrow"
+            return FlashForgeStrings.DeckDetail.Due.tomorrow
         }
-        return "Due \(DateFormatter.deckDueDate.string(from: date))"
+        return FlashForgeStrings.DeckDetail.Due.date(DateFormatter.deckDueDate.string(from: date))
     }
 
     private func frontPreview(for card: DeckCard) -> String {
         CardTextSanitizer.previewLine(
             from: card.content.title,
-            emptyFallback: "No front content yet"
+            emptyFallback: FlashForgeStrings.DeckDetail.Preview.frontEmpty
         )
     }
 
     private func backPreview(for card: DeckCard) -> String {
         CardTextSanitizer.previewLine(
             from: card.content.detail,
-            emptyFallback: "No back content yet"
+            emptyFallback: FlashForgeStrings.DeckDetail.Preview.backEmpty
         )
     }
 }
@@ -257,7 +282,7 @@ extension DeckDetailViewController: UITableViewDelegate {
         trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
     ) -> UISwipeActionsConfiguration? {
         let card = cards[indexPath.row]
-        let delete = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, completion in
+        let delete = UIContextualAction(style: .destructive, title: FlashForgeStrings.DeckDetail.Action.delete) { [weak self] _, _, completion in
             guard let self else {
                 completion(false)
                 return
@@ -275,7 +300,7 @@ extension DeckDetailViewController: UITableViewDelegate {
 private extension DateFormatter {
     static let deckDueDate: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.locale = .autoupdatingCurrent
         formatter.dateStyle = .medium
         formatter.timeStyle = .none
         return formatter
@@ -301,6 +326,14 @@ private final class DeckCardCell: UITableViewCell {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true else {
+            return
+        }
+        applyTheme()
     }
 
     func configure(front: String, back: String, state: String, due: String) {
@@ -351,6 +384,22 @@ private final class DeckCardCell: UITableViewCell {
         cardView.addSubview(statePillLabel)
         cardView.addSubview(dueLabel)
         cardView.addSubview(chevronImageView)
+
+        applyTheme()
+    }
+
+    private func applyTheme() {
+        cardView.backgroundColor = AppTheme.cardBackground
+        cardView.layer.borderColor = AppTheme.resolved(AppTheme.cardBorder, for: traitCollection).cgColor
+        frontLabel.textColor = AppTheme.textPrimary
+        backLabel.textColor = AppTheme.textSecondary
+
+        statePillLabel.textColor = AppTheme.textPrimary
+        statePillLabel.backgroundColor = AppTheme.badgeBackground
+        statePillLabel.layer.borderColor = AppTheme.resolved(AppTheme.badgeBorder, for: traitCollection).cgColor
+
+        dueLabel.textColor = AppTheme.textSecondary
+        chevronImageView.tintColor = AppTheme.textSecondary
     }
 
     private func configureLayout() {

@@ -16,15 +16,13 @@ final class GlassCardView: UIView {
 
     private let glassContainer = UIView()
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
-    private let highlightView = UIView()
+    private let highlightView = GradientOverlayView()
     private let iconImageView = UIImageView()
     private let stateBadgeLabel = UILabel()
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
     private let detailLabel = UILabel()
     private let helperLabel = UILabel()
-
-    private let highlightGradient = CAGradientLayer()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -39,8 +37,15 @@ final class GlassCardView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        highlightGradient.frame = highlightView.bounds
         layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: 24).cgPath
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true else {
+            return
+        }
+        applyTheme()
     }
 
     func configure(with studyCard: StudyCard) {
@@ -140,7 +145,7 @@ final class GlassCardView: UIView {
     }
 
     private func configureStyle() {
-        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowColor = AppTheme.resolved(AppTheme.shadowColor, for: traitCollection).cgColor
         layer.shadowOpacity = 0.15
         layer.shadowRadius = 30
         layer.shadowOffset = CGSize(width: 0, height: 16)
@@ -148,65 +153,91 @@ final class GlassCardView: UIView {
         glassContainer.layer.cornerRadius = 24
         glassContainer.layer.cornerCurve = .continuous
         glassContainer.layer.borderWidth = 1
-        glassContainer.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
+        glassContainer.layer.borderColor = AppTheme.resolved(AppTheme.glassBorder, for: traitCollection).cgColor
         glassContainer.clipsToBounds = true
 
-        blurView.contentView.backgroundColor = UIColor.white.withAlphaComponent(0.03)
+        blurView.contentView.backgroundColor = AppTheme.glassFill
 
-        highlightGradient.colors = [
-            UIColor.white.withAlphaComponent(0.34).cgColor,
-            UIColor.white.withAlphaComponent(0.10).cgColor,
+        highlightView.gradientLayer.needsDisplayOnBoundsChange = true
+        highlightView.gradientLayer.colors = [
+            AppTheme.resolved(AppTheme.glassHighlightStart, for: traitCollection).cgColor,
+            AppTheme.resolved(AppTheme.glassHighlightMid, for: traitCollection).cgColor,
             UIColor.clear.cgColor
         ]
-        highlightGradient.locations = [0.0, 0.38, 1.0]
-        highlightGradient.startPoint = CGPoint(x: 0, y: 0)
-        highlightGradient.endPoint = CGPoint(x: 1, y: 1)
-        highlightView.layer.addSublayer(highlightGradient)
+        highlightView.gradientLayer.locations = [0.0, 0.38, 1.0]
+        highlightView.gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        highlightView.gradientLayer.endPoint = CGPoint(x: 1, y: 1)
         highlightView.isUserInteractionEnabled = false
 
-        iconImageView.tintColor = UIColor.white.withAlphaComponent(0.88)
+        iconImageView.tintColor = AppTheme.textPrimary.withAlphaComponent(0.88)
         iconImageView.contentMode = .scaleAspectFit
-        iconImageView.backgroundColor = UIColor.white.withAlphaComponent(0.12)
+        iconImageView.backgroundColor = AppTheme.badgeBackground
         iconImageView.layer.cornerRadius = 16
         iconImageView.layer.cornerCurve = .continuous
 
         stateBadgeLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 12) ?? .systemFont(ofSize: 12, weight: .semibold)
-        stateBadgeLabel.textColor = UIColor.white.withAlphaComponent(0.92)
-        stateBadgeLabel.backgroundColor = UIColor.white.withAlphaComponent(0.14)
+        stateBadgeLabel.textColor = AppTheme.textPrimary.withAlphaComponent(0.92)
+        stateBadgeLabel.backgroundColor = AppTheme.badgeBackground
         stateBadgeLabel.layer.cornerRadius = 12
         stateBadgeLabel.layer.cornerCurve = .continuous
         stateBadgeLabel.layer.borderWidth = 1
-        stateBadgeLabel.layer.borderColor = UIColor.white.withAlphaComponent(0.22).cgColor
+        stateBadgeLabel.layer.borderColor = AppTheme.resolved(AppTheme.badgeBorder, for: traitCollection).cgColor
         stateBadgeLabel.clipsToBounds = true
         stateBadgeLabel.textAlignment = .center
 
         titleLabel.font = UIFont(name: "AvenirNext-Bold", size: 30) ?? .systemFont(ofSize: 30, weight: .bold)
-        titleLabel.textColor = UIColor.white.withAlphaComponent(0.95)
+        titleLabel.textColor = AppTheme.textPrimary.withAlphaComponent(0.95)
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
         titleLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
 
         subtitleLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 15) ?? .systemFont(ofSize: 15, weight: .semibold)
-        subtitleLabel.textColor = UIColor.white.withAlphaComponent(0.74)
+        subtitleLabel.textColor = AppTheme.textSecondary.withAlphaComponent(0.95)
         subtitleLabel.numberOfLines = 1
         subtitleLabel.lineBreakMode = .byTruncatingTail
         subtitleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
 
         detailLabel.font = UIFont(name: "AvenirNext-Medium", size: 17) ?? .systemFont(ofSize: 17, weight: .medium)
-        detailLabel.textColor = UIColor.white.withAlphaComponent(0.88)
+        detailLabel.textColor = AppTheme.textPrimary.withAlphaComponent(0.90)
         detailLabel.numberOfLines = 0
         detailLabel.lineBreakMode = .byWordWrapping
         detailLabel.setContentCompressionResistancePriority(.required, for: .vertical)
         detailLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
 
         helperLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 14) ?? .systemFont(ofSize: 14, weight: .semibold)
-        helperLabel.textColor = UIColor.white.withAlphaComponent(0.74)
+        helperLabel.textColor = AppTheme.textSecondary.withAlphaComponent(0.95)
         helperLabel.textAlignment = .left
         helperLabel.numberOfLines = 1
         helperLabel.lineBreakMode = .byTruncatingTail
         helperLabel.setContentCompressionResistancePriority(.required, for: .vertical)
-        helperLabel.text = "Tap card to reveal answer"
+        helperLabel.text = FlashForgeStrings.StudyCard.helper
+
+        applyTheme()
+    }
+
+    private func applyTheme() {
+        layer.shadowColor = AppTheme.resolved(AppTheme.shadowColor, for: traitCollection).cgColor
+        glassContainer.layer.borderColor = AppTheme.resolved(AppTheme.glassBorder, for: traitCollection).cgColor
+        blurView.contentView.backgroundColor = AppTheme.glassFill
+
+        highlightView.gradientLayer.colors = [
+            AppTheme.resolved(AppTheme.glassHighlightStart, for: traitCollection).cgColor,
+            AppTheme.resolved(AppTheme.glassHighlightMid, for: traitCollection).cgColor,
+            UIColor.clear.cgColor
+        ]
+
+        iconImageView.tintColor = AppTheme.textPrimary.withAlphaComponent(0.88)
+        iconImageView.backgroundColor = AppTheme.badgeBackground
+
+        stateBadgeLabel.textColor = AppTheme.textPrimary.withAlphaComponent(0.92)
+        stateBadgeLabel.backgroundColor = AppTheme.badgeBackground
+        stateBadgeLabel.layer.borderColor = AppTheme.resolved(AppTheme.badgeBorder, for: traitCollection).cgColor
+
+        titleLabel.textColor = AppTheme.textPrimary.withAlphaComponent(0.95)
+        subtitleLabel.textColor = AppTheme.textSecondary.withAlphaComponent(0.95)
+        detailLabel.textColor = AppTheme.textPrimary.withAlphaComponent(0.90)
+        helperLabel.textColor = AppTheme.textSecondary.withAlphaComponent(0.95)
     }
 
     private func configureLayout() {
@@ -260,13 +291,13 @@ final class GlassCardView: UIView {
     private func badgeText(for state: CardState) -> String {
         switch state {
         case .new:
-            return "NEW"
+            return FlashForgeStrings.StudyCard.Badge.new
         case .learning:
-            return "LEARNING"
+            return FlashForgeStrings.StudyCard.Badge.learning
         case .review:
-            return "REVIEW"
+            return FlashForgeStrings.StudyCard.Badge.review
         case .relearning:
-            return "RELEARNING"
+            return FlashForgeStrings.StudyCard.Badge.relearning
         }
     }
 
@@ -326,5 +357,15 @@ final class GlassCardView: UIView {
         }
 
         return UIFont(name: "AvenirNext-Medium", size: size) ?? .systemFont(ofSize: size, weight: .medium)
+    }
+}
+
+private final class GradientOverlayView: UIView {
+    override class var layerClass: AnyClass {
+        CAGradientLayer.self
+    }
+
+    var gradientLayer: CAGradientLayer {
+        layer as! CAGradientLayer
     }
 }

@@ -12,7 +12,7 @@ enum SchedulerMode: String, CaseIterable, Codable, Sendable {
     case fsrs = "fsrs"
 
     var title: String {
-        "Adaptive Hybrid (Anki + FSRS)"
+        "Adaptive Hybrid (SM-2 + FSRS)"
     }
 
     var shortLabel: String {
