@@ -22,6 +22,27 @@ private enum WidgetText {
     }
 }
 
+private enum WidgetPalette {
+    static let backgroundTop = Color(red: 0.04, green: 0.10, blue: 0.19)
+    static let backgroundMid = Color(red: 0.08, green: 0.18, blue: 0.33)
+    static let backgroundBottom = Color(red: 0.03, green: 0.07, blue: 0.14)
+    static let highlight = Color(red: 0.35, green: 0.84, blue: 0.95).opacity(0.16)
+    static let glow = Color(red: 0.22, green: 0.80, blue: 0.87).opacity(0.22)
+    static let cardBorder = Color.white.opacity(0.16)
+
+    static let textPrimary = Color.white.opacity(0.96)
+    static let textSecondary = Color.white.opacity(0.74)
+
+    static let track = Color.white.opacity(0.18)
+    static let accentStart = Color(red: 0.28, green: 0.74, blue: 0.86)
+    static let accentEnd = Color(red: 0.22, green: 0.80, blue: 0.87)
+
+    static let surface = Color.white.opacity(0.08)
+    static let surfaceBorder = Color.white.opacity(0.13)
+    static let badgeFill = Color.white.opacity(0.11)
+    static let badgeBorder = Color.white.opacity(0.14)
+}
+
 private func syncStatusText(for state: StudySyncState) -> String {
     switch state {
     case .idle:
@@ -35,6 +56,19 @@ private func syncStatusText(for state: StudySyncState) -> String {
     }
 }
 
+private func syncStatusIcon(for state: StudySyncState) -> String {
+    switch state {
+    case .idle:
+        return "pause.circle.fill"
+    case .syncing:
+        return "arrow.triangle.2.circlepath.circle.fill"
+    case .synced:
+        return "checkmark.circle.fill"
+    case .failed:
+        return "exclamationmark.triangle.fill"
+    }
+}
+
 private func progressRatio(completedCount: Int, goalCount: Int, remainingCount: Int) -> Double {
     if goalCount <= 0 {
         return remainingCount == 0 ? 1 : 0
@@ -45,6 +79,14 @@ private func progressRatio(completedCount: Int, goalCount: Int, remainingCount: 
 private func progressPercentText(completedCount: Int, goalCount: Int, remainingCount: Int) -> String {
     let ratio = progressRatio(completedCount: completedCount, goalCount: goalCount, remainingCount: remainingCount)
     return "\(Int((ratio * 100).rounded()))%"
+}
+
+private func goalBaselineCount(goalCount: Int, completedCount: Int) -> Int {
+    max(goalCount, completedCount)
+}
+
+private func completionText(completedCount: Int, goalCount: Int) -> String {
+    "\(completedCount)/\(goalBaselineCount(goalCount: goalCount, completedCount: completedCount))"
 }
 
 private struct StudyStatusEntry: TimelineEntry {
@@ -85,6 +127,125 @@ private struct StudyStatusProvider: TimelineProvider {
     }
 }
 
+private struct WidgetCardBackground: View {
+    var body: some View {
+        ContainerRelativeShape()
+            .fill(
+                LinearGradient(
+                    colors: [
+                        WidgetPalette.backgroundTop,
+                        WidgetPalette.backgroundMid,
+                        WidgetPalette.backgroundBottom
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .overlay(alignment: .topTrailing) {
+                Circle()
+                    .fill(WidgetPalette.highlight)
+                    .frame(width: 120, height: 120)
+                    .blur(radius: 24)
+                    .offset(x: 34, y: -36)
+            }
+            .overlay(alignment: .bottomLeading) {
+                Circle()
+                    .fill(WidgetPalette.glow)
+                    .frame(width: 96, height: 96)
+                    .blur(radius: 20)
+                    .offset(x: -28, y: 32)
+            }
+            .overlay(
+                ContainerRelativeShape()
+                    .stroke(WidgetPalette.cardBorder, lineWidth: 0.8)
+            )
+    }
+}
+
+private struct WidgetProgressBar: View {
+    let value: Double
+    let height: CGFloat
+
+    private var clampedValue: Double {
+        min(1, max(0, value))
+    }
+
+    var body: some View {
+        GeometryReader { proxy in
+            let fillWidth = proxy.size.width * clampedValue
+            let minimumVisibleWidth = min(proxy.size.width, 8)
+            ZStack(alignment: .leading) {
+                Capsule()
+                    .fill(WidgetPalette.track)
+                Capsule()
+                    .fill(
+                        LinearGradient(
+                            colors: [WidgetPalette.accentStart, WidgetPalette.accentEnd],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .frame(width: clampedValue == 0 ? 0 : max(minimumVisibleWidth, fillWidth))
+            }
+        }
+        .frame(height: height)
+    }
+}
+
+private struct WidgetMetricCard: View {
+    let title: String
+    let value: Int
+    let systemImage: String
+    let compact: Bool
+
+    var body: some View {
+        Group {
+            if compact {
+                HStack(spacing: 5) {
+                    Label(title, systemImage: systemImage)
+                        .font(.caption2)
+                        .fontWeight(.medium)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
+                        .foregroundStyle(WidgetPalette.textSecondary)
+                    Spacer(minLength: 4)
+                    Text(value.formatted())
+                        .font(.callout)
+                        .fontWeight(.semibold)
+                        .monospacedDigit()
+                        .foregroundStyle(WidgetPalette.textPrimary)
+                }
+            } else {
+                VStack(alignment: .leading, spacing: 4) {
+                    Label(title, systemImage: systemImage)
+                        .font(.caption2)
+                        .fontWeight(.medium)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
+                        .foregroundStyle(WidgetPalette.textSecondary)
+                    Text(value.formatted())
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .monospacedDigit()
+                        .foregroundStyle(WidgetPalette.textPrimary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .padding(.horizontal, compact ? 7 : 10)
+        .padding(.vertical, compact ? 4 : 7)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: compact ? 9 : 12, style: .continuous)
+                .fill(WidgetPalette.surface)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: compact ? 9 : 12, style: .continuous)
+                .stroke(WidgetPalette.surfaceBorder, lineWidth: 0.8)
+        )
+    }
+}
+
 private struct StudyStatusCard: View {
     let snapshot: StudyStatusSnapshot
     let compact: Bool
@@ -98,78 +259,103 @@ private struct StudyStatusCard: View {
     }
 
     private var progressText: String {
-        if snapshot.goalCount <= 0 {
-            return "0%"
-        }
-        return "\(Int((progressValue * 100).rounded()))%"
+        progressPercentText(
+            completedCount: snapshot.completedCount,
+            goalCount: snapshot.goalCount,
+            remainingCount: snapshot.remainingCount
+        )
+    }
+
+    private var completedGoalText: String {
+        completionText(completedCount: snapshot.completedCount, goalCount: snapshot.goalCount)
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: compact ? 6 : 10) {
-            HStack(alignment: .firstTextBaseline) {
+        VStack(alignment: .leading, spacing: compact ? 7 : 9) {
+            header
+            progressSection
+            HStack(spacing: compact ? 5 : 7) {
+                WidgetMetricCard(
+                    title: WidgetText.completed,
+                    value: snapshot.completedCount,
+                    systemImage: "checkmark.circle.fill",
+                    compact: compact
+                )
+                WidgetMetricCard(
+                    title: WidgetText.remaining,
+                    value: snapshot.remainingCount,
+                    systemImage: "clock.fill",
+                    compact: compact
+                )
+            }
+        }
+        .padding(.horizontal, compact ? 10 : 12)
+        .padding(.vertical, compact ? 12 : 13)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .containerBackground(for: .widget) {
+            WidgetCardBackground()
+        }
+    }
+
+    private var header: some View {
+        HStack(alignment: .top, spacing: 7) {
+            VStack(alignment: .leading, spacing: compact ? 1 : 2) {
                 Text(WidgetText.title)
-                    .font(compact ? .caption : .headline)
+                    .font(.caption2)
                     .fontWeight(.semibold)
+                    .foregroundStyle(WidgetPalette.textSecondary)
                     .lineLimit(1)
-                Spacer(minLength: 6)
-                Text(progressText)
-                    .font(compact ? .caption2 : .subheadline)
-                    .foregroundStyle(Color.white.opacity(0.78))
+                Text(deckTitle)
+                    .font(compact ? .footnote : .subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(WidgetPalette.textPrimary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
             }
 
-            Text(deckTitle)
-                .font(compact ? .caption : .subheadline)
-                .foregroundStyle(Color.white.opacity(0.72))
-                .lineLimit(1)
+            Spacer(minLength: 6)
 
-            ProgressView(value: progressValue)
-                .progressViewStyle(.linear)
-                .tint(Color(red: 0.41, green: 0.84, blue: 0.98))
+            if !compact {
+                syncBadge
+            }
+        }
+    }
 
-            HStack(spacing: compact ? 8 : 12) {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(WidgetText.completed)
-                        .font(.caption2)
-                        .foregroundStyle(Color.white.opacity(0.72))
-                    Text("\(snapshot.completedCount)")
-                        .font(compact ? .callout : .title3)
-                        .fontWeight(.bold)
-                }
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(WidgetText.remaining)
-                        .font(.caption2)
-                        .foregroundStyle(Color.white.opacity(0.72))
-                    Text("\(snapshot.remainingCount)")
-                        .font(compact ? .callout : .title3)
-                        .fontWeight(.bold)
-                }
+    private var progressSection: some View {
+        VStack(alignment: .leading, spacing: compact ? 4 : 5) {
+            HStack(alignment: .lastTextBaseline, spacing: 6) {
+                Text(progressText)
+                    .font(.system(size: compact ? 20 : 26, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                    .foregroundStyle(WidgetPalette.textPrimary)
+                Text(completedGoalText)
+                    .font(compact ? .caption2 : .caption)
+                    .fontWeight(.semibold)
+                    .monospacedDigit()
+                    .foregroundStyle(WidgetPalette.textSecondary)
                 Spacer(minLength: 0)
             }
+            WidgetProgressBar(value: progressValue, height: compact ? 4 : 5)
         }
-        .foregroundStyle(.white)
-        .padding(compact ? 10 : 12)
-        .background(
-            RoundedRectangle(cornerRadius: compact ? 15 : 17, style: .continuous)
-                .fill(
-                    LinearGradient(
-                        colors: [
-                            Color(red: 0.05, green: 0.11, blue: 0.19),
-                            Color(red: 0.09, green: 0.19, blue: 0.31),
-                            Color(red: 0.12, green: 0.24, blue: 0.40)
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: compact ? 15 : 17, style: .continuous)
-                        .stroke(Color.white.opacity(0.14), lineWidth: 0.8)
-                )
-        )
-        .containerBackground(for: .widget) {
-            Color.black
-        }
+    }
+
+    private var syncBadge: some View {
+        Label(syncStatusText(for: snapshot.syncState), systemImage: syncStatusIcon(for: snapshot.syncState))
+            .font(.caption2)
+            .fontWeight(.medium)
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
+            .foregroundStyle(WidgetPalette.textSecondary)
+            .padding(.horizontal, 5)
+            .padding(.vertical, 2)
+            .background(
+                Capsule()
+                    .fill(WidgetPalette.badgeFill)
+            )
+            .overlay(
+                Capsule()
+                    .stroke(WidgetPalette.badgeBorder, lineWidth: 0.8)
+            )
     }
 }
 
@@ -182,7 +368,12 @@ struct StudyStatusWidget: Widget {
                 .environment(\.colorScheme, .dark)
         }
         .configurationDisplayName(WidgetText.localized("widget.config.title", fallback: "Today's Study"))
-        .description(WidgetText.localized("widget.config.description", fallback: "Quick glance at your learning progress and remaining cards."))
+        .description(
+            WidgetText.localized(
+                "widget.config.description",
+                fallback: "Quick glance at your learning progress and remaining cards."
+            )
+        )
         .supportedFamilies([.systemSmall, .systemMedium, .accessoryRectangular])
     }
 }
@@ -205,22 +396,41 @@ private struct StudyStatusWidgetView: View {
     }
 
     private var accessoryView: some View {
-        HStack(spacing: 8) {
-            VStack(alignment: .leading, spacing: 3) {
-                Text(WidgetText.title)
-                    .font(.caption2)
+        let snapshot = entry.snapshot
+        return VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                Text(snapshot.selectedDeckTitle.isEmpty ? WidgetText.noDeck : snapshot.selectedDeckTitle)
+                    .font(.caption)
                     .fontWeight(.semibold)
-                Text(entry.snapshot.selectedDeckTitle.isEmpty ? WidgetText.noDeck : entry.snapshot.selectedDeckTitle)
-                    .font(.caption2)
-                    .foregroundStyle(Color.white.opacity(0.72))
+                    .lineLimit(1)
+                Spacer(minLength: 4)
+                Text(
+                    progressPercentText(
+                        completedCount: snapshot.completedCount,
+                        goalCount: snapshot.goalCount,
+                        remainingCount: snapshot.remainingCount
+                    )
+                )
+                .font(.caption2)
+                .fontWeight(.semibold)
+                .monospacedDigit()
+                .foregroundStyle(.secondary)
+            }
+
+            ProgressView(value: snapshot.progress)
+                .progressViewStyle(.linear)
+                .tint(WidgetPalette.accentEnd)
+
+            HStack(spacing: 10) {
+                Label(snapshot.completedCount.formatted(), systemImage: "checkmark.circle.fill")
+                    .lineLimit(1)
+                Spacer(minLength: 8)
+                Label(snapshot.remainingCount.formatted(), systemImage: "clock.fill")
                     .lineLimit(1)
             }
-            Spacer(minLength: 6)
-            Text("\(entry.snapshot.completedCount)/\(max(entry.snapshot.goalCount, entry.snapshot.completedCount))")
-                .font(.caption)
-                .fontWeight(.bold)
+            .font(.caption2)
+            .foregroundStyle(.secondary)
         }
-        .foregroundStyle(.white)
     }
 }
 
@@ -238,65 +448,97 @@ struct StudySessionLiveActivityWidget: Widget {
                 remainingCount: context.state.remainingCount
             )
             VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
+                HStack(alignment: .top, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 3) {
                         Text(context.state.remainingCount == 0 ? WidgetText.complete : WidgetText.liveLabel)
                             .font(.caption)
                             .fontWeight(.semibold)
+                            .foregroundStyle(WidgetPalette.textSecondary)
                         Text(context.state.deckTitle)
-                            .font(.subheadline)
-                            .fontWeight(.medium)
+                            .font(.headline)
+                            .fontWeight(.semibold)
                             .lineLimit(1)
+                            .minimumScaleFactor(0.75)
+                            .foregroundStyle(WidgetPalette.textPrimary)
                     }
-                    Spacer()
-                    Text(syncStatusText(for: context.state.syncState))
+                    Spacer(minLength: 8)
+                    Label(
+                        syncStatusText(for: context.state.syncState),
+                        systemImage: syncStatusIcon(for: context.state.syncState)
+                    )
                         .font(.caption2)
+                        .fontWeight(.medium)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.72)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
-                        .background(Color.white.opacity(0.14), in: Capsule())
-                        .foregroundStyle(Color.white.opacity(0.8))
+                        .background(WidgetPalette.badgeFill, in: Capsule())
+                        .overlay(
+                            Capsule()
+                                .stroke(WidgetPalette.badgeBorder, lineWidth: 0.8)
+                        )
+                        .foregroundStyle(WidgetPalette.textSecondary)
                 }
-                .padding(.top, 8)
 
                 HStack(alignment: .lastTextBaseline, spacing: 8) {
                     Text(ratioText)
-                        .font(.system(size: 30, weight: .bold, design: .rounded))
-                    Text("\(context.state.completedCount)/\(max(context.state.goalCount, context.state.completedCount))")
-                        .font(.subheadline)
-                        .foregroundStyle(Color.white.opacity(0.78))
+                        .font(.system(size: 32, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                        .foregroundStyle(WidgetPalette.textPrimary)
+                    Text(
+                        completionText(
+                            completedCount: context.state.completedCount,
+                            goalCount: context.state.goalCount
+                        )
+                    )
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .monospacedDigit()
+                    .foregroundStyle(WidgetPalette.textSecondary)
                 }
 
-                ProgressView(value: ratio)
-                    .progressViewStyle(.linear)
-                    .tint(Color(red: 0.41, green: 0.84, blue: 0.98))
-                    .padding(.bottom, 8)
+                WidgetProgressBar(value: ratio, height: 7)
+
+                HStack(spacing: 8) {
+                    WidgetMetricCard(
+                        title: WidgetText.completed,
+                        value: context.state.completedCount,
+                        systemImage: "checkmark.circle.fill",
+                        compact: true
+                    )
+                    WidgetMetricCard(
+                        title: WidgetText.remaining,
+                        value: context.state.remainingCount,
+                        systemImage: "clock.fill",
+                        compact: true
+                    )
+                }
             }
-            .foregroundStyle(.white)
             .padding(.horizontal, 16)
-            .padding(.vertical, 16)
+            .padding(.vertical, 14)
             .background(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
                     .fill(
                         LinearGradient(
                             colors: [
-                                Color(red: 0.05, green: 0.11, blue: 0.19),
-                                Color(red: 0.09, green: 0.19, blue: 0.31),
-                                Color(red: 0.12, green: 0.24, blue: 0.40)
+                                WidgetPalette.backgroundTop,
+                                WidgetPalette.backgroundMid,
+                                WidgetPalette.backgroundBottom
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
                     )
                     .overlay(
-                        RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .stroke(Color.white.opacity(0.14), lineWidth: 0.8)
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .stroke(WidgetPalette.cardBorder, lineWidth: 0.8)
                     )
             )
             .padding(.horizontal, 4)
-            .padding(.vertical, 10)
+            .padding(.vertical, 8)
             .environment(\.colorScheme, .dark)
-            .activityBackgroundTint(Color(red: 0.07, green: 0.13, blue: 0.21))
-            .activitySystemActionForegroundColor(.white)
+            .activityBackgroundTint(WidgetPalette.backgroundTop)
+            .activitySystemActionForegroundColor(WidgetPalette.textPrimary)
         } dynamicIsland: { context in
             let ratio = progressRatio(
                 completedCount: context.state.completedCount,
@@ -311,7 +553,12 @@ struct StudySessionLiveActivityWidget: Widget {
             return DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Label("\(context.state.completedCount)", systemImage: "checkmark.circle.fill")
+                        Label {
+                            Text(context.state.completedCount.formatted())
+                                .monospacedDigit()
+                        } icon: {
+                            Image(systemName: "checkmark.circle.fill")
+                        }
                             .font(.headline)
                             .fontWeight(.bold)
                         Text(WidgetText.doneShort)
@@ -322,7 +569,12 @@ struct StudySessionLiveActivityWidget: Widget {
                 }
                 DynamicIslandExpandedRegion(.trailing) {
                     VStack(alignment: .trailing, spacing: 2) {
-                        Label("\(context.state.remainingCount)", systemImage: "clock.fill")
+                        Label {
+                            Text(context.state.remainingCount.formatted())
+                                .monospacedDigit()
+                        } icon: {
+                            Image(systemName: "clock.fill")
+                        }
                             .font(.headline)
                             .fontWeight(.bold)
                             .labelStyle(.titleAndIcon)
@@ -333,7 +585,7 @@ struct StudySessionLiveActivityWidget: Widget {
                     .padding(.vertical, 2)
                 }
                 DynamicIslandExpandedRegion(.center) {
-                    Text(context.state.deckTitle)
+                    Text(context.state.deckTitle.isEmpty ? WidgetText.noDeck : context.state.deckTitle)
                         .font(.caption)
                         .lineLimit(1)
                         .padding(.vertical, 2)
@@ -341,28 +593,46 @@ struct StudySessionLiveActivityWidget: Widget {
                 DynamicIslandExpandedRegion(.bottom) {
                     VStack(alignment: .leading, spacing: 6) {
                         ProgressView(value: ratio)
+                            .tint(WidgetPalette.accentEnd)
                         HStack {
                             Text(ratioText)
                                 .font(.caption)
                                 .fontWeight(.semibold)
+                                .monospacedDigit()
                             Spacer()
-                            Text(syncStatusText(for: context.state.syncState))
+                            Label(
+                                syncStatusText(for: context.state.syncState),
+                                systemImage: syncStatusIcon(for: context.state.syncState)
+                            )
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
+                                .lineLimit(1)
                         }
                     }
                     .padding(.top, 4)
                 }
             } compactLeading: {
-                Label("\(context.state.completedCount)", systemImage: "checkmark.circle.fill")
+                Label {
+                    Text(context.state.completedCount.formatted())
+                        .monospacedDigit()
+                } icon: {
+                    Image(systemName: "checkmark.circle.fill")
+                }
                     .font(.caption2)
             } compactTrailing: {
-                Label("\(context.state.remainingCount)", systemImage: "clock.fill")
+                Label {
+                    Text(context.state.remainingCount.formatted())
+                        .monospacedDigit()
+                } icon: {
+                    Image(systemName: "clock.fill")
+                }
                     .font(.caption2)
             } minimal: {
                 Text(ratioText)
                     .font(.caption2)
+                    .monospacedDigit()
             }
+            .keylineTint(WidgetPalette.accentEnd)
         }
     }
 
