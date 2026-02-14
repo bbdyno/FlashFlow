@@ -97,6 +97,7 @@ actor ICloudSyncService {
             try await syncBidirectionally()
             await publishStatus(isSyncing: false, errorMessage: nil)
         } catch {
+            CrashReporter.record(error: error, context: "ICloudSyncService.bootstrap")
             await publishStatus(isSyncing: false, errorMessage: error.localizedDescription)
             return
         }
@@ -113,6 +114,7 @@ actor ICloudSyncService {
             try await pushLocalSnapshot()
             await publishStatus(isSyncing: false, errorMessage: nil)
         } catch {
+            CrashReporter.record(error: error, context: "ICloudSyncService.handleLocalDataDidChange")
             await publishStatus(isSyncing: false, errorMessage: error.localizedDescription)
             return
         }
@@ -125,6 +127,7 @@ actor ICloudSyncService {
             try await syncBidirectionally()
             await publishStatus(isSyncing: false, errorMessage: nil)
         } catch {
+            CrashReporter.record(error: error, context: "ICloudSyncService.syncFromCloudNow")
             await publishStatus(isSyncing: false, errorMessage: error.localizedDescription)
             return
         }

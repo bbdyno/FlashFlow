@@ -16,7 +16,8 @@ let project = Project(
     name: appName,
     organizationName: "bbdyno",
     packages: [
-        .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.7.1")
+        .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.7.1"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "11.0.0")
     ],
     settings: .settings(
         base: [
@@ -65,7 +66,8 @@ let project = Project(
                 "ViewControllers/**"
             ],
             resources: [
-                "Resources/AppAssets.xcassets"
+                "Resources/AppAssets.xcassets",
+                "GoogleService-Info.plist"
             ],
             scripts: [
                 .pre(
@@ -85,12 +87,37 @@ let project = Project(
                     fi
                     """,
                     name: "SwiftLint"
+                ),
+                .post(
+                    script: """
+                    if [ "${CONFIGURATION}" != "Release" ]; then
+                      exit 0
+                    fi
+
+                    GOOGLE_SERVICE_INFO="${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist"
+                    if [ ! -f "${GOOGLE_SERVICE_INFO}" ]; then
+                      echo "warning: GoogleService-Info.plist not found. Skipping Crashlytics dSYM upload."
+                      exit 0
+                    fi
+
+                    CRASHLYTICS_RUN_SCRIPT="${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+                    if [ ! -f "${CRASHLYTICS_RUN_SCRIPT}" ]; then
+                      echo "warning: Crashlytics run script not found at ${CRASHLYTICS_RUN_SCRIPT}. Skipping dSYM upload."
+                      exit 0
+                    fi
+
+                    "${CRASHLYTICS_RUN_SCRIPT}"
+                    """,
+                    name: "Firebase Crashlytics Upload dSYMs"
                 )
             ],
             dependencies: [
                 .target(name: "\(appName)Widgets"),
                 .project(target: "SharedResources", path: "SharedResources"),
-                .package(product: "SnapKit")
+                .package(product: "SnapKit"),
+                .package(product: "FirebaseCore"),
+                .package(product: "FirebaseAnalytics"),
+                .package(product: "FirebaseCrashlytics")
             ],
             settings: .settings(
                 base: [

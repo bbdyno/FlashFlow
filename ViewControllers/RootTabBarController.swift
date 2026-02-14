@@ -286,6 +286,7 @@ final class RootTabBarController: UITabBarController {
                 navigation.modalPresentationStyle = .fullScreen
                 self.present(navigation, animated: true)
             } catch {
+                CrashReporter.record(error: error, context: "RootTabBarController.presentOnboardingIfNeeded")
                 self.isPresentingOnboarding = false
             }
         }

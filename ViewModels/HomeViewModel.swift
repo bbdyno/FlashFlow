@@ -86,6 +86,7 @@ final class HomeViewModel {
             try await repository.prepare()
             await reloadDecksAndCurrentCard(resetDeckSelection: true)
         } catch {
+            CrashReporter.record(error: error, context: "HomeViewModel.bootstrap")
             output.didReceiveError(Self.userFacingMessage(from: error))
         }
     }
@@ -120,6 +121,7 @@ final class HomeViewModel {
             output.didUpdateDeckSummaries(summaries, selectedDeckID)
             await refreshCurrentDeckState()
         } catch {
+            CrashReporter.record(error: error, context: "HomeViewModel.reloadDecksAndCurrentCard")
             output.didReceiveError(Self.userFacingMessage(from: error))
         }
     }
@@ -160,6 +162,7 @@ final class HomeViewModel {
                 hasCurrentCard: nextCard != nil
             )
         } catch {
+            CrashReporter.record(error: error, context: "HomeViewModel.refreshCurrentDeckState")
             output.didReceiveError(Self.userFacingMessage(from: error))
         }
     }
@@ -180,6 +183,7 @@ final class HomeViewModel {
             try await repository.review(deckID: selectedDeckID, cardID: currentCardID, grade: grade)
             await refreshCurrentDeckState()
         } catch {
+            CrashReporter.record(error: error, context: "HomeViewModel.applyGrade")
             output.didReceiveError(Self.userFacingMessage(from: error))
         }
     }

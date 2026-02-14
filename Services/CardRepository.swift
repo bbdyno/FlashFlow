@@ -210,6 +210,7 @@ actor CardRepository {
         do {
             return try backupEncoder.encode(store)
         } catch {
+            CrashReporter.record(error: error, context: "CardRepository.exportBackupData.encode")
             throw RepositoryError.persistenceFailed
         }
     }
@@ -610,6 +611,7 @@ actor CardRepository {
             self.container = container
             return container
         } catch {
+            CrashReporter.record(error: error, context: "CardRepository.modelContainer")
             throw RepositoryError.persistenceFailed
         }
     }
@@ -623,6 +625,7 @@ actor CardRepository {
         do {
             try context.save()
         } catch {
+            CrashReporter.record(error: error, context: "CardRepository.save")
             throw RepositoryError.persistenceFailed
         }
     }
@@ -646,6 +649,7 @@ actor CardRepository {
         } catch let error as RepositoryError {
             throw error
         } catch {
+            CrashReporter.record(error: error, context: "CardRepository.migrateLegacyStoreIfNeeded")
             throw RepositoryError.persistenceFailed
         }
     }
@@ -696,6 +700,7 @@ actor CardRepository {
             }
             return store
         } catch {
+            CrashReporter.record(error: error, context: "CardRepository.decodeLegacyStore")
             throw RepositoryError.persistenceFailed
         }
     }
@@ -708,6 +713,7 @@ actor CardRepository {
             }
             return store
         } catch {
+            CrashReporter.record(error: error, context: "CardRepository.decodeBackupStore")
             throw RepositoryError.invalidBackupFile
         }
     }
@@ -718,6 +724,7 @@ actor CardRepository {
         } catch let repositoryError as RepositoryError {
             throw repositoryError
         } catch {
+            CrashReporter.record(error: error, context: "CardRepository.decodeDeckPayload")
             throw RepositoryError.invalidDeckImportFile
         }
     }

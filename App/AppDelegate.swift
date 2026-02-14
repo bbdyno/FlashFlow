@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import FirebaseCore
 
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        configureFirebaseIfAvailable()
+        CrashReporter.start()
         return true
     }
 
@@ -21,5 +24,20 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let configuration = UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
         configuration.delegateClass = SceneDelegate.self
         return configuration
+    }
+
+    private func configureFirebaseIfAvailable() {
+        guard FirebaseApp.app() == nil else {
+            return
+        }
+
+        guard let plistPath = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist"),
+              let options = FirebaseOptions(contentsOfFile: plistPath) else {
+            CrashReporter.log("GoogleService-Info.plist not found. Firebase is not configured.")
+            return
+        }
+
+        FirebaseApp.configure(options: options)
+        CrashReporter.log("Firebase configured successfully.")
     }
 }

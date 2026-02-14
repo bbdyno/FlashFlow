@@ -294,6 +294,7 @@ extension DecksViewController: UIDocumentPickerDelegate {
                 let data = try Data(contentsOf: fileURL)
                 await self.viewModel.send(.importDeckData(data))
             } catch {
+                CrashReporter.record(error: error, context: "DecksViewController.documentPicker")
                 self.presentError(FlashForgeStrings.Decks.Import.readError)
             }
         }

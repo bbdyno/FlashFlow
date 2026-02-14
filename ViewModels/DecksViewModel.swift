@@ -70,6 +70,7 @@ final class DecksViewModel {
             let summaries = try await repository.deckSummaries()
             output.didUpdateDecks(summaries)
         } catch {
+            CrashReporter.record(error: error, context: "DecksViewModel.refreshDecks")
             output.didReceiveError(Self.userFacingMessage(from: error))
         }
     }
@@ -80,6 +81,7 @@ final class DecksViewModel {
             notifyDeckDataChanged()
             await refreshDecks()
         } catch {
+            CrashReporter.record(error: error, context: "DecksViewModel.createDeck")
             output.didReceiveError(Self.userFacingMessage(from: error))
         }
     }
@@ -90,6 +92,7 @@ final class DecksViewModel {
             notifyDeckDataChanged()
             await refreshDecks()
         } catch {
+            CrashReporter.record(error: error, context: "DecksViewModel.renameDeck")
             output.didReceiveError(Self.userFacingMessage(from: error))
         }
     }
@@ -100,6 +103,7 @@ final class DecksViewModel {
             notifyDeckDataChanged()
             await refreshDecks()
         } catch {
+            CrashReporter.record(error: error, context: "DecksViewModel.importDeckData")
             output.didReceiveError(Self.userFacingMessage(from: error))
         }
     }
@@ -110,6 +114,7 @@ final class DecksViewModel {
             notifyDeckDataChanged()
             await refreshDecks()
         } catch {
+            CrashReporter.record(error: error, context: "DecksViewModel.deleteDeck")
             output.didReceiveError(Self.userFacingMessage(from: error))
         }
     }

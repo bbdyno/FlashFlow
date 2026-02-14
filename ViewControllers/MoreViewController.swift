@@ -502,6 +502,7 @@ final class MoreViewController: UIViewController {
                 self.presentShareSheet(fileURL: fileURL, sourceView: self.backupButton)
                 self.dataStatusLabel.text = FlashForgeStrings.More.Data.Export.done
             } catch {
+                CrashReporter.record(error: error, context: "MoreViewController.didTapBackup")
                 self.dataStatusLabel.text = Self.userFacingMessage(from: error)
             }
         }
@@ -524,6 +525,7 @@ final class MoreViewController: UIViewController {
                 self.developerStatusLabel.text = FlashForgeStrings.More.Developer.createdResult(created)
                 NotificationCenter.default.post(name: .deckDataDidChange, object: nil)
             } catch {
+                CrashReporter.record(error: error, context: "MoreViewController.didTapGenerateSamples")
                 self.developerStatusLabel.text = Self.userFacingMessage(from: error)
             }
         }
@@ -578,6 +580,7 @@ final class MoreViewController: UIViewController {
                 self.dataStatusLabel.text = FlashForgeStrings.More.Data.Reset.done
                 NotificationCenter.default.post(name: .deckDataDidChange, object: nil)
             } catch {
+                CrashReporter.record(error: error, context: "MoreViewController.resetAllData")
                 self.dataStatusLabel.text = Self.userFacingMessage(from: error)
             }
         }
@@ -595,6 +598,7 @@ final class MoreViewController: UIViewController {
                 let settings = try await self.service.update(isEnabled: isEnabled, time: selectedTime)
                 self.applySettings(settings)
             } catch let error as StudyReminderError {
+                CrashReporter.record(error: error, context: "MoreViewController.updateReminder.studyReminderError")
                 self.reminderSwitch.setOn(false, animated: true)
                 self.reminderTimePicker.isEnabled = false
                 self.reminderStatusLabel.text = error.errorDescription
@@ -602,6 +606,7 @@ final class MoreViewController: UIViewController {
                     self.presentPermissionAlert()
                 }
             } catch {
+                CrashReporter.record(error: error, context: "MoreViewController.updateReminder")
                 self.reminderSwitch.setOn(false, animated: true)
                 self.reminderTimePicker.isEnabled = false
                 self.reminderStatusLabel.text = FlashForgeStrings.Error.generic
@@ -855,6 +860,7 @@ final class MoreViewController: UIViewController {
                 self.dataStatusLabel.text = FlashForgeStrings.More.Data.Import.done
                 NotificationCenter.default.post(name: .deckDataDidChange, object: nil)
             } catch {
+                CrashReporter.record(error: error, context: "MoreViewController.importBackupData")
                 self.dataStatusLabel.text = Self.userFacingMessage(from: error)
             }
         }
@@ -898,6 +904,7 @@ extension MoreViewController: UIDocumentPickerDelegate {
                 )
                 self.presentImportConfirmation(data: data, preview: preview)
             } catch {
+                CrashReporter.record(error: error, context: "MoreViewController.documentPicker")
                 self.dataStatusLabel.text = Self.userFacingMessage(from: error)
             }
         }

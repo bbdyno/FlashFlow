@@ -83,6 +83,7 @@ final class DeckDetailViewModel {
             let cards = try await repository.cards(in: deckID)
             output.didUpdateCards(cards)
         } catch {
+            CrashReporter.record(error: error, context: "DeckDetailViewModel.refresh")
             output.didReceiveError(Self.userFacingMessage(from: error))
         }
     }
@@ -98,6 +99,7 @@ final class DeckDetailViewModel {
             notifyDeckDataChanged()
             await refresh()
         } catch {
+            CrashReporter.record(error: error, context: "DeckDetailViewModel.addCard")
             output.didReceiveError(Self.userFacingMessage(from: error))
         }
     }
@@ -114,6 +116,7 @@ final class DeckDetailViewModel {
             notifyDeckDataChanged()
             await refresh()
         } catch {
+            CrashReporter.record(error: error, context: "DeckDetailViewModel.updateCard")
             output.didReceiveError(Self.userFacingMessage(from: error))
         }
     }
@@ -124,6 +127,7 @@ final class DeckDetailViewModel {
             notifyDeckDataChanged()
             await refresh()
         } catch {
+            CrashReporter.record(error: error, context: "DeckDetailViewModel.deleteCard")
             output.didReceiveError(Self.userFacingMessage(from: error))
         }
     }

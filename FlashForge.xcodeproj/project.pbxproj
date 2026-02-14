@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		02D22339A3244C853A6828EF /* StudyReminderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1E198DE7F4EAE36BF2902B /* StudyReminderService.swift */; };
 		080B94E7283BC9E25E1762DF /* GlassCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 700AFB3B4CDA3F2F8FD9176C /* GlassCardView.swift */; };
+		0A5C88C991A027F7E15BBFB1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9F49AB32BDE15486A130D8A7 /* GoogleService-Info.plist */; };
 		0BA521677B2D6A433E04FAAE /* ReviewHeatmapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACBC97F9E67929393B532B2 /* ReviewHeatmapView.swift */; };
 		127F0EA7CFF5ECA019E22433 /* StudyStatusService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174EE85526D9B3386325270E /* StudyStatusService.swift */; };
 		1C3EB5D4819DBDDB02534C2B /* DeckDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC6A1679DDC1AB1BE4D56A45 /* DeckDetailViewController.swift */; };
@@ -18,12 +19,15 @@
 		2744FAF5A6C9BA5F220B6091 /* FlashForgeWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CC3EE56F35E255141FD63E1B /* FlashForgeWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		323ABBD9C7F69CAE3D0B57CC /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34E594E97AF0B69E7790D09 /* HomeViewModel.swift */; };
 		34B1A5A4B783E17891789A85 /* DecksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A99F301ADDA6EC2EBF192A3 /* DecksViewModel.swift */; };
+		365783B4BAE20304EBB0E725 /* CrashReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50096BDBECC96DB3FB393852 /* CrashReporter.swift */; };
 		37D79F7F82C9100A8A4AF189 /* FlashForgeWidgetsBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6D6E2802EB6C1CDE0FB302 /* FlashForgeWidgetsBundle.swift */; };
 		384023342BDA62019C3E064D /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94841623693077402111778D /* MoreViewController.swift */; };
+		3B471030F1831B10F5489861 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = D099FA95AC69FC324E2098FB /* FirebaseCrashlytics */; };
 		3B5E45CCDC0D77F1E9445FAE /* PersistenceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF11FE5547DC426B932AFE /* PersistenceModels.swift */; };
 		3FE4103C0B2CCE3DDD6857BE /* CardRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9AD08B6C3F0A200AEE26108 /* CardRepository.swift */; };
 		458B618B1F791ACF7F116934 /* FlashForgeStringsAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053CBE67BBC927E6500C04A6 /* FlashForgeStringsAlias.swift */; };
 		45FA097443B8C349A9723374 /* StudyStatusSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF794A337CBD5B9733BFEE5 /* StudyStatusSnapshot.swift */; };
+		4E29E5CB4CD3AA23FF84D096 /* TuistPlists+FlashForge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D314C8B2B1555CB18594B3 /* TuistPlists+FlashForge.swift */; };
 		51E93FB1205B0D8F6AFFE1BF /* RootTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D461C4D4DA11970FCB8ACF50 /* RootTabBarController.swift */; };
 		606266CFD934DE3628B3D8AB /* SchedulerMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56638997A259354801A20F6A /* SchedulerMode.swift */; };
 		678FC23F12E83EC2647B80F0 /* TuistBundle+FlashForge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D472DD1C95FE3A90AF4B0E /* TuistBundle+FlashForge.swift */; };
@@ -46,6 +50,7 @@
 		AD0262810281751BE87930FA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A34BEB8690A7E0022ADD56 /* AppDelegate.swift */; };
 		B009FFA631F8ABDC60F66B95 /* StudyStatusWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B9C0278336BD004596A432 /* StudyStatusWidget.swift */; };
 		B1B79DE952EA5EC4D52915EC /* SM2Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1B5E6F6E6CA28D5F2AF965 /* SM2Scheduler.swift */; };
+		B739A3B033F880BA8EFEF403 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = C90855FB8FA106676B144D9C /* FirebaseCore */; };
 		BB2580F3F4B570324CF2C3B8 /* AppAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 09E6DD8EF45F2F59CCF78086 /* AppAssets.xcassets */; };
 		BB9B1C01638FD190CBC90506 /* FlashCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F2218C1D27BFD8C0FA63EE /* FlashCard.swift */; };
 		CC9637242E4F66EAE551ABA3 /* AppNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA66B93FA8114B912CE7A7AC /* AppNotification.swift */; };
@@ -57,6 +62,7 @@
 		E019ABFBA476703C376B36B2 /* DecksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BA7B4C4BA63469CF1D48A8 /* DecksViewController.swift */; };
 		E42AA0A1947A2DA8A862AE4E /* FSRSScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FE9F3EE624612B657115E5 /* FSRSScheduler.swift */; };
 		E63DA69BBEA1639520763895 /* FSRSParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADB34A41A0F1A04AB626218 /* FSRSParameters.swift */; };
+		ECE7AD20DF2C379ED61E18D0 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F23BD6688FDF924BC36DAB93 /* FirebaseAnalytics */; };
 		F56A7CC7966EEA138A7A63E7 /* DeckDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2D145E0784B9C06BF5572D /* DeckDetailViewModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -141,6 +147,7 @@
 /* Begin PBXFileReference section */
 		053CBE67BBC927E6500C04A6 /* FlashForgeStringsAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashForgeStringsAlias.swift; sourceTree = "<group>"; };
 		09E6DD8EF45F2F59CCF78086 /* AppAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = AppAssets.xcassets; sourceTree = "<group>"; };
+		10D314C8B2B1555CB18594B3 /* TuistPlists+FlashForge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistPlists+FlashForge.swift"; sourceTree = "<group>"; };
 		11D472DD1C95FE3A90AF4B0E /* TuistBundle+FlashForge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistBundle+FlashForge.swift"; sourceTree = "<group>"; };
 		174EE85526D9B3386325270E /* StudyStatusService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyStatusService.swift; sourceTree = "<group>"; };
 		1A1E198DE7F4EAE36BF2902B /* StudyReminderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyReminderService.swift; sourceTree = "<group>"; };
@@ -158,6 +165,7 @@
 		4CBFE84B93A991370BC52944 /* CardTextSanitizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTextSanitizerTests.swift; sourceTree = "<group>"; };
 		4E5089BB74B6F760A0A723FE /* ICloudSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICloudSyncServiceTests.swift; sourceTree = "<group>"; };
 		4FDF11FE5547DC426B932AFE /* PersistenceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceModels.swift; sourceTree = "<group>"; };
+		50096BDBECC96DB3FB393852 /* CrashReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReporter.swift; sourceTree = "<group>"; };
 		500A5ECFA833BCC0766E720B /* FlashForgeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlashForgeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		56638997A259354801A20F6A /* SchedulerMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerMode.swift; sourceTree = "<group>"; };
 		5F4B8A7C995FFF7C9319638A /* StudySessionActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudySessionActivityAttributes.swift; sourceTree = "<group>"; };
@@ -168,6 +176,7 @@
 		8FBB59EE0B5DFD2C7459A881 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		94841623693077402111778D /* MoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
 		97589DD14631A8CE9AA6E1BE /* FlashForgeUITests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "FlashForgeUITests-Info.plist"; sourceTree = "<group>"; };
+		9F49AB32BDE15486A130D8A7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A0459A3B99EC7E2F11EE1821 /* SharedResources.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SharedResources.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA6D6E2802EB6C1CDE0FB302 /* FlashForgeWidgetsBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashForgeWidgetsBundle.swift; sourceTree = "<group>"; };
 		AAD0BD0EAECA19D54900CC25 /* StudyCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyCard.swift; sourceTree = "<group>"; };
@@ -215,6 +224,9 @@
 			files = (
 				1E32D5F0F29301336C99ECCF /* SharedResources.framework in Frameworks */,
 				1CC9655C2C282ACBEF8D4F28 /* SnapKit in Frameworks */,
+				B739A3B033F880BA8EFEF403 /* FirebaseCore in Frameworks */,
+				ECE7AD20DF2C379ED61E18D0 /* FirebaseAnalytics in Frameworks */,
+				3B471030F1831B10F5489861 /* FirebaseCrashlytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,6 +263,7 @@
 			children = (
 				E12AD161F2369835545014CA /* TuistAssets+FlashForge.swift */,
 				11D472DD1C95FE3A90AF4B0E /* TuistBundle+FlashForge.swift */,
+				10D314C8B2B1555CB18594B3 /* TuistPlists+FlashForge.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -259,6 +272,7 @@
 			isa = PBXGroup;
 			children = (
 				D9AD08B6C3F0A200AEE26108 /* CardRepository.swift */,
+				50096BDBECC96DB3FB393852 /* CrashReporter.swift */,
 				75FE9F3EE624612B657115E5 /* FSRSScheduler.swift */,
 				2B3C59043609F78126C9494B /* ICloudSyncService.swift */,
 				3A1B5E6F6E6CA28D5F2AF965 /* SM2Scheduler.swift */,
@@ -397,6 +411,7 @@
 				92C0AA41AFECC4F234F91590 /* ViewModels */,
 				0685E4CBCF218C4D6FBE1DDE /* Views */,
 				F11675BD7129CA2DB830C4A2 /* WidgetExtension */,
+				9F49AB32BDE15486A130D8A7 /* GoogleService-Info.plist */,
 			);
 			name = Project;
 			sourceTree = "<group>";
@@ -497,6 +512,7 @@
 				2BE922C53BA8E30571EDA071 /* Embed Foundation Extensions */,
 				66F44C7097F93A03334A35D7 /* Frameworks */,
 				73E5DF4C83BC8929513AE10E /* Embed Frameworks */,
+				6DBE03C9AA451EBB2BF3B056 /* Firebase Crashlytics Upload dSYMs */,
 			);
 			buildRules = (
 			);
@@ -506,6 +522,9 @@
 			name = FlashForge;
 			packageProductDependencies = (
 				D55A5C72908252429091416B /* SnapKit */,
+				C90855FB8FA106676B144D9C /* FirebaseCore */,
+				F23BD6688FDF924BC36DAB93 /* FirebaseAnalytics */,
+				D099FA95AC69FC324E2098FB /* FirebaseCrashlytics */,
 			);
 			productName = FlashForge;
 			productReference = 67A3B3161796298FDD85D8F8 /* FlashForge.app */;
@@ -539,6 +558,7 @@
 			mainGroup = 8661AAA9ADF3C2BDDBBC9FD5;
 			packageReferences = (
 				9DAD1267F36BE1A46B2F7CFE /* XCRemoteSwiftPackageReference "SnapKit" */,
+				60796056F7C2E8F60BDBCDEF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = FEF823C3C6F7E97C8AD62107 /* Products */;
 			projectDirPath = "";
@@ -571,6 +591,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A5C88C991A027F7E15BBFB1 /* GoogleService-Info.plist in Resources */,
 				BB2580F3F4B570324CF2C3B8 /* AppAssets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -602,6 +623,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if test -d \"/opt/homebrew/bin\"; then\n  export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif test -d \"/usr/local/bin\"; then\n  export PATH=\"/usr/local/bin:$PATH\"\nfi\n\nif which swiftlint >/dev/null; then\n  swiftlint lint --config \"${SRCROOT}/.swiftlint.yml\" --no-cache\nelse\n  echo \"warning: SwiftLint not installed. Install with: brew install swiftlint\"\nfi";
+		};
+		6DBE03C9AA451EBB2BF3B056 /* Firebase Crashlytics Upload dSYMs */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Firebase Crashlytics Upload dSYMs";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"${CONFIGURATION}\" != \"Release\" ]; then\n  exit 0\nfi\n\nGOOGLE_SERVICE_INFO=\"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist\"\nif [ ! -f \"${GOOGLE_SERVICE_INFO}\" ]; then\n  echo \"warning: GoogleService-Info.plist not found. Skipping Crashlytics dSYM upload.\"\n  exit 0\nfi\n\nCRASHLYTICS_RUN_SCRIPT=\"${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\nif [ ! -f \"${CRASHLYTICS_RUN_SCRIPT}\" ]; then\n  echo \"warning: Crashlytics run script not found at ${CRASHLYTICS_RUN_SCRIPT}. Skipping dSYM upload.\"\n  exit 0\nfi\n\n\"${CRASHLYTICS_RUN_SCRIPT}\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -646,6 +685,7 @@
 				67E01180A67B9AA704B1BD88 /* SceneDelegate.swift in Sources */,
 				8E690888A8F60B1813671647 /* TuistAssets+FlashForge.swift in Sources */,
 				678FC23F12E83EC2647B80F0 /* TuistBundle+FlashForge.swift in Sources */,
+				4E29E5CB4CD3AA23FF84D096 /* TuistPlists+FlashForge.swift in Sources */,
 				CC9637242E4F66EAE551ABA3 /* AppNotification.swift in Sources */,
 				79D6478AB8480D7DDCDAF0A5 /* Card.swift in Sources */,
 				7C0BCB0E4C2A38DB369BF9AE /* CardTextSanitizer.swift in Sources */,
@@ -656,6 +696,7 @@
 				606266CFD934DE3628B3D8AB /* SchedulerMode.swift in Sources */,
 				751611C6D032D21CB655B467 /* StudyCard.swift in Sources */,
 				3FE4103C0B2CCE3DDD6857BE /* CardRepository.swift in Sources */,
+				365783B4BAE20304EBB0E725 /* CrashReporter.swift in Sources */,
 				E42AA0A1947A2DA8A862AE4E /* FSRSScheduler.swift in Sources */,
 				8857D0B5B1AC9B3D9E713079 /* ICloudSyncService.swift in Sources */,
 				B1B79DE952EA5EC4D52915EC /* SM2Scheduler.swift in Sources */,
@@ -1116,6 +1157,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		60796056F7C2E8F60BDBCDEF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
 		9DAD1267F36BE1A46B2F7CFE /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -1127,9 +1176,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		C90855FB8FA106676B144D9C /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseCore;
+		};
+		D099FA95AC69FC324E2098FB /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseCrashlytics;
+		};
 		D55A5C72908252429091416B /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SnapKit;
+		};
+		F23BD6688FDF924BC36DAB93 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseAnalytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

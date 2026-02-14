@@ -235,6 +235,7 @@ final class OnboardingViewController: UIViewController {
                 self.onCompleted?()
                 self.dismiss(animated: true)
             } catch {
+                CrashReporter.record(error: error, context: "OnboardingViewController.didTapStart")
                 self.presentError(message: Self.userFacingMessage(from: error))
             }
         }
@@ -348,6 +349,7 @@ final class OnboardingViewController: UIViewController {
                 self.onCompleted?()
                 self.dismiss(animated: true)
             } catch {
+                CrashReporter.record(error: error, context: "OnboardingViewController.importBackupData")
                 self.presentError(message: Self.userFacingMessage(from: error))
             }
         }
@@ -400,6 +402,7 @@ extension OnboardingViewController: UIDocumentPickerDelegate {
                 let preview = try await self.repository.previewBackupData(data)
                 self.presentImportConfirmation(data: data, preview: preview)
             } catch {
+                CrashReporter.record(error: error, context: "OnboardingViewController.documentPicker")
                 self.presentError(message: Self.userFacingMessage(from: error))
             }
         }

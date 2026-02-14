@@ -130,6 +130,7 @@ final class StudyStatusService {
                 let attributes = StudySessionActivityAttributes(sessionID: UUID().uuidString)
                 _ = try Activity.request(attributes: attributes, content: content, pushType: nil)
             } catch {
+                CrashReporter.record(error: error, context: "StudyStatusService.updateLiveActivity.request")
                 return
             }
         }

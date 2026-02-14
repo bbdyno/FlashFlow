@@ -10,7 +10,8 @@ let project = Project(
     name: appName,
     organizationName: "bbdyno",
     packages: [
-        .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.7.1")
+        .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.7.1"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "11.0.0")
     ],
     settings: .settings(
         base: [
@@ -55,8 +56,15 @@ let project = Project(
                 "../Views/**",
                 "../ViewControllers/**"
             ],
+            resources: [
+                "../Resources/AppAssets.xcassets",
+                "../GoogleService-Info.plist"
+            ],
             dependencies: [
-                .package(product: "SnapKit")
+                .package(product: "SnapKit"),
+                .package(product: "FirebaseCore"),
+                .package(product: "FirebaseAnalytics"),
+                .package(product: "FirebaseCrashlytics")
             ],
             settings: .settings(
                 base: [

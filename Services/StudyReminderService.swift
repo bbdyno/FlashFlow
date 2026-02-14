@@ -74,6 +74,7 @@ final class StudyReminderService {
                 save(settings)
                 return settings
             } catch {
+                CrashReporter.record(error: error, context: "StudyReminderService.update.scheduleReminder")
                 throw StudyReminderError.schedulingFailed
             }
         } else {
@@ -113,6 +114,7 @@ final class StudyReminderService {
             do {
                 return try await notificationCenter.requestAuthorization(options: [.alert, .badge, .sound])
             } catch {
+                CrashReporter.record(error: error, context: "StudyReminderService.requestAuthorizationIfNeeded")
                 return false
             }
         @unknown default:
