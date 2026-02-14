@@ -637,6 +637,13 @@ final class MoreViewController: UIViewController {
 
     @objc
     private func handleICloudSyncStatusDidChange(_ notification: Notification) {
+        if !Thread.isMainThread {
+            DispatchQueue.main.async { [weak self] in
+                self?.handleICloudSyncStatusDidChange(notification)
+            }
+            return
+        }
+
         let userInfo = notification.userInfo ?? [:]
         let isSyncing = (userInfo[ICloudSyncNotificationKey.isSyncing] as? Bool) ?? false
         let lastSyncedAt = userInfo[ICloudSyncNotificationKey.lastSyncedAt] as? Date

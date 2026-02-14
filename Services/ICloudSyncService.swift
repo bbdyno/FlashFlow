@@ -95,9 +95,9 @@ actor ICloudSyncService {
         do {
             try await repository.prepare()
             try await syncBidirectionally()
-            publishStatus(isSyncing: false, errorMessage: nil)
+            await publishStatus(isSyncing: false, errorMessage: nil)
         } catch {
-            publishStatus(isSyncing: false, errorMessage: error.localizedDescription)
+            await publishStatus(isSyncing: false, errorMessage: error.localizedDescription)
             return
         }
     }
@@ -111,21 +111,21 @@ actor ICloudSyncService {
         do {
             try await repository.prepare()
             try await pushLocalSnapshot()
-            publishStatus(isSyncing: false, errorMessage: nil)
+            await publishStatus(isSyncing: false, errorMessage: nil)
         } catch {
-            publishStatus(isSyncing: false, errorMessage: error.localizedDescription)
+            await publishStatus(isSyncing: false, errorMessage: error.localizedDescription)
             return
         }
     }
 
     func syncFromCloudNow() async {
-        publishStatus(isSyncing: true, errorMessage: nil)
+        await publishStatus(isSyncing: true, errorMessage: nil)
         do {
             try await repository.prepare()
             try await syncBidirectionally()
-            publishStatus(isSyncing: false, errorMessage: nil)
+            await publishStatus(isSyncing: false, errorMessage: nil)
         } catch {
-            publishStatus(isSyncing: false, errorMessage: error.localizedDescription)
+            await publishStatus(isSyncing: false, errorMessage: error.localizedDescription)
             return
         }
     }
@@ -222,7 +222,7 @@ actor ICloudSyncService {
         }
     }
 
-    private func publishStatus(isSyncing: Bool, errorMessage: String?) {
+    private func publishStatus(isSyncing: Bool, errorMessage: String?) async {
         var userInfo: [String: Any] = [
             ICloudSyncNotificationKey.isSyncing: isSyncing
         ]
@@ -232,6 +232,8 @@ actor ICloudSyncService {
         if let errorMessage, !errorMessage.isEmpty {
             userInfo[ICloudSyncNotificationKey.errorMessage] = errorMessage
         }
-        notificationCenter.post(name: .iCloudSyncStatusDidChange, object: nil, userInfo: userInfo)
+        await MainActor.run {
+            notificationCenter.post(name: .iCloudSyncStatusDidChange, object: nil, userInfo: userInfo)
+        }
     }
 }
