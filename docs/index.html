@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlashForge - Smart Flashcards with Spaced Repetition</title>
+  <meta name="description" content="FlashForge is an offline-first flashcard app powered by SM-2 + FSRS. Study with science-backed review scheduling.">
+  <meta property="og:title" content="FlashForge - Smart Flashcards with Spaced Repetition">
+  <meta property="og:description" content="Build decks, review smarter, and keep your data on-device.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/flashforge-icon.png">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="apple-itunes-app" content="app-id=6759084535">
+  <link rel="icon" href="assets/flashforge-icon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script defer src="assets/app.js"></script>
+</head>
+<body>
+  <div class="bg-orb bg-orb-one"></div>
+  <div class="bg-orb bg-orb-two"></div>
+
+  <header class="site-header">
+    <nav class="nav container">
+      <a class="brand" href="#top" aria-label="FlashForge home">
+        <img src="assets/flashforge-icon.png" alt="FlashForge icon">
+        <span>FlashForge</span>
+      </a>
+
+      <div class="nav-right">
+        <a href="#features" data-i18n="nav_features">Features</a>
+        <a href="#support" data-i18n="nav_support">Support</a>
+        <a class="nav-store" href="https://apps.apple.com/app/id6759084535" target="_blank" rel="noreferrer" data-i18n="nav_store">App Store</a>
+
+        <label class="lang-wrap" for="langSelect">
+          <span class="visually-hidden" data-i18n="lang_label">Language</span>
+          <select id="langSelect" aria-label="Language selector">
+            <option value="en">English</option>
+            <option value="ko">한국어</option>
+          </select>
+        </label>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero container reveal">
+      <div class="hero-copy">
+        <p class="badge" data-i18n="hero_badge">Launching on the App Store</p>
+        <h1>
+          <span data-i18n="hero_title_1">Study Smarter</span>
+          <span class="gradient" data-i18n="hero_title_2">with science-backed reviews.</span>
+        </h1>
+        <p class="hero-sub" data-i18n="hero_sub">
+          FlashForge combines SM-2 and FSRS to optimize spaced repetition and help you retain more with less effort.
+        </p>
+        <p class="hero-desc" data-i18n="hero_desc">
+          100% offline-first. Your study data stays on your device.
+        </p>
+
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://apps.apple.com/app/id6759084535" target="_blank" rel="noreferrer" data-i18n="cta_appstore">View on App Store</a>
+          <a class="btn btn-secondary" href="https://github.com/bbdyno/FlashFlow" target="_blank" rel="noreferrer" data-i18n="cta_github">View on GitHub</a>
+          <a class="btn btn-tertiary" href="#support" data-i18n="cta_support">Support Development</a>
+        </div>
+
+        <ul class="trust-row">
+          <li data-i18n="trust_1">SM-2 + FSRS Hybrid</li>
+          <li data-i18n="trust_2">Offline-First Privacy</li>
+          <li data-i18n="trust_3">Deck/Review Analytics</li>
+        </ul>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="phone-frame floating">
+          <div class="phone-notch"></div>
+          <div class="phone-content">
+            <img src="assets/flashforge-icon.png" alt="" class="app-icon">
+            <h3>FlashForge</h3>
+            <p data-i18n="mock_sub">Smart flashcards for focused study</p>
+            <div class="mini-stats">
+              <span data-i18n="mock_stat_1">Due cards</span>
+              <span data-i18n="mock_stat_2">Review streak</span>
+              <span data-i18n="mock_stat_3">Retention</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section container reveal">
+      <div class="section-head">
+        <h2 data-i18n="features_title">Everything for deliberate flashcard learning</h2>
+        <p data-i18n="features_sub">From algorithm-driven scheduling to smooth review flows, built for daily learners.</p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature-card">
+          <h3 data-i18n="f1_title">Hybrid Scheduling</h3>
+          <p data-i18n="f1_desc">Combine proven SM-2 with modern FSRS for adaptive, retention-focused intervals.</p>
+        </article>
+
+        <article class="feature-card">
+          <h3 data-i18n="f2_title">Deck & Card Management</h3>
+          <p data-i18n="f2_desc">Create unlimited decks, rich cards, and organize your content for focused sessions.</p>
+        </article>
+
+        <article class="feature-card">
+          <h3 data-i18n="f3_title">4-Grade Feedback</h3>
+          <p data-i18n="f3_desc">Rate each review as Again, Hard, Good, or Easy for precise next scheduling.</p>
+        </article>
+
+        <article class="feature-card">
+          <h3 data-i18n="f4_title">Review Analytics</h3>
+          <p data-i18n="f4_desc">Track progress with due summaries, card states, and long-range heatmap insights.</p>
+        </article>
+
+        <article class="feature-card">
+          <h3 data-i18n="f5_title">Backup & Restore</h3>
+          <p data-i18n="f5_desc">Export and import your decks and review history as portable backup files.</p>
+        </article>
+
+        <article class="feature-card">
+          <h3 data-i18n="f6_title">Privacy by Design</h3>
+          <p data-i18n="f6_desc">No account, no server sync by default, and no forced data collection.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-alt reveal">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-i18n="flow_title">How FlashForge fits your study routine</h2>
+        </div>
+
+        <div class="flow-grid">
+          <article class="flow-step">
+            <span>01</span>
+            <h3 data-i18n="flow_1_title">Create</h3>
+            <p data-i18n="flow_1_desc">Build decks and cards for topics you actually want to remember.</p>
+          </article>
+
+          <article class="flow-step">
+            <span>02</span>
+            <h3 data-i18n="flow_2_title">Review</h3>
+            <p data-i18n="flow_2_desc">Use the hybrid scheduler and 4-grade feedback to optimize intervals.</p>
+          </article>
+
+          <article class="flow-step">
+            <span>03</span>
+            <h3 data-i18n="flow_3_title">Retain</h3>
+            <p data-i18n="flow_3_desc">Track streaks and heatmaps to maintain consistency over the long term.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="support" class="section container reveal">
+      <div class="section-head">
+        <h2 data-i18n="support_title">Support the developer</h2>
+        <p data-i18n="support_sub">FlashForge is built independently. Your support helps keep updates shipping.</p>
+      </div>
+
+      <div class="support-grid">
+        <article class="support-card center">
+          <h3 data-i18n="support_coffee_title">Buy Me a Coffee</h3>
+          <a href="https://buymeacoffee.com/bbdyno" target="_blank" rel="noreferrer" class="coffee-link" data-i18n="support_coffee_btn">Open Support Page</a>
+        </article>
+
+        <article class="support-card">
+          <h3 data-i18n="support_crypto_title">Crypto Donation</h3>
+          <div class="wallet">
+            <p>BTC</p>
+            <code id="btcAddress">bc1qz5neag5j4cg6j8sj53889udws70v7223zlvgd3</code>
+            <button class="copy-btn" data-copy-target="btcAddress" data-i18n="copy_btn">Copy</button>
+          </div>
+          <div class="wallet">
+            <p>ETH</p>
+            <code id="ethAddress">0x5f35523757d0e672fa3ffbc0f1d50d35fd6b2571</code>
+            <button class="copy-btn" data-copy-target="ethAddress" data-i18n="copy_btn">Copy</button>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <p class="footer-brand">FlashForge</p>
+        <p data-i18n="footer_rights">© 2026 FlashForge. All rights reserved.</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="https://github.com/bbdyno" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="mailto:della.kimko@gmail.com" data-i18n="footer_contact">Contact</a>
+        <a href="terms.html" data-i18n="footer_terms">Terms</a>
+        <a href="privacy.html" data-i18n="footer_privacy">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

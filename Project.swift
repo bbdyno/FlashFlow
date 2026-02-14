@@ -9,6 +9,8 @@ let developmentTeamId = "M79H9K226Y"
 let provisioningProfileName = "FlashFlow App Provisioning"
 let provisioningProfileUUID = "a23ea4e6-f546-448f-b9e4-ee6f5ca37ad2"
 let widgetProvisioningProfileName = "FlashFlow WidgetExtension Provisioning"
+let marketingVersion = "1.0.0"
+let buildNumber = "2026.02.14.1"
 
 let project = Project(
     name: appName,
@@ -19,7 +21,9 @@ let project = Project(
     settings: .settings(
         base: [
             "SWIFT_VERSION": "5.9",
-            "SWIFT_STRICT_CONCURRENCY": "complete"
+            "SWIFT_STRICT_CONCURRENCY": "complete",
+            "MARKETING_VERSION": .string(marketingVersion),
+            "CURRENT_PROJECT_VERSION": .string(buildNumber)
         ],
         configurations: [
             .debug(name: "Debug"),
@@ -34,6 +38,8 @@ let project = Project(
             bundleId: bundleId,
             deploymentTargets: .iOS("17.0"),
             infoPlist: .extendingDefault(with: [
+                "CFBundleShortVersionString": .string(marketingVersion),
+                "CFBundleVersion": .string(buildNumber),
                 "CFBundleDevelopmentRegion": .string("en"),
                 "UILaunchScreen": .dictionary([:]),
                 "NSSupportsLiveActivities": .boolean(true),
@@ -89,6 +95,8 @@ let project = Project(
             settings: .settings(
                 base: [
                     "SWIFT_STRICT_CONCURRENCY": .string("complete"),
+                    "MARKETING_VERSION": .string(marketingVersion),
+                    "CURRENT_PROJECT_VERSION": .string(buildNumber),
                     "CODE_SIGN_ENTITLEMENTS": .string("Config/FlashForge.entitlements"),
                     "DEVELOPMENT_TEAM": .string(developmentTeamId),
                     "CODE_SIGN_STYLE": .string("Manual"),
@@ -105,6 +113,8 @@ let project = Project(
             bundleId: widgetBundleId,
             deploymentTargets: .iOS("17.0"),
             infoPlist: .extendingDefault(with: [
+                "CFBundleShortVersionString": .string(marketingVersion),
+                "CFBundleVersion": .string(buildNumber),
                 "CFBundleDevelopmentRegion": .string("en"),
                 "CFBundleDisplayName": .string("FlashFlow Widgets"),
                 "NSExtension": .dictionary([
@@ -121,6 +131,8 @@ let project = Project(
             settings: .settings(
                 base: [
                     "SWIFT_STRICT_CONCURRENCY": .string("complete"),
+                    "MARKETING_VERSION": .string(marketingVersion),
+                    "CURRENT_PROJECT_VERSION": .string(buildNumber),
                     "CODE_SIGN_ENTITLEMENTS": .string("Config/FlashForgeWidgets.entitlements"),
                     "DEVELOPMENT_TEAM": .string(developmentTeamId),
                     "CODE_SIGN_STYLE": .string("Manual"),
@@ -135,7 +147,10 @@ let project = Project(
             product: .unitTests,
             bundleId: testBundleId,
             deploymentTargets: .iOS("17.0"),
-            infoPlist: .default,
+            infoPlist: .extendingDefault(with: [
+                "CFBundleShortVersionString": .string(marketingVersion),
+                "CFBundleVersion": .string(buildNumber)
+            ]),
             sources: [
                 "Tests/**"
             ],
@@ -144,7 +159,9 @@ let project = Project(
             ],
             settings: .settings(
                 base: [
-                    "SWIFT_STRICT_CONCURRENCY": "complete"
+                    "SWIFT_STRICT_CONCURRENCY": "complete",
+                    "MARKETING_VERSION": .string(marketingVersion),
+                    "CURRENT_PROJECT_VERSION": .string(buildNumber)
                 ]
             )
         ),
@@ -154,7 +171,10 @@ let project = Project(
             product: .uiTests,
             bundleId: uiTestBundleId,
             deploymentTargets: .iOS("17.0"),
-            infoPlist: .default,
+            infoPlist: .extendingDefault(with: [
+                "CFBundleShortVersionString": .string(marketingVersion),
+                "CFBundleVersion": .string(buildNumber)
+            ]),
             sources: [
                 "UITests/**"
             ],
@@ -163,7 +183,9 @@ let project = Project(
             ],
             settings: .settings(
                 base: [
-                    "SWIFT_STRICT_CONCURRENCY": "complete"
+                    "SWIFT_STRICT_CONCURRENCY": "complete",
+                    "MARKETING_VERSION": .string(marketingVersion),
+                    "CURRENT_PROJECT_VERSION": .string(buildNumber)
                 ]
             )
         )
