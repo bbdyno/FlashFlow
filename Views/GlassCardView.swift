@@ -361,11 +361,14 @@ final class GlassCardView: UIView {
 }
 
 private final class GradientOverlayView: UIView {
-    override class var layerClass: AnyClass {
+    override static var layerClass: AnyClass {
         CAGradientLayer.self
     }
 
     var gradientLayer: CAGradientLayer {
-        layer as! CAGradientLayer
+        guard let gradientLayer = layer as? CAGradientLayer else {
+            fatalError("Unexpected layer type: \(type(of: layer))")
+        }
+        return gradientLayer
     }
 }

@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData
 
+// swiftlint:disable file_length
 actor CardRepository {
     enum RepositoryError: LocalizedError, Sendable {
         case invalidTitle

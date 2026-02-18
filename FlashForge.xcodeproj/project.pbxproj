@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -48,6 +48,7 @@
 		91E119AC9DDBA9AFF344F7C6 /* CardEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95BA1C7163594BF5A62BC85 /* CardEditorViewController.swift */; };
 		A6094970CF5ECACAF182663E /* SharedResources.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A0459A3B99EC7E2F11EE1821 /* SharedResources.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AD0262810281751BE87930FA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A34BEB8690A7E0022ADD56 /* AppDelegate.swift */; };
+		AE331E9D0D9B754CC9A9F582 /* AppWalkthroughViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C751CA6D9B0B0605F5EB41FA /* AppWalkthroughViewController.swift */; };
 		B009FFA631F8ABDC60F66B95 /* StudyStatusWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B9C0278336BD004596A432 /* StudyStatusWidget.swift */; };
 		B1B79DE952EA5EC4D52915EC /* SM2Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1B5E6F6E6CA28D5F2AF965 /* SM2Scheduler.swift */; };
 		B739A3B033F880BA8EFEF403 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = C90855FB8FA106676B144D9C /* FirebaseCore */; };
@@ -185,6 +186,7 @@
 		BF22BD610B18E1204D750A34 /* FlashForgeTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "FlashForgeTests-Info.plist"; sourceTree = "<group>"; };
 		BF2D145E0784B9C06BF5572D /* DeckDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDetailViewModel.swift; sourceTree = "<group>"; };
 		C086E74EC7A22085D867BFD9 /* FlashForgeWidgets-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "FlashForgeWidgets-Info.plist"; sourceTree = "<group>"; };
+		C751CA6D9B0B0605F5EB41FA /* AppWalkthroughViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppWalkthroughViewController.swift; sourceTree = "<group>"; };
 		CC3EE56F35E255141FD63E1B /* FlashForgeWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FlashForgeWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC6A1679DDC1AB1BE4D56A45 /* DeckDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDetailViewController.swift; sourceTree = "<group>"; };
 		D34EF64EDE96A0D476D7A915 /* FlashForgeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlashForgeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -285,6 +287,7 @@
 		224E887DDF0F320EA851D6FD /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				C751CA6D9B0B0605F5EB41FA /* AppWalkthroughViewController.swift */,
 				B95BA1C7163594BF5A62BC85 /* CardEditorViewController.swift */,
 				CC6A1679DDC1AB1BE4D56A45 /* DeckDetailViewController.swift */,
 				71BA7B4C4BA63469CF1D48A8 /* DecksViewController.swift */,
@@ -705,6 +708,7 @@
 				79916B7690D8147D3911A42C /* FlashForgeStringsAlias.swift in Sources */,
 				8F4EFDB073C9C915D9A03C61 /* StudySessionActivityAttributes.swift in Sources */,
 				45FA097443B8C349A9723374 /* StudyStatusSnapshot.swift in Sources */,
+				AE331E9D0D9B754CC9A9F582 /* AppWalkthroughViewController.swift in Sources */,
 				91E119AC9DDBA9AFF344F7C6 /* CardEditorViewController.swift in Sources */,
 				1C3EB5D4819DBDDB02534C2B /* DeckDetailViewController.swift in Sources */,
 				E019ABFBA476703C376B36B2 /* DecksViewController.swift in Sources */,
@@ -750,8 +754,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Config/FlashForge.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iOS Development";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2026.02.14.2;
 				DEVELOPMENT_TEAM = M79H9K226Y;
 				ENABLE_PREVIEWS = YES;
@@ -765,12 +770,15 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.bbdyno.app.flashFlow;
 				PRODUCT_NAME = FlashForge;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a23ea4e6-f546-448f-b9e4-ee6f5ca37ad2";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "FlashFlow App Provisioning";
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -847,8 +855,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Config/FlashForge.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iOS Development";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2026.02.14.2;
 				DEVELOPMENT_TEAM = M79H9K226Y;
 				ENABLE_PREVIEWS = YES;
@@ -862,7 +871,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.bbdyno.app.flashFlow;
 				PRODUCT_NAME = FlashForge;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a23ea4e6-f546-448f-b9e4-ee6f5ca37ad2";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "FlashFlow App Provisioning";
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
@@ -920,7 +929,10 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -949,7 +961,10 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -1020,8 +1035,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Config/FlashForgeWidgets.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iOS Development";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2026.02.14.2;
 				DEVELOPMENT_TEAM = M79H9K226Y;
 				INFOPLIST_FILE = "Derived/InfoPlists/FlashForgeWidgets-Info.plist";
@@ -1034,7 +1050,7 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bbdyno.app.flashFlow.widget;
 				PRODUCT_NAME = FlashForgeWidgets;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "FlashFlow WidgetExtension Provisioning";
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
@@ -1050,8 +1066,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Config/FlashForgeWidgets.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iOS Development";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2026.02.14.2;
 				DEVELOPMENT_TEAM = M79H9K226Y;
 				INFOPLIST_FILE = "Derived/InfoPlists/FlashForgeWidgets-Info.plist";
@@ -1064,12 +1081,15 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bbdyno.app.flashFlow.widget;
 				PRODUCT_NAME = FlashForgeWidgets;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "FlashFlow WidgetExtension Provisioning";
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+					"$(inherited)",
+					DEBUG,
+				);
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = complete;

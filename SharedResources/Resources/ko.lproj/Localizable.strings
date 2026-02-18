@@ -55,6 +55,7 @@
 
 "more.appinfo.title" = "앱 정보";
 "more.appinfo.body" = "버전: %@ (%@)\n알림: 로컬 푸시";
+"more.walkthrough.replay" = "튜토리얼 다시 보기";
 "more.icloud.sync_now" = "iCloud 지금 동기화";
 "more.icloud.status.idle" = "iCloud 동기화가 대기 중입니다.";
 "more.icloud.status.syncing" = "iCloud와 동기화 중...";
@@ -102,6 +103,16 @@
 "onboarding.backup.invalid.title" = "백업 파일이 올바르지 않습니다";
 "onboarding.backup.invalid.selection" = "유효한 백업 파일을 선택해 주세요.";
 "onboarding.backup.invalid.extension" = "파일 확장자는 .%@ 이어야 합니다.";
+
+"walkthrough.page.intro.title" = "FlashForge 빠르게 시작하기";
+"walkthrough.page.intro.description" = "매일 반복 학습에 맞춘 흐름으로 카드를 빠르게 복습할 수 있어요.";
+"walkthrough.page.study.title" = "간단한 학습 루프";
+"walkthrough.page.study.description" = "앞면을 보고 답을 떠올린 뒤 정답을 확인하고 Again/Hard/Good/Easy로 평가하세요.";
+"walkthrough.page.data.title" = "덱과 백업 관리";
+"walkthrough.page.data.description" = "덱을 만들고 카드를 추가한 뒤, 백업 내보내기/가져오기로 데이터를 안전하게 관리하세요.";
+"walkthrough.action.next" = "다음";
+"walkthrough.action.start" = "시작하기";
+"walkthrough.action.skip" = "건너뛰기";
 
 "card_editor.save" = "저장";
 "card_editor.intro.title" = "카드 편집";

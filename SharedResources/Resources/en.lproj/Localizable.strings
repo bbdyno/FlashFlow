@@ -55,6 +55,7 @@
 
 "more.appinfo.title" = "App Info";
 "more.appinfo.body" = "Version: %@ (%@)\nNotifications: Local Push";
+"more.walkthrough.replay" = "Replay Tutorial";
 "more.icloud.sync_now" = "Sync iCloud Now";
 "more.icloud.status.idle" = "iCloud sync is idle.";
 "more.icloud.status.syncing" = "Syncing with iCloud...";
@@ -102,6 +103,16 @@
 "onboarding.backup.invalid.title" = "Invalid Backup";
 "onboarding.backup.invalid.selection" = "Please select a valid backup file.";
 "onboarding.backup.invalid.extension" = "File extension must be .%@.";
+
+"walkthrough.page.intro.title" = "Start Faster with FlashForge";
+"walkthrough.page.intro.description" = "Review cards quickly with a focused flow built for daily repetition.";
+"walkthrough.page.study.title" = "Simple Study Loop";
+"walkthrough.page.study.description" = "Read the front, reveal the answer, then grade recall with Again/Hard/Good/Easy.";
+"walkthrough.page.data.title" = "Decks and Backup";
+"walkthrough.page.data.description" = "Create decks, add cards, and keep your data safe using backup import/export.";
+"walkthrough.action.next" = "Next";
+"walkthrough.action.start" = "Start";
+"walkthrough.action.skip" = "Skip";
 
 "card_editor.save" = "Save";
 "card_editor.intro.title" = "Card Editor";

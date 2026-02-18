@@ -8,9 +8,16 @@
 import UIKit
 import SnapKit
 import UniformTypeIdentifiers
+import SharedResources
 
+// swiftlint:disable file_length
 final class MoreViewController: UIViewController {
     private static let backupFileExtension = "ffbackup"
+    private static let walkthroughCompletionKey = "hasCompletedWalkthrough"
+
+    private static func localized(_ key: String, fallback: String) -> String {
+        SharedL10n.localized(key, fallback: fallback)
+    }
 
     private let repository: CardRepository
 
@@ -46,6 +53,7 @@ final class MoreViewController: UIViewController {
     private let appInfoCard = UIView()
     private let appInfoTitleLabel = UILabel()
     private let appInfoBodyLabel = UILabel()
+    private let replayWalkthroughButton = UIButton(type: .system)
     private let footerLabel = UILabel()
 
     private let service = StudyReminderService.shared
@@ -115,13 +123,17 @@ final class MoreViewController: UIViewController {
 
         configureReminderCard()
         configureDataCard()
+#if DEBUG
         configureDeveloperCard()
+#endif
         configureAppInfoCard()
         configureSyncToast()
 
         stackView.addArrangedSubview(reminderCard)
         stackView.addArrangedSubview(dataCard)
+#if DEBUG
         stackView.addArrangedSubview(developerCard)
+#endif
         stackView.addArrangedSubview(appInfoCard)
 
         footerLabel.text = FlashForgeStrings.More.footer
@@ -340,8 +352,17 @@ final class MoreViewController: UIViewController {
         appInfoBodyLabel.textColor = AppTheme.textSecondary
         appInfoBodyLabel.numberOfLines = 0
 
+        configureActionButton(
+            replayWalkthroughButton,
+            title: Self.localized("more.walkthrough.replay", fallback: "Replay Tutorial"),
+            tint: AppTheme.accentTeal
+        )
+        replayWalkthroughButton.accessibilityIdentifier = "more.replayWalkthroughButton"
+        replayWalkthroughButton.addTarget(self, action: #selector(didTapReplayWalkthrough), for: .touchUpInside)
+
         appInfoCard.addSubview(appInfoTitleLabel)
         appInfoCard.addSubview(appInfoBodyLabel)
+        appInfoCard.addSubview(replayWalkthroughButton)
 
         appInfoTitleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16)
@@ -351,6 +372,12 @@ final class MoreViewController: UIViewController {
         appInfoBodyLabel.snp.makeConstraints { make in
             make.top.equalTo(appInfoTitleLabel.snp.bottom).offset(10)
             make.leading.trailing.equalToSuperview().inset(16)
+        }
+
+        replayWalkthroughButton.snp.makeConstraints { make in
+            make.top.equalTo(appInfoBodyLabel.snp.bottom).offset(12)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.height.equalTo(42)
             make.bottom.equalToSuperview().inset(16)
         }
     }
@@ -450,6 +477,11 @@ final class MoreViewController: UIViewController {
         configureActionButton(restoreButton, title: FlashForgeStrings.More.Data.`import`, tint: AppTheme.infoBlue)
         configureActionButton(resetButton, title: FlashForgeStrings.More.Data.reset, tint: AppTheme.dangerRed)
         configureActionButton(syncNowButton, title: FlashForgeStrings.More.Icloud.syncNow, tint: AppTheme.accentTeal)
+        configureActionButton(
+            replayWalkthroughButton,
+            title: Self.localized("more.walkthrough.replay", fallback: "Replay Tutorial"),
+            tint: AppTheme.accentTeal
+        )
         configureActionButton(generateSamplesButton, title: FlashForgeStrings.More.Developer.generateSamples, tint: AppTheme.accentTeal)
     }
 
@@ -564,6 +596,20 @@ final class MoreViewController: UIViewController {
             autoDismiss: false
         )
         NotificationCenter.default.post(name: .iCloudSyncManualRequested, object: nil)
+    }
+
+    @objc
+    private func didTapReplayWalkthrough() {
+        let walkthrough = AppWalkthroughViewController()
+        walkthrough.onFinished = { [weak self] in
+            UserDefaults.standard.set(true, forKey: Self.walkthroughCompletionKey)
+            self?.dismiss(animated: true)
+        }
+
+        let navigation = UINavigationController(rootViewController: walkthrough)
+        navigation.modalPresentationStyle = .fullScreen
+        navigation.isModalInPresentation = true
+        present(navigation, animated: true)
     }
 
     private func resetAllData() {

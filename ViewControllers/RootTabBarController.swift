@@ -151,8 +151,13 @@ final class RootTabBarController: UITabBarController {
         static let skipOnboarding = "UITEST_SKIP_ONBOARDING"
     }
 
+    private enum OnboardingDefaultsKey {
+        static let hasCompletedWalkthrough = "hasCompletedWalkthrough"
+    }
+
     private let repository: CardRepository
-    private var hasCheckedOnboarding = false
+    private var hasCheckedInitialFlow = false
+    private var isPresentingWalkthrough = false
     private var isPresentingOnboarding = false
 
     init(repository: CardRepository) {
@@ -181,11 +186,11 @@ final class RootTabBarController: UITabBarController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        guard !hasCheckedOnboarding else {
+        guard !hasCheckedInitialFlow else {
             return
         }
-        hasCheckedOnboarding = true
-        presentOnboardingIfNeeded()
+        hasCheckedInitialFlow = true
+        presentInitialFlowIfNeeded()
     }
 
     private func configureTabs() {
@@ -255,12 +260,58 @@ final class RootTabBarController: UITabBarController {
         tabBar.unselectedItemTintColor = AppTheme.textSecondary
     }
 
-    private func presentOnboardingIfNeeded() {
+    private var hasCompletedWalkthrough: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: OnboardingDefaultsKey.hasCompletedWalkthrough)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: OnboardingDefaultsKey.hasCompletedWalkthrough)
+        }
+    }
+
+    private func presentInitialFlowIfNeeded() {
         if ProcessInfo.processInfo.arguments.contains(UITestLaunchArgument.skipOnboarding) {
             return
         }
 
+        if !hasCompletedWalkthrough {
+            presentWalkthrough()
+            return
+        }
+
+        presentOnboardingIfNeeded()
+    }
+
+    private func presentWalkthrough() {
+        guard !isPresentingWalkthrough else {
+            return
+        }
+        guard presentedViewController == nil else {
+            return
+        }
+
+        isPresentingWalkthrough = true
+        let walkthrough = AppWalkthroughViewController()
+        walkthrough.onFinished = { [weak self] in
+            guard let self else { return }
+            self.hasCompletedWalkthrough = true
+            self.isPresentingWalkthrough = false
+            self.dismiss(animated: true) { [weak self] in
+                self?.presentOnboardingIfNeeded()
+            }
+        }
+
+        let navigation = UINavigationController(rootViewController: walkthrough)
+        navigation.modalPresentationStyle = .fullScreen
+        navigation.isModalInPresentation = true
+        present(navigation, animated: true)
+    }
+
+    private func presentOnboardingIfNeeded() {
         guard !isPresentingOnboarding else {
+            return
+        }
+        guard presentedViewController == nil else {
             return
         }
 
