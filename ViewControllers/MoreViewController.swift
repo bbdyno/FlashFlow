@@ -15,10 +15,6 @@ final class MoreViewController: UIViewController {
     private static let backupFileExtension = "ffbackup"
     private static let walkthroughCompletionKey = "hasCompletedWalkthrough"
 
-    private static func localized(_ key: String, fallback: String) -> String {
-        SharedL10n.localized(key, fallback: fallback)
-    }
-
     private let repository: CardRepository
 
     private let backgroundGradientLayer = CAGradientLayer()
@@ -354,7 +350,7 @@ final class MoreViewController: UIViewController {
 
         configureActionButton(
             replayWalkthroughButton,
-            title: Self.localized("more.walkthrough.replay", fallback: "Replay Tutorial"),
+            title: FlashForgeStrings.More.Walkthrough.replay,
             tint: AppTheme.accentTeal
         )
         replayWalkthroughButton.accessibilityIdentifier = "more.replayWalkthroughButton"
@@ -479,7 +475,7 @@ final class MoreViewController: UIViewController {
         configureActionButton(syncNowButton, title: FlashForgeStrings.More.Icloud.syncNow, tint: AppTheme.accentTeal)
         configureActionButton(
             replayWalkthroughButton,
-            title: Self.localized("more.walkthrough.replay", fallback: "Replay Tutorial"),
+            title: FlashForgeStrings.More.Walkthrough.replay,
             tint: AppTheme.accentTeal
         )
         configureActionButton(generateSamplesButton, title: FlashForgeStrings.More.Developer.generateSamples, tint: AppTheme.accentTeal)
