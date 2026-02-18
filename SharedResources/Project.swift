@@ -1,7 +1,7 @@
 import ProjectDescription
 
-let marketingVersion = "1.0.0"
-let buildNumber = "2026.02.14.2"
+let marketingVersion = "1.0.1"
+let buildNumber = "2026.02.18.1"
 
 let project = Project(
     name: "SharedResources",

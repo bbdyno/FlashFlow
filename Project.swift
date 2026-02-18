@@ -9,8 +9,8 @@ let developmentTeamId = "M79H9K226Y"
 let provisioningProfileName = "FlashFlow App Provisioning"
 let provisioningProfileUUID = "a23ea4e6-f546-448f-b9e4-ee6f5ca37ad2"
 let widgetProvisioningProfileName = "FlashFlow WidgetExtension Provisioning"
-let marketingVersion = "1.0.0"
-let buildNumber = "2026.02.14.2"
+let marketingVersion = "1.0.1"
+let buildNumber = "2026.02.18.1"
 
 let project = Project(
     name: appName,

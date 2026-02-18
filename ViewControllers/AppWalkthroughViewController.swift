@@ -17,37 +17,24 @@ private struct WalkthroughPage {
 }
 
 final class AppWalkthroughViewController: UIViewController {
-    private static func localized(_ key: String, fallback: String) -> String {
-        SharedL10n.localized(key, fallback: fallback)
-    }
-
     private lazy var pages: [WalkthroughPage] = [
         WalkthroughPage(
             symbolName: "bolt.fill",
             tintColor: AppTheme.accent,
-            title: Self.localized("walkthrough.page.intro.title", fallback: "Start Faster with FlashForge"),
-            description: Self.localized(
-                "walkthrough.page.intro.description",
-                fallback: "Review cards quickly with a focused flow built for daily repetition."
-            )
+            title: FlashForgeStrings.Walkthrough.Page.Intro.title,
+            description: FlashForgeStrings.Walkthrough.Page.Intro.description
         ),
         WalkthroughPage(
             symbolName: "rectangle.stack.fill.badge.person.crop",
             tintColor: AppTheme.infoBlue,
-            title: Self.localized("walkthrough.page.study.title", fallback: "Simple Study Loop"),
-            description: Self.localized(
-                "walkthrough.page.study.description",
-                fallback: "Read the front, reveal the answer, then grade recall with Again/Hard/Good/Easy."
-            )
+            title: FlashForgeStrings.Walkthrough.Page.Study.title,
+            description: FlashForgeStrings.Walkthrough.Page.Study.description
         ),
         WalkthroughPage(
             symbolName: "square.and.arrow.down.fill",
             tintColor: AppTheme.accentTeal,
-            title: Self.localized("walkthrough.page.data.title", fallback: "Decks and Backup"),
-            description: Self.localized(
-                "walkthrough.page.data.description",
-                fallback: "Create decks, add cards, and keep your data safe using backup import/export."
-            )
+            title: FlashForgeStrings.Walkthrough.Page.Data.title,
+            description: FlashForgeStrings.Walkthrough.Page.Data.description
         )
     ]
 
@@ -172,11 +159,11 @@ final class AppWalkthroughViewController: UIViewController {
         pageControl.currentPage = currentIndex
 
         let primaryTitle = isLastPage
-            ? Self.localized("walkthrough.action.start", fallback: "Start")
-            : Self.localized("walkthrough.action.next", fallback: "Next")
+            ? FlashForgeStrings.Walkthrough.Action.start
+            : FlashForgeStrings.Walkthrough.Action.next
         primaryButton.setTitle(primaryTitle, for: .normal)
 
-        skipButton.setTitle(Self.localized("walkthrough.action.skip", fallback: "Skip"), for: .normal)
+        skipButton.setTitle(FlashForgeStrings.Walkthrough.Action.skip, for: .normal)
         skipButton.isHidden = isLastPage
     }
 

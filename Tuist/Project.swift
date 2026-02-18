@@ -3,8 +3,8 @@ import ProjectDescription
 let appName = "FlashForge"
 let bundleId = "com.bbdyno.app.flashFlow"
 let testBundleId = "com.bbdyno.app.flashFlowTests"
-let marketingVersion = "1.0.0"
-let buildNumber = "2026.02.14.2"
+let marketingVersion = "1.0.1"
+let buildNumber = "2026.02.18.1"
 
 let project = Project(
     name: appName,
